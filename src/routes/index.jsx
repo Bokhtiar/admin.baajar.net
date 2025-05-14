@@ -1,6 +1,12 @@
 import { DashboardLayout } from "../layouts/dashboard.layout";
 import CategoryShow from "../pages/category";
 import Dashboard from "../pages/Dashboard/Dashboard";
+import AllOrderList from "../pages/order/all-order";
+import CanceledOrderList from "../pages/order/canceled-order";
+import CompleteOrderList from "../pages/order/completed-order";
+import PendingOrderList from "../pages/order/pending-order";
+import ProcessedOrderList from "../pages/order/processed";
+import ShippedOrderList from "../pages/order/Shipped-orders";
 // import { getToken } from "../utils/helpers";
 
  
@@ -11,6 +17,19 @@ const appRoutes = [
      children:[
       { index:true, element:  <Dashboard></Dashboard> },
       { path:"category", element:  <CategoryShow/> },
+      // order
+      // all order
+      { path:"all-order", element:  <AllOrderList/> },
+      // pending order
+      { path:"pending-order", element:  <PendingOrderList/> },
+      // processed order
+      { path:"processed-order", element:  <ProcessedOrderList/> },
+      // shipped-order 
+      { path:"shipped-order", element:  <ShippedOrderList/> },
+      // complete-order 
+      { path:"complete-order", element:  <CompleteOrderList/> },
+      // canceled-order 
+      { path:"canceled-order", element:  <CanceledOrderList/> },
        
      ]
   },

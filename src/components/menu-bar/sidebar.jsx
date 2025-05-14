@@ -9,26 +9,24 @@ import {
 } from "react-icons/ri";
 import { FaUnity } from "react-icons/fa";
 import { CgAttribution } from "react-icons/cg";
-import { HiBars3 } from "react-icons/hi2";
+
 import {
   MdOutlineProductionQuantityLimits,
   MdBrandingWatermark,
   MdSettingsAccessibility,
   MdOutlineCategory,
 } from "react-icons/md";
-// import logo from "../../assets/logo/Zanicon.jpg";
-import logo from "../../assets/logo/ZanIcon.jpg";
 
-const Sidebar = ({ toggleSidebar, menuOpen, menuStyle }) => {
+const Sidebar = ({ setIsSidebarOpen }) => {
   const [openMenu, setOpenMenu] = useState(null);
 
   const location = useLocation();
 
+  console.log("location", location);
+
   const toggleMenu = (title) => {
     setOpenMenu(openMenu === title ? null : title);
   };
-
-  console.log("menuStyle", menuStyle);
 
   const menuData = [
     {
@@ -36,10 +34,43 @@ const Sidebar = ({ toggleSidebar, menuOpen, menuStyle }) => {
       icon: <RxDashboard />,
       path: "/dashboard",
     },
+
     {
-      title: "Category",
-      icon: <HiBars3 />,
-      path: "/dashboard/category",
+      title: "Orders",
+      icon: <RiProductHuntLine />,
+      childrens: [
+        {
+          title: "All Orders",
+          icon: <IoColorPaletteOutline />,
+          path: "/dashboard/all-order",
+        },
+
+        {
+          title: "Pending Orders",
+          icon: <RiProductHuntLine />,
+          path: "/dashboard/pending-order",
+        },
+        {
+          title: "Processed Orders",
+          icon: <RiProductHuntLine />,
+          path: "/dashboard/processed-order",
+        },
+        {
+          title: "Shipped Orders",
+          icon: <RiProductHuntLine />,
+          path: "/dashboard/shipped-order",
+        },
+        {
+          title: "Completed Orders",
+          icon: <RiProductHuntLine />,
+          path: "/dashboard/complete-order",
+        },
+        {
+          title: "Canceled Orders",
+          icon: <RiProductHuntLine />,
+          path: "/dashboard/canceled-order",
+        },
+      ],
     },
     {
       title: "Banner",
@@ -69,7 +100,7 @@ const Sidebar = ({ toggleSidebar, menuOpen, menuStyle }) => {
         {
           title: "Color",
           icon: <IoColorPaletteOutline />,
-          path: "/dashboard/color",
+          path: "/dashboard/category",
         },
         {
           title: "Unit",
@@ -96,112 +127,95 @@ const Sidebar = ({ toggleSidebar, menuOpen, menuStyle }) => {
   ];
   return (
     <>
+      <div
+        className={`w-64  bg-lightCard dark:bg-darkCard dark:text-darkTitle shadow-xl transition-all duration-300 h-full `}
+      >
+        {/* Logo */}
+        <div className="flex items-center justify-between w-full p-[18px]  border-gray-300 lg:hidden">
+          {/* <img src={logo} alt="Logo" className="w-10 h-10 rounded-full" /> */}
 
-      {menuStyle === "click" && (
-        <div
-          className={`w-64 fixed z-50  top-0 left-0 h-screen bg-lightCard dark:bg-darkCard dark:text-darkTitle shadow-2xl transition-all duration-300 ${
-            menuOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
-        >
-          {/* Logo */}
-          <div className="flex items-center justify-between w-full p-[18px] border-b border-gray-300">
-            {/* Logo */}
-            <img src={logo} alt="Logo" className="w-10 h-10 rounded-full" />
+          <h1 className="text-2xl text-red-600 font-bold pl-5 ">Bajjar</h1>
 
-            {/* Title */}
-            <span className="text-lg font-semibold">Zav Vision </span>
+          <button className="flex items-center justify-center w-10 h-10 rounded-md transition ">
+            <RiMenuFold4Fill
+              onClick={() => setIsSidebarOpen(false)}
+              className={`text-xl transform transition-transform duration-300 z-50 cursor-pointer `}
+            />
+          </button>
+        </div>
 
-            {/* Toggle Button */}
-            <button
-              className="flex items-center justify-center w-10 h-10 rounded-md transition "
-              onClick={toggleSidebar}
-            >
-              <RiMenuFold4Fill
-                className={`text-xl transform transition-transform duration-300 z-50 cursor-pointer ${
-                  menuOpen ? "rotate-180" : ""
-                }`}
-              />
-            </button>
-          </div>
+        {/* Menu List */}
+        <nav className="mt-1 overflow-hidden">
+          {" "}
+          {/* Prevents blue bar from going outside */}
+          {menuData.map((item, index) => {
+            const isActive = location.pathname === item.path;
 
-          {/* Menu List */}
-          <nav className="mt-4 overflow-hidden">
-            {" "}
-            {/* Prevents blue bar from going outside */}
-            {menuData.map((item, index) => {
-              const isActive = location.pathname === item.path; // Check active menu
 
-              return (
-                <div
-                  key={index}
-                  className="mb-2 relative overflow-hidden gap-4"
-                >
-                  {/* Parent Menu Item */}
-                  {isActive && (
-                    <span className="absolute left-0 top-0 h-full w-1 bg-[#0d6efd] z-50  "></span>
-                  )}
-                  <Link
-                    to={item.path}
-                    className={`flex items-center w-full  text-left rounded-md 
-                p-2 pl-6 transition-all duration-200 relative 
+            return (
+              <div
+                key={index}
+                className="mb-2 relative overflow-hidden gap-4 pl-3 pr-2"
+              >
+                <Link
+                  to={item.path}
+                  className={`flex items-center w-full  text-left rounded-md 
+                p-[10px] pl-4 transition-all duration-200 relative border-[1px] border-[#F3F4F6] 
                 ${
                   isActive
-                    ? "bg-blue-200 text-[#0d6efd]"
-                    : " hover:text-black hover:bg-blue-100 "
+                    ? "bg-[#DC2626] text-white font-semibold "
+                    : " hover:text-black hover:bg-white "
                 }
               `}
-                    onClick={() => toggleMenu(item.title)}
-                  >
-                    <span className="mr-3 flex-shrink-0 text-base p-1">
-                      {item.icon}
-                    </span>
+                  onClick={() => toggleMenu(item.title)}
+                >
+                  <span className="mr-3 flex-shrink-0 text-2xl p-1">
+                    {item.icon}
+                  </span>
 
-                    {/* Title - Truncated for consistency */}
-                    <div className="truncate w-full text-sm">{item.title}</div>
-                  </Link>
+                  {/* Title - Truncated for consistency */}
+                  <div className="truncate w-full text-xl ">{item.title}</div>
+                </Link>
 
-                  {/* Submenu Items (if exists) */}
-                  {item.childrens && openMenu === item.title && (
-                    <div className="ml-6 mt-1 flex flex-col space-y-1">
-                      {item.childrens.map((subItem, subIndex) => {
-                        const isSubActive = location.pathname === subItem.path; // Check active submenu
-                        return (
-                          <Link
-                            key={subIndex}
-                            to={subItem.path}
-                            className={`flex items-center text-sm rounded-md p-2 pl-4 transition-all duration-200 relative text-lightTitle dark:text-darkTitle
+                {/* Submenu Items (if exists) */}
+                {item.childrens && openMenu === item.title && (
+                  <div className="ml-6 mt-1 flex flex-col space-y-1">
+                    {item.childrens.map((subItem, subIndex) => {
+                      const isSubActive = location.pathname === subItem.path;
+
+                      return (
+                        <Link
+                          key={subIndex}
+                          to={subItem.path}
+                          className={`flex items-center text-sm rounded-md p-1 pl-4 transition-all duration-200 relative 
                         ${
                           isSubActive
-                            ? "bg-blue-200 text-blue-900"
-                            : "hover:bg-blue-100 hover:text-lightTitle"
+                            ? "  text-primary  font-semibold"
+                            : " hover:text-primary"
                         }
                       `}
-                          >
-                            {/* Active Vertical Bar for Submenu */}
-                            {/* {isSubActive && (
-                              <span className="absolute left-0 top-0 h-full w-1 bg-blue-500"></span>
-                            )} */}
+                        >
+                          {/* Active Vertical Bar for Submenu */}
 
-                            {/* Submenu Icon - Fixed Size */}
-                            <span className="mr-2 flex-shrink-0 text-lg">
-                              {subItem.icon}
-                            </span>
+                          {/* Submenu Icon - Fixed Size */}
+                          <span className="mr-2 flex-shrink-0 text-lg">
+                            {/* {subItem.icon} */}
+                          </span>
 
-                            {/* Submenu Title - Truncated */}
-                            <div className="truncate w-full">
-                              {subItem.title}
-                            </div>
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </nav>
-        </div>
-      )}
+                          {/* Submenu Title - Truncated */}
+                          <div className="truncate w-full ">
+                            {subItem.title}
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </nav>
+      </div>
     </>
   );
 };
