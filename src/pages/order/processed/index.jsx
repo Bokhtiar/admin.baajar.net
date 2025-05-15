@@ -53,10 +53,10 @@ const orders = [
 
 const getStatusBadge = (status) => {
   const colorMap = {
-    Pending: "bg-yellow-400 text-white",
-    Shipped: "bg-blue-500 text-white",
-    Delivered: "bg-green-500 text-white",
-    Cancelled: "bg-red-500 text-white",
+    Pending: "bg-[#FF6600] text-white rounded-full px-3",
+    Shipped: "bg-[#A600FF] text-white rounded-full px-3",
+    Delivered: "bg-[#13BF00] text-white rounded-full px-3",
+    Cancelled: "bg-[#DC2626] text-white rounded-full px-3",
   };
   return (
     <span className={`px-2 py-1 rounded text-sm ${colorMap[status] || ""}`}>

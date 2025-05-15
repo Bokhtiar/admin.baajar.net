@@ -1,5 +1,7 @@
 import { DashboardLayout } from "../layouts/dashboard.layout";
-import CategoryShow from "../pages/category";
+import CategoryTable from "../pages/category/allcategory";
+import SubCategoryTable from "../pages/category/subcategory";
+
 import Dashboard from "../pages/Dashboard/Dashboard";
 import AllOrderList from "../pages/order/all-order";
 import CanceledOrderList from "../pages/order/canceled-order";
@@ -16,7 +18,10 @@ const appRoutes = [
     element: <DashboardLayout />,
      children:[
       { index:true, element:  <Dashboard></Dashboard> },
-      { path:"category", element:  <CategoryShow/> },
+      // category
+      { path:"all-category", element:  <CategoryTable/> },
+      //sub  category
+      { path:"sub-category", element:  <SubCategoryTable/> },
       // order
       // all order
       { path:"all-order", element:  <AllOrderList/> },

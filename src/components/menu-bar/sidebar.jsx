@@ -19,6 +19,9 @@ import {
 
 const Sidebar = ({ setIsSidebarOpen }) => {
   const [openMenu, setOpenMenu] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  console.log("open",open)
 
   const location = useLocation();
 
@@ -72,15 +75,22 @@ const Sidebar = ({ setIsSidebarOpen }) => {
         },
       ],
     },
-    {
-      title: "Banner",
-      icon: <RiGalleryFill />,
-      path: "/dashboard/banner",
-    },
+
     {
       title: "Category",
       icon: <MdOutlineCategory />,
-      path: "/dashboard/category",
+            childrens: [
+        {
+          title: "All Categories",
+          icon: <IoColorPaletteOutline />,
+          path: "/dashboard/all-category",
+        },
+
+        {
+          title: "Sub Categories",
+          icon: <RiProductHuntLine />,
+          path: "/dashboard/sub-category",
+        },]
     },
     {
       title: "Brand",
@@ -128,7 +138,8 @@ const Sidebar = ({ setIsSidebarOpen }) => {
   return (
     <>
       <div
-        className={`w-64  bg-lightCard dark:bg-darkCard dark:text-darkTitle shadow-xl transition-all duration-300 h-full `}
+      // overflow-y-auto scrollbar-thin
+        className={`w-64  bg-lightCard dark:bg-darkCard dark:text-darkTitle shadow-xl transition-all duration-300 h-screen  mt-[0.5px] `}
       >
         {/* Logo */}
         <div className="flex items-center justify-between w-full p-[18px]  border-gray-300 lg:hidden">
@@ -145,36 +156,38 @@ const Sidebar = ({ setIsSidebarOpen }) => {
         </div>
 
         {/* Menu List */}
-        <nav className="mt-1 overflow-hidden">
+        <nav className="mt-1 overflow-y-auto">
           {" "}
           {/* Prevents blue bar from going outside */}
           {menuData.map((item, index) => {
             const isActive = location.pathname === item.path;
-
+            const bgColor=open ==item.title
 
             return (
               <div
                 key={index}
-                className="mb-2 relative overflow-hidden gap-4 pl-3 pr-2"
+                className="mb-2 relative overflow-y-auto gap-4 pl-3 pr-3"
               >
                 <Link
                   to={item.path}
                   className={`flex items-center w-full  text-left rounded-md 
                 p-[10px] pl-4 transition-all duration-200 relative border-[1px] border-[#F3F4F6] 
                 ${
-                  isActive
+                  isActive || bgColor
                     ? "bg-[#DC2626] text-white font-semibold "
                     : " hover:text-black hover:bg-white "
                 }
               `}
-                  onClick={() => toggleMenu(item.title)}
+                  onClick={() => {toggleMenu(item.title)
+                    setOpen(item.title);
+                  }}
                 >
                   <span className="mr-3 flex-shrink-0 text-2xl p-1">
                     {item.icon}
                   </span>
 
                   {/* Title - Truncated for consistency */}
-                  <div className="truncate w-full text-xl ">{item.title}</div>
+                  <div className="truncate w-full text- ">{item.title}</div>
                 </Link>
 
                 {/* Submenu Items (if exists) */}
@@ -182,7 +195,7 @@ const Sidebar = ({ setIsSidebarOpen }) => {
                   <div className="ml-6 mt-1 flex flex-col space-y-1">
                     {item.childrens.map((subItem, subIndex) => {
                       const isSubActive = location.pathname === subItem.path;
-
+              
                       return (
                         <Link
                           key={subIndex}
