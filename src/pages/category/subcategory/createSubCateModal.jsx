@@ -6,10 +6,10 @@ import { Toastify } from "../../../components/toastify";
 // import { networkErrorHandeller } from "../../../utils/helpers/index";
 import { RiArrowDropDownLine } from "react-icons/ri";
 
-export default function CreateCategoryModal({ onClose }) {
+export default function CreateSubCategoryModal({ onClose }) {
   const { register, handleSubmit, reset, watch } = useForm();
   const modalRef = useRef();
-  const [imageName, setImageName] = useState("");
+//   const [imageName, setImageName] = useState("");
   const [btnloading, setBtnLoading] = useState(false);
 
   const handleOutsideClick = (e) => {
@@ -33,11 +33,10 @@ export default function CreateCategoryModal({ onClose }) {
       const formData = new FormData();
       formData.append("name", data.name);
       formData.append("slug", data.slug);
+      formData.append("category", data.category);
       formData.append("status", data.status);
 
-      if (data.image && data.image[0]) {
-        formData.append("image", data.image[0]);
-      }
+
 
       const response = await NetworkServices.Category.store(formData);
       console.log("response", response);
@@ -55,13 +54,13 @@ export default function CreateCategoryModal({ onClose }) {
     }
   };
 
-  const watchImage = watch("image");
+//   const watchImage = watch("image");
 
-  useEffect(() => {
-    if (watchImage && watchImage.length > 0) {
-      setImageName(watchImage[0].name);
-    }
-  }, [watchImage]);
+//   useEffect(() => {
+//     if (watchImage && watchImage.length > 0) {
+//       setImageName(watchImage[0].name);
+//     }
+//   }, [watchImage]);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -70,16 +69,35 @@ export default function CreateCategoryModal({ onClose }) {
         className="bg-white p-6 rounded-2xl shadow-md w-[450px] "
       >
         <h2 className="text-center text-xl font-semibold mb-6">
-          Create A New Category
+          Create A New Sub Category
         </h2>
 
         <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4">
           <input
             type="text"
-            placeholder="Category Name"
+            placeholder="Sub-Category Name"
             {...register("name", { required: true })}
             className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
           />
+          <div className="relative w-">
+            <select
+              {...register("category", { required: true })}
+              className="appearance-none w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none text-gray-500 pr-8"
+              defaultValue="active"
+            >
+              <option className="text-gray-500" value="act">
+                Parent Category
+              </option>
+              <option className="text-gray-500" value="inactive">
+                Status : Inactive
+              </option>
+            </select>
+
+            {/* Dropdown icon on the left */}
+            <div className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+              <RiArrowDropDownLine className="text-3xl" />
+            </div>
+          </div>
 
           <div className="flex gap-3">
             <input
@@ -109,24 +127,14 @@ export default function CreateCategoryModal({ onClose }) {
             </div>
           </div>
 
-          <label className="w-full block">
-            <div className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-500 text-sm cursor-pointer flex items-center gap-2 pl-4">
-              <CiCamera className="text-xl" />
-              <span>{imageName || "Upload Category Image / Icon"}</span>
-            </div>
-            <input
-              type="file"
-              {...register("image", { required: true })}
-              className="hidden"
-            />
-          </label>
+
 
           <div className="w-full flex justify-center">
             <button
               type="submit"
               className="w-[50%] bg-[#13BF00] hover:bg-green-600 text-white py-2 rounded-full mt-4 cursor-pointer"
             >
-              Save Category
+              Save Sub-Category
             </button>
           </div>
         </form>

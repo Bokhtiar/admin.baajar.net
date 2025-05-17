@@ -1,13 +1,14 @@
 import axios from "axios";
-import { getToken } from "../utils/helper";
+import { getToken } from "../utils/helpers";
+// import { getToken } from "../utils/helper";
 
  
 const publicRequest = axios.create({
-    baseURL: process.env.REACT_APP_API_ENDPOINT,
+    // baseURL: process.env.REACT_APP_API_ENDPOINT,
 });
 
 const privateRequest = axios.create({
-    baseURL: process.env.REACT_APP_API_ENDPOINT,
+    // baseURL: process.env.REACT_APP_API_ENDPOINT,
 }); 
 
 /* Public request config */

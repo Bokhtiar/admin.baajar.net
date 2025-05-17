@@ -3,12 +3,17 @@ import CategoryTable from "../pages/category/allcategory";
 import SubCategoryTable from "../pages/category/subcategory";
 
 import Dashboard from "../pages/Dashboard/Dashboard";
+import DeliveryMan from "../pages/deliveryMan";
 import AllOrderList from "../pages/order/all-order";
 import CanceledOrderList from "../pages/order/canceled-order";
 import CompleteOrderList from "../pages/order/completed-order";
 import PendingOrderList from "../pages/order/pending-order";
 import ProcessedOrderList from "../pages/order/processed";
 import ShippedOrderList from "../pages/order/Shipped-orders";
+import ProductTable from "../pages/products";
+import User from "../pages/user";
+import AllVendorsTable from "../pages/vendors";
+
 // import { getToken } from "../utils/helpers";
 
  
@@ -35,7 +40,14 @@ const appRoutes = [
       { path:"complete-order", element:  <CompleteOrderList/> },
       // canceled-order 
       { path:"canceled-order", element:  <CanceledOrderList/> },
-       
+      // vendors
+       { path:"vendors", element:  <AllVendorsTable/> },
+      // product
+       { path:"product", element:  <ProductTable/> },
+      // delivery man
+       { path:"delivery-man", element:  <DeliveryMan/> },
+      // user
+       { path:"user", element:  <User/> },
      ]
   },
 ];

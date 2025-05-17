@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import DataTable from "react-data-table-component";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
@@ -56,20 +56,7 @@ export default function CategoryTable() {
       )
     );
   };
-    const handleAddCategory = (newCategory) => {
-    const newId = data.length + 1;
-    setData((prev) => [
-      ...prev,
-      {
-        id: newId,
-        name: newCategory.name,
-        slug: newCategory.slug,
-        image: img,
-        products: 0,
-        status: newCategory.status === "active",
-      },
-    ]);
-  };
+
 
   const handleDelete = (id) => {
     setData((prev) => prev.filter((item) => item.id !== id));
@@ -166,7 +153,7 @@ export default function CategoryTable() {
             />
           </div>
 
-          <button className="bg-[#13BF00] text-white px-11 py-[6px] rounded-full hover:bg-green-600"
+          <button className="bg-[#13BF00] text-white px-11 py-[6px] rounded-full hover:bg-green-600 cursor-pointer"
           onClick={() => setShowModal(true)}
           >
             + Add New
@@ -186,7 +173,7 @@ export default function CategoryTable() {
             {showModal && (
         <CreateCategoryModal
           onClose={() => setShowModal(false)}
-          onSubmit={handleAddCategory}
+          // onSubmit={handleAddCategory}
         />
       )}
     </div>

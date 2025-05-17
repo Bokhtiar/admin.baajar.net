@@ -17,7 +17,7 @@ export const DashboardLayout = () => {
 
       <div className="flex flex-1  gap-1">
         <div
-          className={`fixed top-0 left-0 z-40 transition-transform duration-300 lg:static lg:translate-x-0  ${
+          className={`fixed top-0 left-0 z-40 transition-transform duration-300 lg:static lg:translate-x-0 h-screen  ${
             isSidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >

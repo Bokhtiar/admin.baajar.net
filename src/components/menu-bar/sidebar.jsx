@@ -93,53 +93,32 @@ const Sidebar = ({ setIsSidebarOpen }) => {
         },]
     },
     {
-      title: "Brand",
+      title: "Vendors",
       icon: <MdBrandingWatermark />,
-      path: "/dashboard/brand",
+      path: "/dashboard/vendors",
     },
     {
       title: "Product",
       icon: <MdOutlineProductionQuantityLimits />,
       path: "/dashboard/product",
     },
+    {
+      title: "Delivery Man",
+      icon: <MdOutlineProductionQuantityLimits />,
+      path: "/dashboard/delivery-man",
+    },
 
     {
-      title: "Product Variant",
-      icon: <RiProductHuntLine />,
-      childrens: [
-        {
-          title: "Color",
-          icon: <IoColorPaletteOutline />,
-          path: "/dashboard/category",
-        },
-        {
-          title: "Unit",
-          icon: <FaUnity />,
-          path: "/dashboard/unit",
-        },
-        {
-          title: "Attribute",
-          icon: <CgAttribution />,
-          path: "/dashboard/attribute",
-        },
-        {
-          title: "Product Variant",
-          icon: <RiProductHuntLine />,
-          path: "/dashboard/product-variant",
-        },
-      ],
-    },
-    {
-      title: "WebSetting",
+      title: "User",
       icon: <MdSettingsAccessibility />,
-      path: "/dashboard/web-setting",
+      path: "/dashboard/user",
     },
   ];
   return (
     <>
       <div
       // overflow-y-auto scrollbar-thin
-        className={`w-64  bg-lightCard dark:bg-darkCard dark:text-darkTitle shadow-xl transition-all duration-300 h-screen  mt-[0.5px] `}
+        className={`w-64  bg-lightCard dark:bg-darkCard dark:text-darkTitle shadow-xl transition-all duration-300 h-full  mt-[0.5px] `}
       >
         {/* Logo */}
         <div className="flex items-center justify-between w-full p-[18px]  border-gray-300 lg:hidden">
