@@ -4,11 +4,11 @@ import { getToken } from "../utils/helpers";
 
  
 const publicRequest = axios.create({
-    // baseURL: process.env.REACT_APP_API_ENDPOINT,
+    baseURL: import.meta.env.VITE_API_URL+"api",
 });
 
 const privateRequest = axios.create({
-    // baseURL: process.env.REACT_APP_API_ENDPOINT,
+    baseURL: import.meta.env.VITE_API_URL+"api",
 }); 
 
 /* Public request config */

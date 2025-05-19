@@ -31,8 +31,6 @@ export default function CreateVendorModal({ onClose }) {
   }, []);
 
   const onFormSubmit = async (data) => {
-    console.log("✅ Form submitted with data:", data);
-
     try {
       setBtnLoading(true);
 
@@ -62,7 +60,6 @@ export default function CreateVendorModal({ onClose }) {
         onClose();
       } else {
         Toastify.Error("Something went wrong. Please try again.");
-        console.error("❌ Response Error:", response);
       }
     } catch (error) {
       console.error("❌ Submission Error:", error);
@@ -87,27 +84,25 @@ export default function CreateVendorModal({ onClose }) {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div
         ref={modalRef}
-        className="bg-white px-8 py-5 rounded-2xl shadow-md w-[500px] "
+        className="bg-white px-4 md:px-8 py-5 rounded-2xl shadow-md w-full max-w-md md:max-w-lg lg:max-w-xl max-h-[90vh] overflow-y-auto mx-4"
       >
         <h2 className="text-center text-xl font-semibold mb-4">
           Create A New Vendor
         </h2>
 
-        {/* 🧪 Form with error handling */}
         <form onSubmit={handleSubmit(onFormSubmit, onFormError)} className="space-y-2">
 
-          {/* 👇 Store Name & Category */}
-          <div className="flex gap-3">
+          {/* Store Name & Category */}
+          <div className="flex flex-col md:flex-row gap-3">
             <input
               type="text"
               placeholder="Store Name"
               {...register("store_name", { required: true })}
-              className="w-1/2 px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
+              className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
             />
             <select
               {...register("category", { required: true })}
-              className="w-1/2 px-4 py-2 border border-gray-300 rounded-full focus:outline-none text-gray-500"
-              defaultValue="active"
+              className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-full focus:outline-none text-gray-500"
             >
               <option value="">Store Category</option>
               <option value="fashion">Fashion</option>
@@ -116,23 +111,23 @@ export default function CreateVendorModal({ onClose }) {
             </select>
           </div>
 
-          {/* 👇 Owner Name */}
-          <div className="flex gap-3">
+          {/* Owner Name */}
+          <div className="flex flex-col md:flex-row gap-3">
             <input
               type="text"
               placeholder="Owner First Name"
               {...register("first_name", { required: true })}
-              className="w-1/2 px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
+              className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
             />
             <input
               type="text"
               placeholder="Owner Last Name"
               {...register("last_name", { required: true })}
-              className="w-1/2 px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
+              className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
             />
           </div>
 
-          {/* 👇 Address */}
+          {/* Address */}
           <input
             type="text"
             placeholder="Store Address"
@@ -140,23 +135,23 @@ export default function CreateVendorModal({ onClose }) {
             className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
           />
 
-          {/* 👇 NID & License */}
-          <div className="flex gap-3">
+          {/* NID & License */}
+          <div className="flex flex-col md:flex-row gap-3">
             <input
               type="text"
               placeholder="Owner NID No."
               {...register("nid", { required: true })}
-              className="w-1/2 px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
+              className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
             />
             <input
               type="text"
               placeholder="Store License No."
               {...register("license", { required: true })}
-              className="w-1/2 px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
+              className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
             />
           </div>
 
-          {/* 👇 Phone */}
+          {/* Phone */}
           <input
             type="text"
             placeholder="Phone Number"
@@ -164,7 +159,7 @@ export default function CreateVendorModal({ onClose }) {
             className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
           />
 
-          {/* 👇 Email */}
+          {/* Email */}
           <input
             type="text"
             placeholder="Email/Username"
@@ -172,7 +167,7 @@ export default function CreateVendorModal({ onClose }) {
             className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
           />
 
-          {/* 👇 Password */}
+          {/* Password */}
           <input
             type="password"
             placeholder="Set Password"
@@ -180,7 +175,7 @@ export default function CreateVendorModal({ onClose }) {
             className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
           />
 
-          {/* 👇 Upload Image */}
+          {/* Upload Image */}
           <label className="w-full block">
             <div className="w-full px-4 py-2 border border-gray-300 rounded-full bg-white text-gray-500 text-sm cursor-pointer flex items-center gap-2 pl-4">
               <CiCamera className="text-xl" />
@@ -193,28 +188,28 @@ export default function CreateVendorModal({ onClose }) {
             />
           </label>
 
-          {/* 👇 Store ID & Status */}
-          <div className="flex gap-3">
+          {/* Store ID & Status */}
+          <div className="flex flex-col md:flex-row gap-3">
             <input
               type="text"
               placeholder="Store ID"
               {...register("store_id", { required: true })}
-              className="w-1/2 px-4 py-2 border border-gray-300 rounded-full text-gray-500 focus:outline-none"
+              className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-full text-gray-500 focus:outline-none"
             />
             <select
               {...register("status", { required: true })}
-              className="w-1/2 px-4 py-2 border border-gray-300 rounded-full focus:outline-none text-gray-500"
+              className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-full focus:outline-none text-gray-500"
             >
               <option value="active">Status: Active</option>
               <option value="inactive">Status: Inactive</option>
             </select>
           </div>
 
-          {/* 👇 Submit */}
+          {/* Submit */}
           <div className="w-full flex justify-center">
             <button
               type="submit"
-              className="w-[50%] bg-[#13BF00] hover:bg-green-600 text-white py-2 rounded-full mt-4 cursor-pointer"
+              className="w-full sm:w-[60%] md:w-[50%] bg-[#13BF00] hover:bg-green-600 text-white py-2 rounded-full mt-4 cursor-pointer"
               disabled={btnLoading}
             >
               {btnLoading ? "Saving..." : "Save Vendors"}

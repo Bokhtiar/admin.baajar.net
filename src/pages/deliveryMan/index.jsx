@@ -4,6 +4,7 @@ import { CiSearch } from "react-icons/ci";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
 // import img from "../../assets/logo/";
 import img from "/image/bg/starry-night.webp";
+import CreateDeliveryManModal from "./CreateDeliveryManModal";
 // import CreateVendorModal from "./CreateVendorModal";
 
 const data = [
@@ -150,7 +151,7 @@ export default function DeliveryMan() {
         />
       </div>
       {showModal && (
-        <CreateVendorModal
+        <CreateDeliveryManModal
           onClose={() => setShowModal(false)}
           // onSubmit={handleAddCategory}
         />

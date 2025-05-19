@@ -64,10 +64,10 @@ export default function CreateCategoryModal({ onClose }) {
   }, [watchImage]);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/75 opacity-  flex items-center justify-center z-50 px-4">
       <div
         ref={modalRef}
-        className="bg-white p-6 rounded-2xl shadow-md w-[450px] "
+        className="bg-white p-6 rounded-2xl shadow-md w-[400px] "
       >
         <h2 className="text-center text-xl font-semibold mb-6">
           Create A New Category
@@ -81,14 +81,17 @@ export default function CreateCategoryModal({ onClose }) {
             className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
           />
 
-          <div className="flex gap-3">
-            <input
-              type="text"
-              placeholder="Slug"
-              {...register("slug", { required: true })}
-              className="w-1/2 px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
-            />
-            <div className="relative w-1/2">
+          <div className="flex flex-col md:flex-row gap-3">
+            <div className="w-full">
+              {" "}
+              <input
+                type="text"
+                placeholder="Slug"
+                {...register("slug", { required: true })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
+              />
+            </div>
+            <div className="relative  w-full">
               <select
                 {...register("status", { required: true })}
                 className="appearance-none w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none text-gray-500 pr-8"
@@ -112,7 +115,7 @@ export default function CreateCategoryModal({ onClose }) {
           <label className="w-full block">
             <div className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-500 text-sm cursor-pointer flex items-center gap-2 pl-4">
               <CiCamera className="text-xl" />
-              <span>{imageName || "Upload Category Image / Icon"}</span>
+              <span>{imageName || "Upload  Image / Icon"}</span>
             </div>
             <input
               type="file"

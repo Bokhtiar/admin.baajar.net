@@ -42,6 +42,20 @@ const initialData = [
     products: 453,
     status: true,
   },
+  {
+    id: 7,
+    name: "Beverages",
+    image: img,
+    products: 879,
+    status: true,
+  },
+  {
+    id: 8,
+    name: "Frozen Foods",
+    image: img,
+    products: 453,
+    status: true,
+  },
 ];
 
 export default function CategoryTable() {

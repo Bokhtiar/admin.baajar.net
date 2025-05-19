@@ -1,15 +1,18 @@
 import React, { useState, useRef } from "react";
-import { FaEye, FaEyeSlash, FaRegUser } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaPhoneAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import { NetworkServices } from "../../network";
+import { setToken } from "../../utils/helpers";
+import { Toastify } from "../../components/toastify";
 
 const Login = () => {
   const [focusField, setFocusField] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [inputValues, setInputValues] = useState({
-    username: "",
+    phone: "",
     password: "",
   });
-  const [errors, setErrors] = useState({ username: "", password: "" });
+  const [errors, setErrors] = useState({ phone: "", password: "" });
   const passwordRef = useRef(null);
   const navigate = useNavigate();
 
@@ -19,9 +22,9 @@ const Login = () => {
   };
 
   const validateFields = () => {
-    const newErrors = { username: "", password: "" };
-    if (!inputValues.username) {
-      newErrors.username = "Username is required.";
+    const newErrors = { phone: "", password: "" };
+    if (!inputValues.phone) {
+      newErrors.phone = "Phone number is required.";
     }
     if (!inputValues.password) {
       newErrors.password = "Password is required.";
@@ -30,13 +33,26 @@ const Login = () => {
     return Object.values(newErrors).every((error) => error === "");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateFields()) return;
 
-    if (validateFields()) {
-      navigate("/dashboard");
-      alert("Login successful");
-      console.log("inputValues", inputValues);
+    try {
+      const response = await NetworkServices.Authentication.login(inputValues);
+      const queryParams = new URLSearchParams(location.search);
+      const redirectFrom = queryParams.get("redirectFrom") || "/dashboard";
+
+      if (response.status === 200) {
+        if (response?.data?.data?.user?.role === "admin") {
+          setToken(response?.data?.data?.token);
+          navigate(redirectFrom);
+          Toastify.Success("Login successfully done");
+        } else {
+          Toastify.Error("Invalid user role");
+        }
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -49,38 +65,39 @@ const Login = () => {
       <div className="relative w-96 p-8 bg-white/30 rounded-lg shadow-lg text-white border border-white">
         <h2 className="text-center text-2xl font-bold mb-4">Login</h2>
         <div className="space-y-6">
-          {/* Username Input */}
+
+          {/* Phone Number Input */}
           <div className="relative">
             <label
-              htmlFor="username"
+              htmlFor="phone"
               className={`absolute left-3 text-sm transition-all cursor-pointer ${
-                focusField === "username" || inputValues.username
-                  ? "-top-3 left-3  text-white"
+                focusField === "phone" || inputValues.phone
+                  ? "-top-3 left-3 text-white"
                   : "top-6 text-white"
               }`}
             >
-              Username
+              Phone Number
             </label>
             <input
-              id="username"
-              type="text"
-              value={inputValues.username}
+              id="phone"
+              type="tel"
+              value={inputValues.phone}
               className="w-full p-3 pr-10 text-white outline-none border-b-2 bg-transparent"
-              onFocus={() => setFocusField("username")}
+              onFocus={() => setFocusField("phone")}
               onBlur={() => setFocusField("")}
               onChange={(e) => {
-                setInputValues({ ...inputValues, username: e.target.value });
-                if (errors.username) {
-                  setErrors({ ...errors, username: "" });
+                setInputValues({ ...inputValues, phone: e.target.value });
+                if (errors.phone) {
+                  setErrors({ ...errors, phone: "" });
                 }
               }}
             />
             <span className="absolute right-3 top-6 text-white">
-              <FaRegUser />
+              <FaPhoneAlt />
             </span>
-            {errors.username && (
+            {errors.phone && (
               <label className="text-red-500 text-xs mt-1">
-                {errors.username}
+                {errors.phone}
               </label>
             )}
           </div>
@@ -91,7 +108,7 @@ const Login = () => {
               htmlFor="pass"
               className={`absolute left-3 text-sm transition-all cursor-pointer ${
                 focusField === "password" || inputValues.password
-                  ? "-top-3 left-3  text-white"
+                  ? "-top-3 left-3 text-white"
                   : "top-6 text-white"
               }`}
             >

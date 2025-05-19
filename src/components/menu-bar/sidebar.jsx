@@ -118,7 +118,7 @@ const Sidebar = ({ setIsSidebarOpen }) => {
     <>
       <div
       // overflow-y-auto scrollbar-thin
-        className={`w-64  bg-lightCard dark:bg-darkCard dark:text-darkTitle shadow-xl transition-all duration-300 h-full  mt-[0.5px] `}
+        className={`w-64  bg-lightCard dark:bg-darkCard dark:text-darkTitle   transition-all duration-300  mt-[0.5px] `}
       >
         {/* Logo */}
         <div className="flex items-center justify-between w-full p-[18px]  border-gray-300 lg:hidden">

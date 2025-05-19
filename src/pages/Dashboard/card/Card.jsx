@@ -9,7 +9,7 @@ const stats = [
   { title: "Canceled Orders", value: 15, bgColor: 'bg-gradient-to-r from-[#FA6464] to-[#DC2626]', icon: <FaShoppingBag size={80} /> },
   { title: "Sold Today", value: 5100, bgColor: 'bg-gradient-to-r from-[#F8BB21] to-[#FFA100]', icon: <FaMoneyBillWave size={80} /> },
   { title: "Total Sold", value: 98891, bgColor: 'bg-gradient-to-r from-[#F8BB21] to-[#FFA100]', icon: <FaMoneyBillWave size={80} /> },
-  { title: "Total Revenue", value: 10540, bgColor: 'bg-gradient-to-r from-[#F8BB21] to-[#FFA100]', icon: <FaMoneyBillWave size={80} /> },
+  { title: "Total Revenue", value: 105400, bgColor: 'bg-gradient-to-r from-[#F8BB21] to-[#FFA100]', icon: <FaMoneyBillWave size={80} /> },
 ];
 
 const Card = () => {
