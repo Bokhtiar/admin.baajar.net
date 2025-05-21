@@ -16,6 +16,7 @@ export default function CreateVendorModal({ onClose }) {
   const modalRef = useRef();
   const [imageName, setImageName] = useState("");
   const [btnLoading, setBtnLoading] = useState(false);
+  
 
   const handleOutsideClick = (e) => {
     if (modalRef.current && !modalRef.current.contains(e.target)) {
@@ -84,7 +85,7 @@ export default function CreateVendorModal({ onClose }) {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div
         ref={modalRef}
-        className="bg-white px-4 md:px-8 py-5 rounded-2xl shadow-md w-full max-w-md md:max-w-lg lg:max-w-xl max-h-[90vh] overflow-y-auto mx-4"
+        className="bg-white px-4 md:px-8 py-5 rounded-2xl shadow-md w-full max-w-md md:max-w-lg lg:max-w-xl max-h-[95vh] overflow-y-auto mx-4"
       >
         <h2 className="text-center text-xl font-semibold mb-4">
           Create A New Vendor

@@ -1,9 +1,10 @@
-import  { useState } from "react";
+import { useState } from "react";
 import DataTable from "react-data-table-component";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
 import img from "/image/bg/starry-night.webp";
 import CreateCategoryModal from "./CreateCategoryModa";
+import Header from "../../../components/heading/heading";
 
 const initialData = [
   { id: 1, name: "Groceries", image: img, products: 925, status: true },
@@ -71,6 +72,7 @@ export default function CategoryTable() {
     );
   };
 
+  console.log("search",search)
 
   const handleDelete = (id) => {
     setData((prev) => prev.filter((item) => item.id !== id));
@@ -146,36 +148,16 @@ export default function CategoryTable() {
 
   return (
     <div className="mt-3 bg ">
-      <div className="flex flex-col md:flex-row justify-between items-center mb-4  ">
-        <h2 className="text-xl font-semibold text-primary">All Categories</h2>
-        <div className="flex flex-col md:flex-row gap-2">
-          <div className="relative w-60 ">
-            <span className="absolute left-20 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm pointer-events-none">
-              <div className="flex items-center justify-center gap-2">
-                <div>
-                  <CiSearch className="text-xl" />
-                </div>
-                <h1>search</h1>
-              </div>
-            </span>
-            <input
-              type="text"
-              //   placeholder="Search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-4 pr-3 py-1 w-full border border-lightBorder rounded-full focus:outline-none "
-            />
-          </div>
 
-          <button className="bg-[#13BF00] text-white px-11 py-[6px] rounded-full hover:bg-green-600 cursor-pointer"
-          onClick={() => setShowModal(true)}
-          >
-            + Add New
-          </button>
-        </div>
-      </div>
 
-      <div className=" bg-white shadow rounded overflow-y-auto">
+      <Header
+        title="All Categories"
+        searchValue={search}
+        onSearchChange={(value) => setSearch(value)}
+        onAddClick={() => setShowModal(true)}
+      />
+
+      <div className=" bg-white shadow rounded overflow-y-auto mb-10">
         <DataTable
           columns={columns}
           data={filteredData}
@@ -184,7 +166,7 @@ export default function CategoryTable() {
           highlightOnHover
         />
       </div>
-            {showModal && (
+      {showModal && (
         <CreateCategoryModal
           onClose={() => setShowModal(false)}
           // onSubmit={handleAddCategory}

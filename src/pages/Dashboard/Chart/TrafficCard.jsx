@@ -52,7 +52,7 @@ const TrafficCard = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-md w-full ">
+    <div className="bg-[#FFFFFF] p-6 rounded-xl shadow-md w-full ">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold">Traffic</h2>
         <button className="text-sm text-blue-500">More →</button>

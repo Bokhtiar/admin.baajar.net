@@ -112,7 +112,7 @@ const columns = [
 
 const ProcessedOrderList = () => {
   return (
-    <div className=" bg-white shadow rounded overflow-y-auto">
+    <div className=" bg-white shadow rounded overflow-y-auto mb-10">
       
       <DataTable
         columns={columns}

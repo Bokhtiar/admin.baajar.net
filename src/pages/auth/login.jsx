@@ -34,6 +34,7 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
+    navigate("dashboard")
     e.preventDefault();
     if (!validateFields()) return;
 
@@ -49,6 +50,7 @@ const Login = () => {
           Toastify.Success("Login successfully done");
         } else {
           Toastify.Error("Invalid user role");
+          
         }
       }
     } catch (error) {

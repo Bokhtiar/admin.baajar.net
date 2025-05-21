@@ -15,7 +15,7 @@ export const DashboardLayout = () => {
         <Header toggleSidebar={toggleSidebar} />
       </div>
 
-      <div className="flex flex-1  gap-1">
+      <div className="flex flex-1 ">
         <div
           className={`fixed top-0 left-0 z-40 transition-transform duration-300 lg:static lg:translate-x-0 min-h-full  ${
             isSidebarOpen ? "translate-x-0" : "-translate-x-full"

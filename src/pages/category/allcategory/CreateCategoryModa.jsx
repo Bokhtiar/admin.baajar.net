@@ -64,7 +64,7 @@ export default function CreateCategoryModal({ onClose }) {
   }, [watchImage]);
 
   return (
-    <div className="fixed inset-0 bg-black/75 opacity-  flex items-center justify-center z-50 px-4">
+    <div className="fixed inset-0 bg-gradient-to-b from-black/85 to-black  flex items-center justify-center z-50 px-4">
       <div
         ref={modalRef}
         className="bg-white p-6 rounded-2xl shadow-md w-[400px] "
