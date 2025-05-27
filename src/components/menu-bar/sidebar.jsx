@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { RxDashboard } from "react-icons/rx";
-import { IoColorPaletteOutline } from "react-icons/io5";
+import { IoColorPaletteOutline, IoSettingsOutline } from "react-icons/io5";
 import {
   RiGalleryFill,
   RiMenuFold4Fill,
   RiProductHuntLine,
+  RiShieldUserFill,
 } from "react-icons/ri";
-import { FaUnity } from "react-icons/fa";
+import { FaList, FaUnity, FaUsers } from "react-icons/fa";
 import { CgAttribution } from "react-icons/cg";
 
 import {
@@ -15,7 +16,11 @@ import {
   MdBrandingWatermark,
   MdSettingsAccessibility,
   MdOutlineCategory,
+  MdStorefront,
 } from "react-icons/md";
+import { FiFileText } from "react-icons/fi";
+import { TbPackages, TbTruckDelivery } from "react-icons/tb";
+import { BsFillBagPlusFill } from "react-icons/bs";
 
 const Sidebar = ({ setIsSidebarOpen }) => {
   const [openMenu, setOpenMenu] = useState(null);
@@ -40,7 +45,7 @@ const Sidebar = ({ setIsSidebarOpen }) => {
 
     {
       title: "Orders",
-      icon: <RiProductHuntLine />,
+      icon: <FiFileText/>,
       childrens: [
         {
           title: "All Orders",
@@ -78,7 +83,7 @@ const Sidebar = ({ setIsSidebarOpen }) => {
 
     {
       title: "Category",
-      icon: <MdOutlineCategory />,
+      icon: <FaList />,
             childrens: [
         {
           title: "All Categories",
@@ -94,23 +99,38 @@ const Sidebar = ({ setIsSidebarOpen }) => {
     },
     {
       title: "Vendors",
-      icon: <MdBrandingWatermark />,
+      icon: <MdStorefront />,
       path: "/dashboard/vendors",
     },
     {
       title: "Product",
-      icon: <MdOutlineProductionQuantityLimits />,
+      icon: <TbPackages />,
       path: "/dashboard/product",
     },
     {
       title: "Delivery Man",
-      icon: <MdOutlineProductionQuantityLimits />,
+      icon: <TbTruckDelivery />,
       path: "/dashboard/delivery-man",
     },
 
     {
       title: "User",
-      icon: <MdSettingsAccessibility />,
+      icon: <FaUsers />,
+      path: "/dashboard/user",
+    },
+    {
+      title: "Admins",
+      icon: <RiShieldUserFill />,
+      path: "/dashboard/user",
+    },
+    {
+      title: "Earnings",
+      icon: <BsFillBagPlusFill />,
+      path: "/dashboard/user",
+    },
+    {
+      title: "Settings",
+      icon: <IoSettingsOutline />,
       path: "/dashboard/user",
     },
   ];

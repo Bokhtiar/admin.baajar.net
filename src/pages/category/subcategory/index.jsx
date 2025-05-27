@@ -1,72 +1,44 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
 import img from "/image/bg/starry-night.webp";
 import CreateSubCategoryModal from "./createSubCateModal";
 import Header from "../../../components/heading/heading";
+import { NetworkServices } from "../../../network";
+import { networkErrorHandeller } from "../../../utils/helpers";
+import { RiEdit2Fill } from "react-icons/ri";
+import { FaTrashCan } from "react-icons/fa6";
 
-const initialData = [
-  {
-    id: 1,
-    subcategory: "Rice",
-    category: "Groceries",
-    name: "Groceries",
-    image: img,
-    products: 925,
-    status: true,
-  },
-  {
-    id: 2,
-    name: "Meats",
-    subcategory: "Rice",
-    category: "Groceries",
-    image: img,
-    products: 825,
-    status: true,
-  },
-  {
-    id: 3,
-    name: "Dairy Products",
-    subcategory: "Rice",
-    category: "Groceries",
-    image: img,
-    products: 787,
-    status: true,
-  },
-  {
-    id: 4,
-    name: "Breads & Bakery",
-    subcategory: "Rice",
-    category: "Groceries",
-    image: img,
-    products: 632,
-    status: true,
-  },
-  {
-    id: 5,
-    name: "Beverages",
-    subcategory: "Rice",
-    category: "Groceries",
-    image: img,
-    products: 879,
-    status: true,
-  },
-  {
-    id: 6,
-    name: "Frozen Foods",
-    subcategory: "Rice",
-    category: "Groceries",
-    image: img,
-    products: 453,
-    status: true,
-  },
-];
 
 export default function SubCategoryTable() {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
+   const [loading, setLoading] = useState(false);
+
+   console.log("dghdgh",data)
+
+  // Fetch categories from API
+  const fetchCategory = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await NetworkServices.Category.index();
+      console.log("response", response);
+
+      if (response?.status === 200) {
+        setData(response?.data?.data?.child_category || []);
+      }
+    } catch (error) {
+      console.log(error);
+      networkErrorHandeller(error);
+    }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    fetchCategory();
+  }, [fetchCategory]);
 
   const handleToggle = (id) => {
     setData((prev) =>
@@ -80,15 +52,14 @@ export default function SubCategoryTable() {
     setData((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const filteredData = data.filter((item) =>
-    item.name.toLowerCase().includes(search.toLowerCase())
-  );
+  // const filteredData = data.filter((item) =>
+  //   item.name.toLowerCase().includes(search.toLowerCase())
+  // );
 
   const columns = [
-    {
+   {
       name: "SN.",
-      selector: (row, index) => String(index + 1).padStart(2, "0") + ".",
-      //   width: "70px",
+      selector: (row, index) => row?.serial_num +"."
     },
     // {
     //   name: "Image",
@@ -105,7 +76,7 @@ export default function SubCategoryTable() {
     // },
     {
       name: "Sub-Category",
-      selector: (row) => row.subcategory,
+      selector: (row) => row?.category_name,
       sortable: true,
     },
     {
@@ -122,9 +93,10 @@ export default function SubCategoryTable() {
       name: "Status",
       cell: (row) => (
         <button
-          onClick={() => handleToggle(row.id)}
+          onClick={() => handleToggle(row.status)}
+          
           className={`w-10 h-6 rounded-full flex items-center px-1 transition ${
-            row.status ? "bg-green-500" : "bg-gray-300"
+            row.status ==1 ? "bg-green-500" : "bg-gray-300"
           }`}
         >
           <div
@@ -138,15 +110,15 @@ export default function SubCategoryTable() {
     {
       name: "Action",
       cell: (row) => (
-        <div className="flex gap-2 text-lg">
-          <button className="text-blue-600 hover:text-blue-800">
-            <FaEdit />
+        <div className="flex gap-3 text-lg">
+          <button className="">
+            <RiEdit2Fill />
           </button>
           <button
             className="text-red-500 hover:text-red-700"
             onClick={() => handleDelete(row.id)}
           >
-            <FaTrash />
+            <FaTrashCan />
           </button>
         </div>
       ),
@@ -165,7 +137,7 @@ export default function SubCategoryTable() {
       <div className=" bg-white shadow rounded overflow-y-auto mb-10">
         <DataTable
           columns={columns}
-          data={filteredData}
+          data={data}
           pagination
           responsive
           highlightOnHover

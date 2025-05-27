@@ -7,6 +7,7 @@ const Header = ({
   onSearchChange, // this will be triggered AFTER debounce
   onAddClick,
   addButtonText = "+ Add New",
+  
 }) => {
   const [inputValue, setInputValue] = useState(searchValue);
 
@@ -23,6 +24,7 @@ const Header = ({
 
     return () => clearTimeout(timer);
   }, [inputValue, onSearchChange]);
+  
 
   return (
     <div className="flex flex-col md:flex-row justify-between items-center mb-4 mt-5">

@@ -2,7 +2,7 @@ import { privateRequest } from '../config/axios.config'
 
 /* list of resource */
 export const index = async ( ) => {
-    return await privateRequest.get(`/admin/category` );
+    return await privateRequest.get(`/category` );
 };
 
 /* parent category list */
@@ -28,7 +28,7 @@ export const update = async(id, data) => {
 
 /* resource destory */
 export const destroy = async (id) => {
-    return await privateRequest.delete(`/admin/category/${id}`)
+    return await privateRequest.delete(`/category/${id}`)
 }
 
 /* resource destory */

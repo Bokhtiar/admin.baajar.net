@@ -1,7 +1,8 @@
 import {privateRequest, publicRequest} from '../config/axios.config'
 
 export const login = async (data) => {
-    return await publicRequest.post(`/auth/login`, data);
+    console.log("data",data)
+    return await publicRequest.post(`auth/login`, data);
 };
 
 /* list of resource */
@@ -25,3 +26,13 @@ export const show = async(id) => {
 export const destroy = async (id) => {
     return await privateRequest.delete(`/admin/user-list/${id}`)
 }
+// forgot password
+export const forgotpass = async (data) => {
+    console.log("data",data)
+    return await publicRequest.post(`/auth/forgot/password/sms-send`, data);
+};
+// forgot password
+export const forgotpassSend = async (data) => {
+    console.log("data",data)
+    return await publicRequest.post(`/forgot-code-check`, data);
+};

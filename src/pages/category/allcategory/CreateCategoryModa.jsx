@@ -137,3 +137,5 @@ export default function CreateCategoryModal({ onClose }) {
     </div>
   );
 }
+
+

@@ -40,6 +40,7 @@ const Login = () => {
 
     try {
       const response = await NetworkServices.Authentication.login(inputValues);
+      console.log("response", response);
       const queryParams = new URLSearchParams(location.search);
       const redirectFrom = queryParams.get("redirectFrom") || "/dashboard";
 
@@ -50,7 +51,6 @@ const Login = () => {
           Toastify.Success("Login successfully done");
         } else {
           Toastify.Error("Invalid user role");
-          
         }
       }
     } catch (error) {
@@ -67,7 +67,6 @@ const Login = () => {
       <div className="relative w-96 p-8 bg-white/30 rounded-lg shadow-lg text-white border border-white">
         <h2 className="text-center text-2xl font-bold mb-4">Login</h2>
         <div className="space-y-6">
-
           {/* Phone Number Input */}
           <div className="relative">
             <label
@@ -150,9 +149,12 @@ const Login = () => {
             <label className="flex items-center">
               <input type="checkbox" className="mr-2" /> Remember me
             </label>
-            <a href="#" className="hover:underline">
+            {/* <a href="#" className="hover:underline">
               Forgot password?
-            </a>
+            </a> */}
+            <Link to="/forgot-password" className="hover:underline">
+              Forgot password?
+            </Link>
           </div>
 
           {/* Login Button */}

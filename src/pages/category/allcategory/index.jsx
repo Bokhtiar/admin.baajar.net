@@ -1,101 +1,100 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { FaEdit, FaTrash } from "react-icons/fa";
-import { CiSearch } from "react-icons/ci";
-import img from "/image/bg/starry-night.webp";
+
 import CreateCategoryModal from "./CreateCategoryModa";
 import Header from "../../../components/heading/heading";
-
-const initialData = [
-  { id: 1, name: "Groceries", image: img, products: 925, status: true },
-  {
-    id: 2,
-    name: "Meats",
-    image: img,
-    products: 825,
-    status: true,
-  },
-  {
-    id: 3,
-    name: "Dairy Products",
-    image: img,
-    products: 787,
-    status: true,
-  },
-  {
-    id: 4,
-    name: "Breads & Bakery",
-    image: img,
-    products: 632,
-    status: true,
-  },
-  {
-    id: 5,
-    name: "Beverages",
-    image: img,
-    products: 879,
-    status: true,
-  },
-  {
-    id: 6,
-    name: "Frozen Foods",
-    image: img,
-    products: 453,
-    status: true,
-  },
-  {
-    id: 7,
-    name: "Beverages",
-    image: img,
-    products: 879,
-    status: true,
-  },
-  {
-    id: 8,
-    name: "Frozen Foods",
-    image: img,
-    products: 453,
-    status: true,
-  },
-];
+import { NetworkServices } from "../../../network";
+import { networkErrorHandeller } from "../../../utils/helpers";
+import { RiEdit2Fill } from "react-icons/ri";
+import { FaTrashCan } from "react-icons/fa6";
+import { confirmAlert } from "react-confirm-alert";
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import { Toastify } from "../../../components/toastify";
 
 export default function CategoryTable() {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleToggle = (id) => {
-    setData((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, status: !item.status } : item
-      )
-    );
+  console.log("dghdgh", data);
+
+  // Fetch categories from API
+  const fetchCategory = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await NetworkServices.Category.index();
+      console.log("response", response);
+
+      if (response?.status === 200) {
+        setData(response?.data?.data?.parent_category || []);
+      }
+    } catch (error) {
+      console.log(error);
+      networkErrorHandeller(error);
+    }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    fetchCategory();
+  }, [fetchCategory]);
+
+  // const handleToggle = (id) => {
+  //   setData((prev) =>
+  //     prev.map((item) =>
+  //       item.id === id ? { ...item, status: !item.status } : item
+  //     )
+  //   );
+  // };
+
+  console.log("search", search);
+
+  // const filteredData = data.filter((item) =>
+  //   item.name.toLowerCase().includes(search.toLowerCase())
+  // );
+  // String(index + 1).padStart(2, "0") + ".",
+
+  const destroy = (id) => {
+    console.log("first",id)
+    confirmAlert({
+      title: "Confirm Delete",
+      message: "Are you sure you want to delete this category?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: async () => {
+            try {
+              const response = await NetworkServices.Category.destroy(id);
+              if (response?.status === 200) {
+                Toastify.Info("Category deleted successfully.");
+                fetchCategory();
+              }
+            } catch (error) {
+              networkErrorHandeller(error);
+            }
+          },
+        },
+        {
+          label: "No",
+        },
+      ],
+    });
   };
-
-  console.log("search",search)
-
-  const handleDelete = (id) => {
-    setData((prev) => prev.filter((item) => item.id !== id));
-  };
-
-  const filteredData = data.filter((item) =>
-    item.name.toLowerCase().includes(search.toLowerCase())
-  );
 
   const columns = [
     {
       name: "SN.",
-      selector: (row, index) => String(index + 1).padStart(2, "0") + ".",
-      //   width: "70px",
+      selector: (row) => row?.serial_num + ".",
     },
     {
       name: "Image",
-      selector: (row) => row.image,
+      selector: (row) => row.category_image,
       cell: (row) => (
-        <div className="w-12 h-10 bg-[#FFFFFF] shadow-2xl  rounded-sm flex items-center justify-center">
+        <div className="w-12 h-10 bg-[#FFFFFF] shadow-md rounded-sm flex items-center justify-center transition-transform duration-300 hover:shadow-xl scale-105">
           <img
-            className="w-8 h-8 object-contain"
-            src={row.image}
+            className="w-8 h-8 object-contain "
+            src={`${import.meta.env.VITE_API_SERVER}${row?.category_image}`}
             alt={row.name}
           />
         </div>
@@ -103,7 +102,7 @@ export default function CategoryTable() {
     },
     {
       name: "Name",
-      selector: (row) => row.name,
+      selector: (row) => row.category_name,
       sortable: true,
     },
     {
@@ -115,9 +114,9 @@ export default function CategoryTable() {
       name: "Status",
       cell: (row) => (
         <button
-          onClick={() => handleToggle(row.id)}
+          // onClick={() => handleToggle(row.status)}
           className={`w-10 h-6 rounded-full flex items-center px-1 transition ${
-            row.status ? "bg-green-500" : "bg-gray-300"
+            row.status == 1 ? "bg-green-500" : "bg-gray-300"
           }`}
         >
           <div
@@ -131,25 +130,26 @@ export default function CategoryTable() {
     {
       name: "Action",
       cell: (row) => (
-        <div className="flex gap-2 text-lg">
-          <button className="text-blue-600 hover:text-blue-800">
-            <FaEdit />
+        <div className="flex gap-3 text-lg">
+          <button className="">
+            <RiEdit2Fill />
           </button>
           <button
             className="text-red-500 hover:text-red-700"
-            onClick={() => handleDelete(row.id)}
+            
           >
-            <FaTrash />
+            <FaTrashCan
+            onClick={() => destroy(row?.category_id)}
+            />
           </button>
         </div>
       ),
     },
+,
   ];
 
   return (
     <div className="mt-3 bg ">
-
-
       <Header
         title="All Categories"
         searchValue={search}
@@ -160,7 +160,7 @@ export default function CategoryTable() {
       <div className=" bg-white shadow rounded overflow-y-auto mb-10">
         <DataTable
           columns={columns}
-          data={filteredData}
+          data={data}
           pagination
           responsive
           highlightOnHover

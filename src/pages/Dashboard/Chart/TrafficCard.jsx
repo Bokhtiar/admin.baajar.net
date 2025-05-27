@@ -58,8 +58,8 @@ const TrafficCard = () => {
         <button className="text-sm text-blue-500">More →</button>
       </div>
 
-      <div className="flex justify-between mb-4">
-        <div className="bg-white shadow-xl w-56 px-5 py-4 flex justify-between rounded-md">
+      <div className="flex justify-between gap-8 mb-4">
+        <div className="bg-white shadow-xl w-[50%] px-5 py-4 flex justify-between rounded-md">
           <div>
             <p className="text-sm text-gray-500 pb-1">Store Visits</p>
             <p className="text-2xl font-bold">8950</p>
@@ -68,7 +68,7 @@ const TrafficCard = () => {
             <span className="text-green-500 text-sm">+22%</span>
           </div>
         </div>
-        <div className="bg-white shadow-xl w-56 px-5 py-4 flex justify-between rounded-md">
+        <div className="bg-white shadow-xl w-[50%] px-5 py-4 flex justify-between rounded-md">
           <div>
             <p className="text-sm text-gray-500 pb-1">Visitors</p>
             <p className="text-2xl font-bold">1520</p>

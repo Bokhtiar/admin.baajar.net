@@ -109,6 +109,27 @@ const columns = [
     ),
   },
 ];
+  const customStyles = {
+    headCells: {
+      style: {
+        fontWeight: "600",
+        fontSize: "14px",
+        color: "#6B7280",
+      },
+    },
+    rows: {
+      style: {
+        minHeight: "64px",
+        borderBottom: "1px solid #E5E7EB",
+      },
+    },
+    cells: {
+      style: {
+        paddingTop: "14px",
+        paddingBottom: "14px",
+      },
+    },
+  };
 
 const AllOrderList = () => {
   return (
@@ -117,6 +138,7 @@ const AllOrderList = () => {
       <DataTable
         columns={columns}
         data={orders}
+        // customStyles={customStyles}
         pagination
         highlightOnHover
         responsive
