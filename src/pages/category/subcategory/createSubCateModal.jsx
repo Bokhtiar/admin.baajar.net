@@ -5,8 +5,9 @@ import { NetworkServices } from "../../../network";
 import { Toastify } from "../../../components/toastify";
 // import { networkErrorHandeller } from "../../../utils/helpers/index";
 import { RiArrowDropDownLine } from "react-icons/ri";
+import { networkErrorHandeller } from "../../../utils/helpers";
 
-export default function CreateSubCategoryModal({ onClose }) {
+export default function CreateSubCategoryModal({ onClose,fetchCategory }) {
   const { register, handleSubmit, reset, watch } = useForm();
   const modalRef = useRef();
 //   const [imageName, setImageName] = useState("");
@@ -31,10 +32,11 @@ export default function CreateSubCategoryModal({ onClose }) {
       setBtnLoading(true); // Loader চালু
 
       const formData = new FormData();
-      formData.append("name", data.name);
-      formData.append("slug", data.slug);
-      formData.append("category", data.category);
-      formData.append("status", data.status);
+      formData.append("category_name", data.name);
+      formData.append("parent_id", "1");
+      formData.append("isNavbar", '1');
+      // formData.append("status", data.status);
+      formData.append("status", "1");
 
 
 
@@ -43,12 +45,13 @@ export default function CreateSubCategoryModal({ onClose }) {
 
       if (response && response.status === 200) {
         Toastify.Success("Category created successfully!");
-        reset(); // ফর্ম রিসেট
-        onClose(); // modal বন্ধ
+        reset(); 
+        onClose(); 
+        fetchCategory()
       }
     } catch (error) {
-      // networkErrorHandeller(error);
-      console.log(error);
+      networkErrorHandeller(error);
+     
     } finally {
       setBtnLoading(false);
     }

@@ -1,4 +1,5 @@
-import {privateRequest, publicRequest} from '../config/axios.config'
+import { privateRequest, publicRequest } from "../config/axios.config";
+
 
 export const login = async (data) => {
     console.log("data",data)

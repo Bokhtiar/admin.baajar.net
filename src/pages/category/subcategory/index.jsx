@@ -9,6 +9,8 @@ import { NetworkServices } from "../../../network";
 import { networkErrorHandeller } from "../../../utils/helpers";
 import { RiEdit2Fill } from "react-icons/ri";
 import { FaTrashCan } from "react-icons/fa6";
+import { confirmAlert } from "react-confirm-alert";
+import { Toastify } from "../../../components/toastify";
 
 
 export default function SubCategoryTable() {
@@ -48,9 +50,33 @@ export default function SubCategoryTable() {
     );
   };
 
-  const handleDelete = (id) => {
-    setData((prev) => prev.filter((item) => item.id !== id));
+  const destroy = (id) => {
+    console.log("first",id)
+    confirmAlert({
+      title: "Confirm Delete",
+      message: "Are you sure you want to delete this category?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: async () => {
+            try {
+              const response = await NetworkServices.Category.destroy(id);
+              if (response?.status === 200) {
+                Toastify.Info("Category deleted successfully.");
+                fetchCategory();
+              }
+            } catch (error) {
+              networkErrorHandeller(error);
+            }
+          },
+        },
+        {
+          label: "No",
+        },
+      ],
+    });
   };
+
 
   // const filteredData = data.filter((item) =>
   //   item.name.toLowerCase().includes(search.toLowerCase())
@@ -116,7 +142,7 @@ export default function SubCategoryTable() {
           </button>
           <button
             className="text-red-500 hover:text-red-700"
-            onClick={() => handleDelete(row.id)}
+            onClick={() => destroy(row?.category_id)}
           >
             <FaTrashCan />
           </button>
@@ -146,6 +172,7 @@ export default function SubCategoryTable() {
       {showModal && (
         <CreateSubCategoryModal
           onClose={() => setShowModal(false)}
+          fetchCategory={fetchCategory}
           // onSubmit={handleAddCategory}
         />
       )}

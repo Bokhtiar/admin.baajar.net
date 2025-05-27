@@ -93,7 +93,7 @@ export default function CategoryTable() {
       cell: (row) => (
         <div className="w-12 h-10 bg-[#FFFFFF] shadow-md rounded-sm flex items-center justify-center transition-transform duration-300 hover:shadow-xl scale-105">
           <img
-            className="w-8 h-8 object-contain "
+            className="w-8 h-6  "
             src={`${import.meta.env.VITE_API_SERVER}${row?.category_image}`}
             alt={row.name}
           />
@@ -130,12 +130,12 @@ export default function CategoryTable() {
     {
       name: "Action",
       cell: (row) => (
-        <div className="flex gap-3 text-lg">
-          <button className="">
+        <div className="flex gap-3 text-lg cursor-pointer">
+          <button className="cursor-pointer">
             <RiEdit2Fill />
           </button>
           <button
-            className="text-red-500 hover:text-red-700"
+            className="text-red-500 hover:text-red-700 cursor-pointer"
             
           >
             <FaTrashCan
@@ -170,6 +170,7 @@ export default function CategoryTable() {
         <CreateCategoryModal
           onClose={() => setShowModal(false)}
           // onSubmit={handleAddCategory}
+          fetchCategory={fetchCategory}
         />
       )}
     </div>

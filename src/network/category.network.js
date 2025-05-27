@@ -13,7 +13,7 @@ export const parentList = async() => {
 /* resource store */
 export const store = async(data) => {
     
-    return await privateRequest.post('/admin/category', data)
+    return await privateRequest.post('/category', data)
 }
 
 /* resource show */

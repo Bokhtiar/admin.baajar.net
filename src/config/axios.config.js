@@ -1,7 +1,5 @@
 import axios from "axios";
 import { getToken } from "../utils/helpers";
-// import { getToken } from "../utils/helpers";
-// import { getToken } from "../utils/helper";
 
  
 const publicRequest = axios.create({
