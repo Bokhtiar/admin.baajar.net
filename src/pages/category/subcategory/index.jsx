@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { FaEdit, FaTrash } from "react-icons/fa";
-import { CiSearch } from "react-icons/ci";
-import img from "/image/bg/starry-night.webp";
+
 import CreateSubCategoryModal from "./createSubCateModal";
 import Header from "../../../components/heading/heading";
 import { NetworkServices } from "../../../network";
@@ -11,15 +9,17 @@ import { RiEdit2Fill } from "react-icons/ri";
 import { FaTrashCan } from "react-icons/fa6";
 import { confirmAlert } from "react-confirm-alert";
 import { Toastify } from "../../../components/toastify";
-
+import SubCategoryUpdate from "./SubCategoryUpdate";
 
 export default function SubCategoryTable() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
-   const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [updateModal, setUpdateModal] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
-   console.log("dghdgh",data)
+  console.log("dghdgh", data);
 
   // Fetch categories from API
   const fetchCategory = useCallback(async () => {
@@ -51,7 +51,7 @@ export default function SubCategoryTable() {
   };
 
   const destroy = (id) => {
-    console.log("first",id)
+    console.log("first", id);
     confirmAlert({
       title: "Confirm Delete",
       message: "Are you sure you want to delete this category?",
@@ -77,15 +77,14 @@ export default function SubCategoryTable() {
     });
   };
 
-
   // const filteredData = data.filter((item) =>
   //   item.name.toLowerCase().includes(search.toLowerCase())
   // );
 
   const columns = [
-   {
+    {
       name: "SN.",
-      selector: (row, index) => row?.serial_num +"."
+      selector: (row) => row?.serial_num + ".",
     },
     // {
     //   name: "Image",
@@ -120,9 +119,8 @@ export default function SubCategoryTable() {
       cell: (row) => (
         <button
           onClick={() => handleToggle(row.status)}
-          
           className={`w-10 h-6 rounded-full flex items-center px-1 transition ${
-            row.status ==1 ? "bg-green-500" : "bg-gray-300"
+            row.status == 1 ? "bg-green-500" : "bg-gray-300"
           }`}
         >
           <div
@@ -136,12 +134,18 @@ export default function SubCategoryTable() {
     {
       name: "Action",
       cell: (row) => (
-        <div className="flex gap-3 text-lg">
-          <button className="">
-            <RiEdit2Fill />
+        <div className="flex gap-3 text-lg cursor-pointer">
+          <button
+            onClick={() => {
+              setSelectedCategoryId(row.category_id);
+              setUpdateModal(true);
+            }}
+            className=""
+          >
+            <RiEdit2Fill className="cursor-pointer" />
           </button>
           <button
-            className="text-red-500 hover:text-red-700"
+            className="text-red-500 hover:text-red-700 cursor-pointer"
             onClick={() => destroy(row?.category_id)}
           >
             <FaTrashCan />
@@ -174,6 +178,14 @@ export default function SubCategoryTable() {
           onClose={() => setShowModal(false)}
           fetchCategory={fetchCategory}
           // onSubmit={handleAddCategory}
+        />
+      )}
+      {updateModal && (
+        <SubCategoryUpdate
+          categoryId={selectedCategoryId}
+          onClose={() => setUpdateModal(false)}
+          // onSubmit={handleAddCategory}
+          fetchCategory={fetchCategory}
         />
       )}
     </div>

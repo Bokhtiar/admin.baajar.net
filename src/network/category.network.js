@@ -18,12 +18,12 @@ export const store = async(data) => {
 
 /* resource show */
 export const show = async(id) => {
-    return await privateRequest.get(`/admin/category/${id}`)
+    return await privateRequest.get(`/category/${id}`)
 }
 
 /* reosurce update */
 export const update = async(id, data) => {
-    return await privateRequest.post(`admin/category/${id}`, data)
+    return await privateRequest.post(`/category/${id}`, data)
 }
 
 /* resource destory */

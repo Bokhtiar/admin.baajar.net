@@ -8,14 +8,17 @@ import { networkErrorHandeller } from "../../../utils/helpers";
 import { RiEdit2Fill } from "react-icons/ri";
 import { FaTrashCan } from "react-icons/fa6";
 import { confirmAlert } from "react-confirm-alert";
-import 'react-confirm-alert/src/react-confirm-alert.css';
+import "react-confirm-alert/src/react-confirm-alert.css";
 import { Toastify } from "../../../components/toastify";
+import CategoryUpdateModal from "./CategoryUpdateModal";
 
 export default function CategoryTable() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [updateModal, setUpdateModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
   console.log("dghdgh", data);
 
@@ -56,7 +59,7 @@ export default function CategoryTable() {
   // String(index + 1).padStart(2, "0") + ".",
 
   const destroy = (id) => {
-    console.log("first",id)
+    console.log("first", id);
     confirmAlert({
       title: "Confirm Delete",
       message: "Are you sure you want to delete this category?",
@@ -131,21 +134,21 @@ export default function CategoryTable() {
       name: "Action",
       cell: (row) => (
         <div className="flex gap-3 text-lg cursor-pointer">
-          <button className="cursor-pointer">
+          <button
+            onClick={() => {
+              setSelectedCategoryId(row.category_id);
+              setUpdateModal(true);
+            }}
+            className="cursor-pointer"
+          >
             <RiEdit2Fill />
           </button>
-          <button
-            className="text-red-500 hover:text-red-700 cursor-pointer"
-            
-          >
-            <FaTrashCan
-            onClick={() => destroy(row?.category_id)}
-            />
+          <button className="text-red-500 hover:text-red-700 cursor-pointer">
+            <FaTrashCan onClick={() => destroy(row?.category_id)} />
           </button>
         </div>
       ),
     },
-,
   ];
 
   return (
@@ -169,6 +172,14 @@ export default function CategoryTable() {
       {showModal && (
         <CreateCategoryModal
           onClose={() => setShowModal(false)}
+          // onSubmit={handleAddCategory}
+          fetchCategory={fetchCategory}
+        />
+      )}
+      {updateModal && (
+        <CategoryUpdateModal
+        categoryId={selectedCategoryId}
+          onClose={() => setUpdateModal(false)}
           // onSubmit={handleAddCategory}
           fetchCategory={fetchCategory}
         />
