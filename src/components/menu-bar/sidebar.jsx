@@ -121,17 +121,17 @@ const Sidebar = ({ setIsSidebarOpen }) => {
     {
       title: "Admins",
       icon: <RiShieldUserFill />,
-      path: "/dashboard/user",
+      path: "/dashboard/admins",
     },
     {
       title: "Earnings",
       icon: <BsFillBagPlusFill />,
-      path: "/dashboard/user",
+      path: "/dashboard/earnings",
     },
     {
       title: "Settings",
       icon: <IoSettingsOutline />,
-      path: "/dashboard/user",
+      path: "/dashboard/settings",
     },
   ];
   return (
