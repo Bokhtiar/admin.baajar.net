@@ -89,7 +89,11 @@ const columns = [
   { name: "Price", selector: (row) => row.price },
   {
     name: "Order Status",
-    cell: (row) => getStatusBadge(row.status),
+    cell: (row) => (
+      <div className="text-nowrap">
+        {getStatusBadge(row.status)}
+      </div>
+    ),
   },
   {
     name: "Delivery Man",
@@ -109,13 +113,39 @@ const columns = [
   },
 ];
 
+const customStyles = {
+  headCells: {
+    style: {
+      fontWeight: "400",
+      fontSize: "14px",
+      color: "#8B8B8B", 
+    },
+  },
+  rows: {
+    style: {
+      minHeight: "64px",
+      borderBottom: "1px solid #E5E7EB",
+      color: "#33363F", 
+    },
+  },
+  cells: {
+    style: {
+      paddingTop: "8px",
+      paddingBottom: "8px",
+      color: "#33363F", 
+    },
+  },
+};
+
+
 const CompleteOrderList = () => {
   return (
-    <div className=" bg-white shadow rounded overflow-y-auto mb-10">
+    <div className=" bg-white rounded overflow-y-auto mb-10">
       
       <DataTable
         columns={columns}
         data={orders}
+        customStyles={customStyles}
         pagination
         highlightOnHover
         responsive

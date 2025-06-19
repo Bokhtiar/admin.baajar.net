@@ -6,7 +6,7 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 const orders = [
   {
     date: "26 Apr 25",
-    time:"10.30 AM",
+    time: "10.30 AM",
     orderNo: "48956486",
     customer: "Bakhtiar Tashar",
     address: "23/2 Jailroad Road, Sylhet",
@@ -17,7 +17,7 @@ const orders = [
   },
   {
     date: "24 Apr 25",
-    time:"10.30 AM",
+    time: "10.30 AM",
     orderNo: "48956486",
     customer: "Bakhtiar Tashar",
     address: "23/2 Jailroad Road, Sylhet",
@@ -28,7 +28,7 @@ const orders = [
   },
   {
     date: "24 Apr 25",
-    time:"10.30 AM",
+    time: "10.30 AM",
     orderNo: "48956486",
     customer: "Bakhtiar Tashar",
     address: "23/2 Jailroad Road, Sylhet",
@@ -39,7 +39,7 @@ const orders = [
   },
   {
     date: "24 Apr 25",
-    time:"10.30 AM",
+    time: "10.30 AM",
     orderNo: "48956486",
     customer: "Bakhtiar Tashar",
     address: "23/2 Jailroad Road, Sylhet",
@@ -67,30 +67,35 @@ const getStatusBadge = (status) => {
 
 const columns = [
   {
-  name: "Date",
-  sortable: true,
-  cell: (row) => (
-    <div>
-      <div className="font-medium">{row.date}</div>
-      <div className="text-xs text-gray-500">{row.time}</div>
-    </div>
-  ),
-},
+    name: "Date",
+    sortable: true,
+    cell: (row) => (
+      <div>
+        <div className="font-medium">{row.date}</div>
+        <div className="text-xs text-gray-500">{row.time}</div>
+      </div>
+    ),
+  },
   { name: "Order No.", selector: (row) => row.orderNo },
   { name: "Customer", selector: (row) => row.customer },
   {
-  name: "Address",
-  cell: (row) => (
-    <div className="whitespace-normal break-words max-w-[220px]">
-      {row.address}
-    </div>
-  ),
-},
+    name: "Address",
+    cell: (row) => (
+      <div className="whitespace-normal break-words max-w-[220px]">
+        {row.address}
+      </div>
+    ),
+  },
   { name: "Vendor", selector: (row) => row.vendor },
   { name: "Price", selector: (row) => row.price },
+
   {
     name: "Order Status",
-    cell: (row) => getStatusBadge(row.status),
+    cell: (row) => (
+      <div className="text-nowrap">
+        {getStatusBadge(row.status)}
+      </div>
+    ),
   },
   {
     name: "Delivery Man",
@@ -109,36 +114,38 @@ const columns = [
     ),
   },
 ];
-  const customStyles = {
-    headCells: {
-      style: {
-        fontWeight: "600",
-        fontSize: "14px",
-        color: "#6B7280",
-      },
+const customStyles = {
+  headCells: {
+    style: {
+      fontWeight: "400",
+      fontSize: "14px",
+      color: "#8B8B8B", 
     },
-    rows: {
-      style: {
-        minHeight: "64px",
-        borderBottom: "1px solid #E5E7EB",
-      },
+  },
+  rows: {
+    style: {
+      minHeight: "64px",
+      borderBottom: "1px solid #E5E7EB",
+      color: "#33363F", 
     },
-    cells: {
-      style: {
-        paddingTop: "14px",
-        paddingBottom: "14px",
-      },
+  },
+  cells: {
+    style: {
+      paddingTop: "8px",
+      paddingBottom: "8px",
+      color: "#33363F", 
     },
-  };
+  },
+};
+
 
 const AllOrderList = () => {
   return (
-    <div className=" bg-white shadow rounded overflow-y-auto mb-10">
-      
+    <div className=" bg-white  rounded overflow-y-auto mb-10">
       <DataTable
         columns={columns}
         data={orders}
-        // customStyles={customStyles}
+        customStyles={customStyles}
         pagination
         highlightOnHover
         responsive

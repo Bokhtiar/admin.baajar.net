@@ -28,7 +28,7 @@ const bestSellers = [
 
 const BestSellersCard = () => {
   return (
-    <div className="bg-white p-6 rounded-xl shadow-md w-full ">
+    <div className="bg-white p-6 rounded-xl shadow-md shadow-[#3326AE14] w-full ">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold">Best Sellers</h2>
         <button className="text-sm text-blue-500">More →</button>

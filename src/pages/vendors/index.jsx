@@ -6,6 +6,7 @@ import { FaTrashAlt, FaEdit } from "react-icons/fa";
 import img from "/image/bg/starry-night.webp";
 import CreateVendorModal from "./CreateVendorModal";
 import Header from "../../components/heading/heading";
+import ListSkeleton from "../../components/loading/ListLoading";
 
 const data = [
   {
@@ -104,10 +105,34 @@ const columns = [
   },
 ];
 
+const customStyles = {
+  headCells: {
+    style: {
+      fontWeight: "400",
+      fontSize: "14px",
+      color: "#8B8B8B",
+    },
+  },
+  rows: {
+    style: {
+      minHeight: "64px",
+      borderBottom: "1px solid #E5E7EB",
+      color: "#33363F",
+    },
+  },
+  cells: {
+    style: {
+      paddingTop: "8px",
+      paddingBottom: "8px",
+      color: "#33363F",
+    },
+  },
+};
+
 export default function AllVendorsTable() {
   const [showModal, setShowModal] = useState(false);
   const [search, setSearch] = useState("");
-  console.log("searchxx",search)
+  console.log("searchxx", search);
   return (
     <div className=" bg-white rounded-lg  mt-3">
       <Header
@@ -117,10 +142,23 @@ export default function AllVendorsTable() {
         onAddClick={() => setShowModal(true)}
       />
 
-      <div className="bg-white shadow rounded overflow-y-auto mb-10">
+      <div className="bg-white  rounded overflow-y-auto mb-10">
+        {/* {loading ? (
+          <ListSkeleton />
+        ) : (
+          <DataTable
+            columns={columns}
+            data={data}
+            customStyles={customStyles}
+            pagination
+            highlightOnHover
+            responsive
+          />
+        )} */}
         <DataTable
           columns={columns}
           data={data}
+          customStyles={customStyles}
           pagination
           highlightOnHover
           responsive

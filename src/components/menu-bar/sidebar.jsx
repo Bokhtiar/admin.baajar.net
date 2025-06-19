@@ -138,7 +138,7 @@ const Sidebar = ({ setIsSidebarOpen }) => {
     <>
       <div
       // overflow-y-auto scrollbar-thin
-        className={`w-64  bg-lightCard dark:bg-darkCard dark:text-darkTitle   transition-all duration-300  mt-[0.5px] `}
+        className={`w-64  bg-lightCard dark:bg-darkCard dark:text-darkTitle   transition-all duration-300   mt-[0.5px] `}
       >
         {/* Logo */}
         <div className="flex items-center justify-between w-full p-[18px]  border-gray-300 lg:hidden">
@@ -155,7 +155,7 @@ const Sidebar = ({ setIsSidebarOpen }) => {
         </div>
 
         {/* Menu List */}
-        <nav className="mt-1 overflow-y-auto">
+        <nav className="mt-1 overflow-y-auto max-h-[calc(100vh-60px)] pb-14">
           {" "}
           {/* Prevents blue bar from going outside */}
           {menuData.map((item, index) => {

@@ -3,20 +3,20 @@ import Cookies from 'js-cookie';
 import { Toastify } from '../../components/toastify';
 /* Set token */
 export const setToken = async (token) => {
-    Cookies.set('token', token, { expires: 7, path: '/' }); // Set token with expiration (7 days) and path
+    Cookies.set('bajjar-admin', token, { expires: 7, path: '/' }); // Set token with expiration (7 days) and path
     return true;
 };
 
 /* Get token */
 export const getToken = () => {
     if (typeof window !== 'undefined') {
-        return Cookies.get('token'); // Retrieve token from cookie
+        return Cookies.get('bajjar-admin'); // Retrieve token from cookie
     }
 };
 
 /* Remove token */
 export const removeToken = () => {
-    Cookies.remove('token');
+    Cookies.remove('bajjar-admin');
     return true;
 };
 

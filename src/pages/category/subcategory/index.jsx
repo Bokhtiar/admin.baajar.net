@@ -10,6 +10,8 @@ import { FaTrashCan } from "react-icons/fa6";
 import { confirmAlert } from "react-confirm-alert";
 import { Toastify } from "../../../components/toastify";
 import SubCategoryUpdate from "./SubCategoryUpdate";
+import ListLoading from "../../../components/loading/ListLoading";
+import ListSkeleton from "../../../components/loading/ListLoading";
 
 export default function SubCategoryTable() {
   const [data, setData] = useState([]);
@@ -155,6 +157,34 @@ export default function SubCategoryTable() {
     },
   ];
 
+  // if (loading) {
+  //   <ListLoading></ListLoading>;
+  // }
+
+  const customStyles = {
+    headCells: {
+      style: {
+        fontWeight: "400",
+        fontSize: "14px",
+        color: "#8B8B8B",
+      },
+    },
+    rows: {
+      style: {
+        minHeight: "64px",
+        borderBottom: "1px solid #E5E7EB",
+        color: "#33363F",
+      },
+    },
+    cells: {
+      style: {
+        paddingTop: "8px",
+        paddingBottom: "8px",
+        color: "#33363F",
+      },
+    },
+  };
+
   return (
     <div className="mt-3 bg ">
       <Header
@@ -164,14 +194,19 @@ export default function SubCategoryTable() {
         onAddClick={() => setShowModal(true)}
       />
 
-      <div className=" bg-white shadow rounded overflow-y-auto mb-10">
-        <DataTable
-          columns={columns}
-          data={data}
-          pagination
-          responsive
-          highlightOnHover
-        />
+      <div className=" bg-white  rounded overflow-y-auto mb-10">
+        {loading ? (
+          <ListSkeleton />
+        ) : (
+          <DataTable
+            columns={columns}
+            data={data}
+            customStyles={customStyles}
+            pagination
+            responsive
+            highlightOnHover
+          />
+        )}
       </div>
       {showModal && (
         <CreateSubCategoryModal

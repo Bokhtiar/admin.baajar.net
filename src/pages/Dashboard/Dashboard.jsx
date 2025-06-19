@@ -5,7 +5,7 @@ import TrafficCard from "./Chart/TrafficCard";
 
 const Dashboard = () => {
   return (
-    <div>
+    <div className="pb-10">
       <Card />
 
       <div className="mt-5">

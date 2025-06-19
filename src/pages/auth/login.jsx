@@ -2,12 +2,13 @@ import React, { useState, useRef } from "react";
 import { FaEye, FaEyeSlash, FaPhoneAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { NetworkServices } from "../../network";
-import { setToken } from "../../utils/helpers";
+import { networkErrorHandeller, setToken } from "../../utils/helpers";
 import { Toastify } from "../../components/toastify";
 
 const Login = () => {
   const [focusField, setFocusField] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [btnloading, setBtnLoading] = useState(false);
   const [inputValues, setInputValues] = useState({
     phone: "",
     password: "",
@@ -34,18 +35,19 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    navigate("dashboard")
+    // navigate("dashboard")
     e.preventDefault();
     if (!validateFields()) return;
 
     try {
+      setBtnLoading(true);
       const response = await NetworkServices.Authentication.login(inputValues);
       console.log("response", response);
       const queryParams = new URLSearchParams(location.search);
       const redirectFrom = queryParams.get("redirectFrom") || "/dashboard";
 
       if (response.status === 200) {
-        if (response?.data?.data?.user?.role === "admin") {
+        if (response?.data?.data?.user?.role === "user") {
           setToken(response?.data?.data?.token);
           navigate(redirectFrom);
           Toastify.Success("Login successfully done");
@@ -54,7 +56,10 @@ const Login = () => {
         }
       }
     } catch (error) {
-      console.log(error);
+      setBtnLoading(false);
+      networkErrorHandeller(error);
+    } finally {
+      setBtnLoading(false);
     }
   };
 
@@ -159,10 +164,32 @@ const Login = () => {
 
           {/* Login Button */}
           <button
-            className="w-full bg-white text-gray-600 py-2 rounded-lg font-bold transition cursor-pointer"
+            className="w-full bg-white text-gray-600 py-2 rounded-lg font-bold transition cursor-pointer flex items-center justify-center gap-2"
             onClick={handleSubmit}
           >
-            Login
+            {btnloading && (
+              <svg
+                className="animate-spin h-5 w-5 text-gray-600"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                />
+              </svg>
+            )}
+            {btnloading ? "Logging in..." : "Login"}
           </button>
 
           {/* Register Link */}

@@ -11,6 +11,7 @@ import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { Toastify } from "../../../components/toastify";
 import CategoryUpdateModal from "./CategoryUpdateModal";
+import ListSkeleton from "../../../components/loading/ListLoading";
 
 export default function CategoryTable() {
   const [data, setData] = useState([]);
@@ -151,6 +152,30 @@ export default function CategoryTable() {
     },
   ];
 
+  const customStyles = {
+  headCells: {
+    style: {
+      fontWeight: "400",
+      fontSize: "14px",
+      color: "#8B8B8B", 
+    },
+  },
+  rows: {
+    style: {
+      minHeight: "64px",
+      borderBottom: "1px solid #E5E7EB",
+      color: "#33363F", 
+    },
+  },
+  cells: {
+    style: {
+      paddingTop: "8px",
+      paddingBottom: "8px",
+      color: "#33363F", 
+    },
+  },
+};
+
   return (
     <div className="mt-3 bg ">
       <Header
@@ -160,14 +185,19 @@ export default function CategoryTable() {
         onAddClick={() => setShowModal(true)}
       />
 
-      <div className=" bg-white shadow rounded overflow-y-auto mb-10">
-        <DataTable
-          columns={columns}
-          data={data}
-          pagination
-          responsive
-          highlightOnHover
-        />
+      <div className=" bg-white  rounded overflow-y-auto mb-10">
+        {loading ? (
+          <ListSkeleton />
+        ) : (
+          <DataTable
+            columns={columns}
+            data={data}
+            customStyles={customStyles}
+            pagination
+            responsive
+            highlightOnHover
+          />
+        )}
       </div>
       {showModal && (
         <CreateCategoryModal
@@ -178,7 +208,7 @@ export default function CategoryTable() {
       )}
       {updateModal && (
         <CategoryUpdateModal
-        categoryId={selectedCategoryId}
+          categoryId={selectedCategoryId}
           onClose={() => setUpdateModal(false)}
           // onSubmit={handleAddCategory}
           fetchCategory={fetchCategory}

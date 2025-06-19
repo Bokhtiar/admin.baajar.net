@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { CiCamera } from "react-icons/ci";
 // import { networkErrorHandeller } from "../../../utils/helpers/index";
@@ -14,11 +14,19 @@ export default function SubCategoryUpdate({
   fetchCategory,
   categoryId,
 }) {
-  const { register, handleSubmit, reset, watch, setValue } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm();
   const modalRef = useRef();
   const [imageName, setImageName] = useState("");
   const [btnloading, setBtnLoading] = useState(false);
   const [category, setCategory] = useState({});
+  const [categories, setCategories] = useState([]);
 
   console.log("categodry", category);
 
@@ -34,6 +42,31 @@ export default function SubCategoryUpdate({
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
+  const fetchCategoryItem = useCallback(async () => {
+    // setLoading(true);
+    try {
+      const response = await NetworkServices.Category.index();
+      console.log("first", response);
+      if (response && response.status === 200) {
+        // setCategories(response?.data?.data);
+        const categories = response?.data?.data?.parent_category?.map(
+          (item) => ({
+            value: item.category_id,
+            name: item.category_name,
+          })
+        );
+        setCategories(categories);
+      }
+    } catch (error) {
+      networkErrorHandeller(error);
+    }
+    // setLoading(false);
+  }, []);
+
+  // category api fetch
+  useEffect(() => {
+    fetchCategoryItem();
+  }, [fetchCategoryItem]);
 
   // Fetch the category details from the API and populate the form
   const fetchParentCategory = async (categoryId) => {
@@ -46,7 +79,7 @@ export default function SubCategoryUpdate({
         setCategory(category);
 
         setValue("category_name", category.category_name);
-        setValue("category_image", category.category_image);
+        setValue("category", category.parent_id);
         setValue("slug", category.slug);
         setValue("status", category.status === 1 ? "active" : "inactive");
       }
@@ -76,12 +109,7 @@ export default function SubCategoryUpdate({
       formData.append("status", data?.status === "active" ? 1 : 0);
 
       formData.append("_method", "PUT");
-      //   if (data?.category_image && data?.category_image[0]) {
-      //     formData.append("category_image", data?.category_image[0]);
-      //   }
-      if (data?.category_image?.[0] instanceof File) {
-        formData.append("category_image", data.category_image[0]);
-      }
+
 
       const response = await NetworkServices.Category.update(
         categoryId,
@@ -114,7 +142,7 @@ export default function SubCategoryUpdate({
     <div className="fixed inset-0 bg-gradient-to-b from-black/85 to-black  flex items-center justify-center z-50 px-4">
       <div
         ref={modalRef}
-        className="bg-white p-6 rounded-2xl shadow-md w-[400px] "
+        className="bg-white p-6 rounded-2xl shadow-md w-[450px] "
       >
         <h2 className="text-center text-xl font-semibold mb-6">
           Update Sub Category
@@ -123,69 +151,95 @@ export default function SubCategoryUpdate({
         <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4">
           <input
             type="text"
-            placeholder="Category Name"
+            placeholder="Sub Category Name "
             {...register("category_name", { required: false })}
             className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
           />
 
-          <div className="flex flex-col md:flex-row gap-3">
-            <div className="w-full">
-              {" "}
+          <div className="relative">
+            <select
+              {...register("category", {
+                required: "Please select a parent category",
+              })}
+              className={`appearance-none w-full px-4 py-2 border rounded-full focus:outline-none text-gray-500 pr-8 ${
+                errors.category ? "border-red-500" : "border-gray-300"
+              }`}
+              defaultValue=""
+              placeholder=""
+            >
+              <option value="" disabled>
+                Select Parent Category
+              </option>
+
+              {categories.map((cat) => (
+                <option key={cat.value} value={cat.value}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+
+            <div
+              className={`pointer-events-none absolute right-3 ${
+                errors.category ? "top-2" : "top-1/2 transform -translate-y-1/2"
+              } text-gray-400`}
+            >
+              <RiArrowDropDownLine className="text-3xl" />
+            </div>
+
+            {errors.category && (
+              <p className="text-red-500 text-sm mt-">
+                {errors.category.message}
+              </p>
+            )}
+          </div>
+
+          <div className="flex gap-3">
+            <div className="w-1/2">
               <input
                 type="text"
                 placeholder="Slug"
                 {...register("slug", { required: false })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
+                className={`w-full px-4 py-2 border rounded-full focus:outline-none ${
+                  errors.slug ? "border-red-500" : "border-gray-300"
+                }`}
               />
-            </div>
-            <div className="relative  w-full">
-              <select
-                {...register("status", { required: false })}
-                className="appearance-none w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none text-gray-500 pr-8"
-                defaultValue="active"
-              >
-                <option className="text-gray-500" value="active">
-                  Status : Active
-                </option>
-                <option className="text-gray-500" value="inactive">
-                  Status : Inactive
-                </option>
-              </select>
-
-              {/* Dropdown icon on the left */}
-              <div className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                <RiArrowDropDownLine className="text-3xl" />
-              </div>
-            </div>
-          </div>
-
-          <label className="w-full block">
-            <div className="w-full   border border-gray-300 rounded-lg bg-white text-gray-500 text-sm cursor-pointer flex items-center gap-2 ">
-              {imageName ? (
-                <>
-                  <div className="flex items-center gap-2 px-3">
-                    <CiCamera className="text-xl" />
-                    <span className="py-2">{imageName}</span>
-                  </div>
-                </>
-              ) : category.category_image ? (
-                <img
-                  src={`${import.meta.env.VITE_API_SERVER}${
-                    category.category_image
-                  }`}
-                  alt="Current Category"
-                  className="w-10 h-[38px]  rounded"
-                />
-              ) : (
-                <span className="py-2 px-3">Upload Image / Icon</span>
+              {errors.slug && (
+                <p className="text-red-500 text-sm mt-">
+                  {errors.slug.message}
+                </p>
               )}
             </div>
-            <input
-              type="file"
-              {...register("category_image", { required: false })}
-              className="hidden"
-            />
-          </label>
+
+            <div className="relative w-1/2">
+              <select
+                {...register("status", { required: false })}
+                className={`appearance-none w-full px-4 py-2 border rounded-full focus:outline-none text-gray-500 pr-8 ${
+                  errors.status ? "border-red-500" : "border-gray-300"
+                }`}
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  Select Status
+                </option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+
+              <div
+                className={`pointer-events-none absolute right-3 ${
+                  errors.status ? "top-1" : "top-1/2 transform -translate-y-1/2"
+                } text-gray-400`}
+              >
+                <RiArrowDropDownLine className="text-3xl" />
+              </div>
+
+              {errors.status && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.status.message}
+                </p>
+              )}
+            </div>
+          </div>
 
           <div className="w-full flex justify-center">
             <button
