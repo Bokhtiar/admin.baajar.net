@@ -4,53 +4,51 @@ import { CiSearch } from "react-icons/ci";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
 // import img from "../../assets/logo/";
 import img from "/image/bg/starry-night.webp";
-import CreateVendorModal from "./CreateVendorModal";
 import Header from "../../components/heading/heading";
-import ListSkeleton from "../../components/loading/ListLoading";
 import { IoDocumentTextOutline } from "react-icons/io5";
-import { RiWallet3Fill } from "react-icons/ri";
+// import CreateVendorModal from "./CreateVendorModal";
 
 const data = [
   {
     id: 1,
     image: img, // replace with actual logos
     name: "Bokhtiar Fashion",
-    category: "Fashion",
+    Address: "Mogbazar Road , Siddheshwari 017335469825",
     products: 633,
   },
   {
     id: 2,
     image: img,
     name: "Tamim Agro",
-    category: "Vegetables",
+    Address: "Mogbazar Road , Siddheshwari 017335469825",
     products: 730,
   },
   {
     id: 3,
     image: img,
     name: "Rabu Mudi Ghor",
-    category: "Grocery",
+    Address: "Mogbazar Road , Siddheshwari 017335469825",
     products: 1152,
   },
   {
     id: 4,
     image: img,
     name: "Shibly Juice Bar",
-    category: "Drinks",
+    Address: "Mogbazar Road , Siddheshwari 017335469825",
     products: 40,
   },
   {
     id: 5,
     image: img,
     name: "Mamun Tailors",
-    category: "Fashion",
+    Address: "Mogbazar Road , Siddheshwari 017335469825",
     products: 231,
   },
   {
     id: 6,
     image: img,
     name: "Mehedi Store",
-    category: "Grocery",
+    Address: "Mogbazar Road , Siddheshwari 017335469825",
     products: 650,
   },
 ];
@@ -72,7 +70,7 @@ const columns = [
       />
     ),
     width: "100px",
-    
+    center: true,
   },
   {
     name: "Name",
@@ -80,15 +78,18 @@ const columns = [
     sortable: true,
   },
   {
-    name: "Category",
-    selector: (row) => row.category,
-    sortable: true,
+    name: "Address",
+    cell: (row) => (
+      <div className="whitespace-normal break-words max-w-[220px] ">
+        {row.Address}
+      </div>
+    ),
   },
   {
-    name: "Available Products",
+    name: "Total Orders",
     selector: (row) => row.products,
     sortable: true,
-    
+    center: true,
   },
   {
     name: "Action",
@@ -109,83 +110,64 @@ const columns = [
         <button className="text-[#2D264B] text-xl">
           <IoDocumentTextOutline />
         </button>
-
-
         <button className="text-red-500 hover:text-red-700">
           <FaTrashAlt />
         </button>
       </div>
     ),
-    
-    
+    center: true,
+    width: "120px",
   },
 ];
 
-const customStyles = {
-  headCells: {
-    style: {
-      fontWeight: "400",
-      fontSize: "14px",
-      color: "#8B8B8B",
-    },
-  },
-  rows: {
-    style: {
-      minHeight: "64px",
-      borderBottom: "1px solid #E5E7EB",
-      color: "#33363F",
-    },
-  },
-  cells: {
-    style: {
-      paddingTop: "8px",
-      paddingBottom: "8px",
-      color: "#33363F",
-    },
-  },
-};
-
-export default function AllVendorsTable() {
-  const [showModal, setShowModal] = useState(false);
+export default function Admins() {
+  // const [showModal, setShowModal] = useState(false);
   const [search, setSearch] = useState("");
-  console.log("searchxx", search);
+  console.log("sxxearch", search);
   return (
     <div className=" bg-white rounded-lg  mt-3">
-      <Header
-        title="All Vendors"
+      {/* <Header
+        title="Delivery Man"
         searchValue={search}
         onSearchChange={(value) => setSearch(value)}
         onAddClick={() => setShowModal(true)}
-      />
-
-      <div className="bg-white  rounded overflow-y-auto mb-10">
-        {/* {loading ? (
-          <ListSkeleton />
-        ) : (
-          <DataTable
-            columns={columns}
-            data={data}
-            customStyles={customStyles}
-            pagination
-            highlightOnHover
-            responsive
-          />
-        )} */}
+      /> */}
+      <div className="flex flex-col md:flex-row justify-between items-center mb-4 mt-5">
+        <h2 className="text-xl font-semibold text-primary">Admins</h2>
+        <div className="flex flex-col md:flex-row gap-2 mt-2 md:mt-0">
+          <div className="relative w-80">
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-10 pr-3 py-2 w-full border border-lightBorder rounded-full focus:outline-none text-sm"
+              // placeholder="Search"
+            />
+            {
+              <div className="absolute left-28 top-1/2 transform -translate-y-1/2 flex items-center text-gray-400 pointer-events-none">
+                <CiSearch className="text-lg mr-1" />
+                <span className="text-sm">search</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+      <div className="bg-white shadow rounded overflow-y-auto mb-10">
         <DataTable
           columns={columns}
           data={data}
-          customStyles={customStyles}
           pagination
           highlightOnHover
           responsive
         />
       </div>
-      {showModal && (
+
+      {/* {showModal && (
         <CreateVendorModal
           onClose={() => setShowModal(false)}
           // onSubmit={handleAddCategory}
         />
-      )}
+      )} */}
     </div>
   );
 }

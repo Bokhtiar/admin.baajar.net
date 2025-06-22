@@ -116,7 +116,7 @@ const Sidebar = ({ setIsSidebarOpen }) => {
     {
       title: "User",
       icon: <FaUsers />,
-      path: "/dashboard/user",
+      path: "/dashboard/users",
     },
     {
       title: "Admins",

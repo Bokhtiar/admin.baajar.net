@@ -6,6 +6,8 @@ import { FaTrashAlt, FaEdit } from "react-icons/fa";
 import img from "/image/bg/starry-night.webp";
 import CreateDeliveryManModal from "./CreateDeliveryManModal";
 import Header from "../../components/heading/heading";
+import { IoDocumentTextOutline } from "react-icons/io5";
+import { RiWallet3Fill } from "react-icons/ri";
 // import CreateVendorModal from "./CreateVendorModal";
 
 const data = [
@@ -95,33 +97,63 @@ const columns = [
     name: "Action",
     cell: (row) => (
       <div className="flex justify-center gap-2 text-lg">
-        <button className="text-blue-500 hover:text-blue-700">
+        <button
+          // onClick={() => handleToggle(row.status)}
+          className={`w-10 h-6 rounded-full flex items-center px-1 transition ${
+            row.status == 1 ? "bg-green-500" : "bg-gray-300"
+          }`}
+        >
+          <div
+            className={`w-4 h-4 bg-white rounded-full transform transition-transform ${
+              row.status ? "translate-x-4" : ""
+            }`}
+          ></div>
+        </button>
+        <button className="text-[#2D264B] text-xl">
+          <IoDocumentTextOutline />
+        </button>
+        <button className="text-[#2D264B] text-xl">
           <FaEdit />
+        </button>
+        <button className="text-[#2D264B] text-xl">
+          <RiWallet3Fill />
         </button>
         <button className="text-red-500 hover:text-red-700">
           <FaTrashAlt />
         </button>
       </div>
     ),
-    center: true,
-    width: "120px",
   },
 ];
 
 export default function DeliveryMan() {
   const [showModal, setShowModal] = useState(false);
-    const [search, setSearch] = useState("");
-    console.log("sxxearch",search)
+  const [search, setSearch] = useState("");
+  console.log("sxxearch", search);
   return (
     <div className=" bg-white rounded-lg  mt-3">
-      <Header
-        title="Delivery Man"
-        searchValue={search}
-        onSearchChange={(value) => setSearch(value)}
-        onAddClick={() => setShowModal(true)}
-      />
+      <div className="flex flex-col md:flex-row justify-between items-center mb-4 mt-5">
+        <h2 className="text-xl font-semibold text-primary">Delivery Man</h2>
+        <div className="flex flex-col md:flex-row gap-2 mt-2 md:mt-0">
+          <div className="relative w-80">
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-10 pr-3 py-2 w-full border border-lightBorder rounded-full focus:outline-none text-sm"
+              // placeholder="Search"
+            />
+            {
+              <div className="absolute left-28 top-1/2 transform -translate-y-1/2 flex items-center text-gray-400 pointer-events-none">
+                <CiSearch className="text-lg mr-1" />
+                <span className="text-sm">search</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
 
-      <div className="bg-white shadow rounded overflow-y-auto mb-10">
+      <div className="bg-white rounded overflow-y-auto mb-10">
         <DataTable
           columns={columns}
           data={data}

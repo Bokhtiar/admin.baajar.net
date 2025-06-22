@@ -1,4 +1,5 @@
 import { DashboardLayout } from "../layouts/dashboard.layout";
+import Admins from "../pages/admins";
 import CategoryTable from "../pages/category/allcategory";
 import SubCategoryTable from "../pages/category/subcategory";
 
@@ -47,7 +48,9 @@ const appRoutes = [
       // delivery man
        { path:"delivery-man", element:  <DeliveryMan/> },
       // user
-       { path:"user", element:  <User/> },
+       { path:"users", element:  <User/> },
+      // admin
+       { path:"admins", element:  <Admins/> },
      ]
   },
 ];

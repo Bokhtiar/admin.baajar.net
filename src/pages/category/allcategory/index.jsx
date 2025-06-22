@@ -31,7 +31,7 @@ export default function CategoryTable() {
       console.log("response", response);
 
       if (response?.status === 200) {
-        setData(response?.data?.data?.parent_category || []);
+        setData(response?.data?.data || []);
       }
     } catch (error) {
       console.log(error);

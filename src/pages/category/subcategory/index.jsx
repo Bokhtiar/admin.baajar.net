@@ -23,6 +23,16 @@ export default function SubCategoryTable() {
 
   console.log("dghdgh", data);
 
+  const allChildren = data.flatMap((parent) =>
+    (parent.children || []).map((child) => ({
+      ...child,
+      parent_name: parent.category_name,
+      parent_id: parent.category_id,
+      parent_created_at: parent.created_at,
+      parent_status: parent.status,
+    }))
+  );
+
   // Fetch categories from API
   const fetchCategory = useCallback(async () => {
     setLoading(true);
@@ -31,7 +41,7 @@ export default function SubCategoryTable() {
       console.log("response", response);
 
       if (response?.status === 200) {
-        setData(response?.data?.data?.child_category || []);
+        setData(response?.data?.data || []);
       }
     } catch (error) {
       console.log(error);
@@ -83,39 +93,95 @@ export default function SubCategoryTable() {
   //   item.name.toLowerCase().includes(search.toLowerCase())
   // );
 
+  // const columns = [
+
+
+  //   {
+  //     name: "Sub-Category",
+  //     selector: (row) => row?.category_name,
+  //     sortable: true,
+  //   },
+  //   {
+  //     name: "Category",
+  //     selector: (row) => row.name,
+  //     sortable: true,
+  //   },
+
+  //   {
+  //     name: "Sub-Subcategories",
+  //     cell: (row) =>
+  //       row.children && row.children.length > 0 ? (
+  //         <div className="flex flex-wrap gap-2">
+  //           {row.children.map((child, idx) => (
+  //             <span
+  //               key={idx}
+  //               className="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full"
+  //             >
+  //               {child.category_name}
+  //             </span>
+  //           ))}
+  //         </div>
+  //       ) : (
+  //         <span className="text-gray-400 text-sm">No sub-items</span>
+  //       ),
+  //   },
+  //   {
+  //     name: "Status",
+  //     cell: (row) => (
+  //       <button
+  //         onClick={() => handleToggle(row.status)}
+  //         className={`w-10 h-6 rounded-full flex items-center px-1 transition ${
+  //           row.status == 1 ? "bg-green-500" : "bg-gray-300"
+  //         }`}
+  //       >
+  //         <div
+  //           className={`w-4 h-4 bg-white rounded-full transform transition-transform ${
+  //             row.status ? "translate-x-4" : ""
+  //           }`}
+  //         ></div>
+  //       </button>
+  //     ),
+  //   },
+  //   {
+  //     name: "Action",
+  //     cell: (row) => (
+  //       <div className="flex gap-3 text-lg cursor-pointer">
+  //         <button
+  //           onClick={() => {
+  //             setSelectedCategoryId(row.category_id);
+  //             setUpdateModal(true);
+  //           }}
+  //           className=""
+  //         >
+  //           <RiEdit2Fill className="cursor-pointer" />
+  //         </button>
+  //         <button
+  //           className="text-red-500 hover:text-red-700 cursor-pointer"
+  //           onClick={() => destroy(row?.category_id)}
+  //         >
+  //           <FaTrashCan />
+  //         </button>
+  //       </div>
+  //     ),
+  //   },
+  // ];
+
   const columns = [
     {
       name: "SN.",
       selector: (row) => row?.serial_num + ".",
     },
-    // {
-    //   name: "Image",
-    //   selector: (row) => row.image,
-    //   cell: (row) => (
-    //     <div className="w-12 h-10 bg-[#FFFFFF] shadow-2xl  rounded-sm flex items-center justify-center">
-    //       <img
-    //         className="w-8 h-8 object-contain"
-    //         src={row.image}
-    //         alt={row.name}
-    //       />
-    //     </div>
-    //   ),
-    // },
+
     {
-      name: "Sub-Category",
-      selector: (row) => row?.category_name,
-      sortable: true,
+      name: "Child Name",
+      selector: (row) => row.category_name,
     },
     {
       name: "Category",
-      selector: (row) => row.name,
-      sortable: true,
+      selector: (row) => row.parent_name,
     },
-    // {
-    //   name: "Available Products",
-    //   selector: (row) => row.products,
-    //   sortable: true,
-    // },
+
+
     {
       name: "Status",
       cell: (row) => (
@@ -133,7 +199,7 @@ export default function SubCategoryTable() {
         </button>
       ),
     },
-    {
+        {
       name: "Action",
       cell: (row) => (
         <div className="flex gap-3 text-lg cursor-pointer">
@@ -154,7 +220,7 @@ export default function SubCategoryTable() {
           </button>
         </div>
       ),
-    },
+    }
   ];
 
   // if (loading) {
@@ -200,7 +266,7 @@ export default function SubCategoryTable() {
         ) : (
           <DataTable
             columns={columns}
-            data={data}
+            data={allChildren}
             customStyles={customStyles}
             pagination
             responsive
