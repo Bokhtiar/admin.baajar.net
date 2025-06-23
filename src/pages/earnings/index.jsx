@@ -1,8 +1,10 @@
 // EarningsTable.jsx
-import React from "react";
+import React, { useState } from "react";
 import DataTable from "react-data-table-component";
+import { CiSearch } from "react-icons/ci";
 import { FaSearch } from "react-icons/fa";
 import { MdSend } from "react-icons/md";
+import PaymentModal from "./paymentModal";
 
 const earningsData = [
   {
@@ -70,45 +72,46 @@ const columns = [
         </span>
       ),
   },
-  {
-    name: "Action",
-    cell: (row) =>
-      row.status === "Sent" ? (
-        <MdSend className="text-fuchsia-600 text-xl" title="Sent Icon" />
-      ) : null,
-    center: true,
-    width: "80px",
-  },
+  // {
+  //   name: "Action",
+  //   cell: (row) =>
+  //     row.status === "Sent" ? (
+  //       <MdSend className="text-fuchsia-600 text-xl" title="Sent Icon" />
+  //     ) : null,
+  //   center: true,
+  //   width: "80px",
+  // },
 ];
 
-        customStyles={{
-          headCells: {
-            style: {
-              fontWeight: "bold",
-              fontSize: "14px",
-              backgroundColor: "#f9fafb",
-            },
-          },
-        }}
-
 export default function EarningsTable() {
+  const [search, setSearch] = useState([]);
+  const [showmodal,setShowModal]=useState(false)
   return (
     <div className="p-6 bg-white min-h-screen">
-      <h1 className="text-red-600 text-xl font-bold mb-4">Earnings</h1>
+      <div className="flex  justify-between">
+        <h1 className="text-red-600 text-xl font-bold mb-4">Earnings</h1>
 
-      {/* Controls */}
-      <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6">
-        <select className="border border-gray-300 rounded-md px-4 py-2 w-full md:w-48">
-          <option>All Vendor</option>
-        </select>
+        {/* Controls */}
+        <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6">
+          <select className="border border-lightBorder  px-4 py-2 w-full md:w-48 rounded-full">
+            <option>All Vendor</option>
+          </select>
 
-        <div className="relative w-full md:w-64">
-          <input
-            type="text"
-            placeholder="Search"
-            className="w-full border border-gray-300 rounded-md pl-10 pr-4 py-2 focus:outline-none"
-          />
-          <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+          <div className="relative w-80">
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-10 pr-3 py-2 w-full border border-lightBorder rounded-full focus:outline-none text-sm"
+              // placeholder="Search"
+            />
+            {
+              <div className="absolute left-28 top-1/2 transform -translate-y-1/2 flex items-center text-gray-400 pointer-events-none">
+                <CiSearch className="text-lg mr-1" />
+                <span className="text-sm">search</span>
+              </div>
+            }
+          </div>
         </div>
       </div>
 
@@ -116,12 +119,25 @@ export default function EarningsTable() {
       <DataTable
         columns={columns}
         data={earningsData}
-        pagination
+        pagination={false}
         highlightOnHover
         striped
         responsive
-
       />
+      <div className="text-end">
+        <button onClick={()=>setShowModal(true)} className="text-[#D623FE] mt-4 ">
+          sent icon here
+        </button>
+      </div>
+      {
+        showmodal && (
+          <PaymentModal
+          onClose={()=>setShowModal(false)}
+          />
+        )
+      }
+
+
     </div>
   );
 }

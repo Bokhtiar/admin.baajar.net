@@ -8,6 +8,8 @@ import CreateDeliveryManModal from "./CreateDeliveryManModal";
 import Header from "../../components/heading/heading";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { RiWallet3Fill } from "react-icons/ri";
+import DeliveryEarningsModal from "./earningModal";
+// import { DeliveryEarningsModal } from "./earningModal";
 // import CreateVendorModal from "./CreateVendorModal";
 
 const data = [
@@ -55,7 +57,13 @@ const data = [
   },
 ];
 
-const columns = [
+
+export default function DeliveryMan() {
+  const [showModal, setShowModal] = useState(false);
+  const [search, setSearch] = useState("");
+  console.log("sxxearch", search);
+
+  const columns = [
   {
     name: "SN.",
     selector: (row, index) => `${(index + 1).toString().padStart(2, "0")}.`,
@@ -109,7 +117,7 @@ const columns = [
             }`}
           ></div>
         </button>
-        <button className="text-[#2D264B] text-xl">
+        <button onClick={() => setShowModal(true)} className="text-[#2D264B] text-xl">
           <IoDocumentTextOutline />
         </button>
         <button className="text-[#2D264B] text-xl">
@@ -126,10 +134,6 @@ const columns = [
   },
 ];
 
-export default function DeliveryMan() {
-  const [showModal, setShowModal] = useState(false);
-  const [search, setSearch] = useState("");
-  console.log("sxxearch", search);
   return (
     <div className=" bg-white rounded-lg  mt-3">
       <div className="flex flex-col md:flex-row justify-between items-center mb-4 mt-5">
@@ -163,11 +167,17 @@ export default function DeliveryMan() {
         />
       </div>
       {showModal && (
-        <CreateDeliveryManModal
+        <DeliveryEarningsModal 
           onClose={() => setShowModal(false)}
           // onSubmit={handleAddCategory}
         />
       )}
+      {/* {showModal && (
+        <CreateDeliveryManModal
+          onClose={() => setShowModal(false)}
+          // onSubmit={handleAddCategory}
+        />
+      )} */}
     </div>
   );
 }

@@ -5,6 +5,7 @@ import SubCategoryTable from "../pages/category/subcategory";
 
 import Dashboard from "../pages/Dashboard/Dashboard";
 import DeliveryMan from "../pages/deliveryMan";
+import EarningsTable from "../pages/earnings";
 import AllOrderList from "../pages/order/all-order";
 import CanceledOrderList from "../pages/order/canceled-order";
 import CompleteOrderList from "../pages/order/completed-order";
@@ -51,6 +52,8 @@ const appRoutes = [
        { path:"users", element:  <User/> },
       // admin
        { path:"admins", element:  <Admins/> },
+      // earningd
+       { path:"earnings", element:  <EarningsTable/> },
      ]
   },
 ];
