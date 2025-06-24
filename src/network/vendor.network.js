@@ -2,33 +2,30 @@ import { privateRequest } from "../config/axios.config";
 
 /* list of resource */
 export const index = async (params) => {
-  return await privateRequest.get("/admin/exam",params);
+  return await privateRequest.get("/admin/vendor-list",params);
 };
 
-/* parent category list */
-export const parentList = async () => {
-  return await privateRequest.get("/admin/category/parent");
-};
+
 
 /* resource store */
 export const store = async (data) => {
   
-  return await privateRequest.post("/admin/exam", data);
+  return await privateRequest.post("/admin/vendor-list", data);
 };
 
 /* resource show */
 export const show = async (id) => {
-  return await privateRequest.get(`/admin/exam/${id}`);
+  return await privateRequest.get(`/admin/vendor-list/${id}`);
 };
 
 /* reosurce update */
 export const update = async (id, data) => {
-  return await privateRequest.post(`/admin/exam/${id}`, data);
+  return await privateRequest.post(`/admin/vendor-list/${id}`, data);
 };
 
 /* resource destory */
 export const destroy = async (id) => {
-  return await privateRequest.delete(`/admin/exam/${id}`);
+  return await privateRequest.delete(`/admin/vendor-list/${id}`);
 };
 
 /* resource destory */

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { CiSearch } from "react-icons/ci";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
@@ -9,53 +9,92 @@ import Header from "../../components/heading/heading";
 import ListSkeleton from "../../components/loading/ListLoading";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { RiWallet3Fill } from "react-icons/ri";
+import { NetworkServices } from "../../network";
+import { networkErrorHandeller } from "../../utils/helpers";
+import Confirmation from "../../components/Confirmation/Confirmation";
+import { Toastify } from "../../components/toastify";
 
-const data = [
-  {
-    id: 1,
-    image: img, // replace with actual logos
-    name: "Bokhtiar Fashion",
-    category: "Fashion",
-    products: 633,
-  },
-  {
-    id: 2,
-    image: img,
-    name: "Tamim Agro",
-    category: "Vegetables",
-    products: 730,
-  },
-  {
-    id: 3,
-    image: img,
-    name: "Rabu Mudi Ghor",
-    category: "Grocery",
-    products: 1152,
-  },
-  {
-    id: 4,
-    image: img,
-    name: "Shibly Juice Bar",
-    category: "Drinks",
-    products: 40,
-  },
-  {
-    id: 5,
-    image: img,
-    name: "Mamun Tailors",
-    category: "Fashion",
-    products: 231,
-  },
-  {
-    id: 6,
-    image: img,
-    name: "Mehedi Store",
-    category: "Grocery",
-    products: 650,
-  },
-];
 
-const columns = [
+
+
+
+const customStyles = {
+  headCells: {
+    style: {
+      fontWeight: "400",
+      fontSize: "14px",
+      color: "#8B8B8B",
+    },
+  },
+  rows: {
+    style: {
+      minHeight: "64px",
+      borderBottom: "1px solid #E5E7EB",
+      color: "#33363F",
+    },
+  },
+  cells: {
+    style: {
+      paddingTop: "8px",
+      paddingBottom: "8px",
+      color: "#33363F",
+    },
+  },
+};
+
+export default function AllVendorsTable() {
+  const [showModal, setShowModal] = useState(false);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [vendor, setVendor] = useState([]);
+  console.log("searchxx", search);
+
+  
+  
+
+  console.log("vendor", vendor);
+
+  // Fetch vendor from API
+  const fetchVendor = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await NetworkServices.Vendor.index();
+      console.log("response",response)
+
+      if (response?.status === 200) {
+        setVendor(response?.data?.data || []);
+      }
+    } catch (error) {
+      console.log(error);
+      networkErrorHandeller(error);
+    }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    fetchVendor();
+  }, [fetchVendor]);
+
+    const destroy = (id) => {
+    const dialog = Confirmation({
+      title: "Confirm Delete",
+      message: "Are you sure you want to delete this Vendor?",
+      onConfirm: async () => {
+        try {
+          const response = await NetworkServices.Vendor.destroy(id);
+          if (response?.status === 200) {
+            Toastify.Info("Vendor deleted successfully.");
+            fetchVendor();
+          }
+        } catch (error) {
+          networkErrorHandeller(error);
+        }
+      },
+    });
+
+    dialog.showDialog();
+  };
+  const columns = [
   {
     name: "SN.",
     selector: (row, index) => `${(index + 1).toString().padStart(2, "0")}.`,
@@ -66,7 +105,8 @@ const columns = [
     name: "Image",
     cell: (row) => (
       <img
-        src={row.image}
+        // src={row.logo}
+        src={`${import.meta.env.VITE_API_SERVER}${row?.logo}`}
         alt={row.name}
         className="w-14 h-14 rounded-full object-cover shadow-2xl p-2 transform scale-105 z-10"
       />
@@ -76,7 +116,7 @@ const columns = [
   },
   {
     name: "Name",
-    selector: (row) => row.name,
+    selector: (row) => row?.company_name,
     sortable: true,
   },
   {
@@ -106,12 +146,13 @@ const columns = [
             }`}
           ></div>
         </button>
-        <button className="text-[#2D264B] text-xl">
-          <IoDocumentTextOutline />
+        <button  className="text-[#2D264B] text-xl">
+          
+          <IoDocumentTextOutline  />
         </button>
 
 
-        <button className="text-red-500 hover:text-red-700">
+        <button onClick={() => destroy(row?.id)} className="text-red-500 hover:text-red-700">
           <FaTrashAlt />
         </button>
       </div>
@@ -121,34 +162,6 @@ const columns = [
   },
 ];
 
-const customStyles = {
-  headCells: {
-    style: {
-      fontWeight: "400",
-      fontSize: "14px",
-      color: "#8B8B8B",
-    },
-  },
-  rows: {
-    style: {
-      minHeight: "64px",
-      borderBottom: "1px solid #E5E7EB",
-      color: "#33363F",
-    },
-  },
-  cells: {
-    style: {
-      paddingTop: "8px",
-      paddingBottom: "8px",
-      color: "#33363F",
-    },
-  },
-};
-
-export default function AllVendorsTable() {
-  const [showModal, setShowModal] = useState(false);
-  const [search, setSearch] = useState("");
-  console.log("searchxx", search);
   return (
     <div className=" bg-white rounded-lg  mt-3">
       <Header
@@ -173,7 +186,7 @@ export default function AllVendorsTable() {
         )} */}
         <DataTable
           columns={columns}
-          data={data}
+          data={vendor}
           customStyles={customStyles}
           pagination
           highlightOnHover
