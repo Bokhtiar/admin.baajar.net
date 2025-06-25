@@ -40,12 +40,13 @@ const customStyles = {
 };
 
 export default function AllVendorsTable() {
-  const [showModal, setShowModal] = useState(false);
-  const [updateModal, setUpdateModal] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
+  // const [updateModal, setUpdateModal] = useState(false);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
+  const [statusLoading, setStatusLoading] = useState(false);
   const [vendor, setVendor] = useState([]);
-  const [selectedId, setSelectedId] = useState(null);
+  // const [selectedId, setSelectedId] = useState(null);
 
   console.log("searchxx", search);
 
@@ -91,6 +92,26 @@ export default function AllVendorsTable() {
 
     dialog.showDialog();
   };
+
+  const handleToggleStatus = async (vendorId, currentStatus) => {
+    try {
+      setStatusLoading(true);
+      const formData = new FormData();
+      formData.append("is_active", currentStatus === 1 ? 0 : 1);
+      formData.append("_method", "PUT");
+
+      const response = await NetworkServices.Vendor.update(vendorId, formData);
+      if (response && response.status === 200) {
+        Toastify.Success("Vendor status updated!");
+        fetchVendor();
+      }
+    } catch (error) {
+      networkErrorHandeller(error);
+    } finally {
+      setStatusLoading(false);
+    }
+  };
+
   const columns = [
     {
       name: "SN.",
@@ -130,24 +151,21 @@ export default function AllVendorsTable() {
       cell: (row) => (
         <div className="flex justify-center gap-2 text-lg">
           <button
-            // onClick={() => handleToggle(row.status)}
+            onClick={() => handleToggleStatus(row.id, row.is_active)}
             className={`w-10 h-6 rounded-full flex items-center px-1 transition ${
-              row.status == 1 ? "bg-green-500" : "bg-gray-300"
+              row.is_active == 1 ? "bg-green-500" : "bg-gray-300"
             }`}
           >
             <div
               className={`w-4 h-4 bg-white rounded-full transform transition-transform ${
-                row.status ? "translate-x-4" : ""
+                row.is_active == 1 ? "translate-x-4" : ""
               }`}
             ></div>
           </button>
+
           <button
             className="text-[#2D264B] text-xl"
-            onClick={() => {
-              setSelectedId(row.id);
 
-              setUpdateModal(true);
-            }}
           >
             <IoDocumentTextOutline />
           </button>
@@ -169,8 +187,13 @@ export default function AllVendorsTable() {
         title="All Vendors"
         searchValue={search}
         onSearchChange={(value) => setSearch(value)}
-        onAddClick={() => setShowModal(true)}
+        // onAddClick={() => setShowModal(true)}
       />
+      {statusLoading && (
+        <div className="fixed  inset-0 bg-black/80  z-[9999] flex items-center justify-center">
+          <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      )}
 
       <div className="bg-white  rounded overflow-y-auto mb-10">
         {/* {loading ? (
@@ -194,19 +217,8 @@ export default function AllVendorsTable() {
           responsive
         />
       </div>
-      {showModal && (
-        <CreateVendorModal
-          onClose={() => setShowModal(false)}
-          // onSubmit={handleAddCategory}
-        />
-      )}
-      {updateModal && (
-        <VendorUpdateModal
-          id={selectedId}
-          onClose={() => setUpdateModal(false)}
-          // onSubmit={handleAddCategory}
-        />
-      )}
+
+
     </div>
   );
 }
