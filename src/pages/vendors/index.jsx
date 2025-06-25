@@ -13,10 +13,7 @@ import { NetworkServices } from "../../network";
 import { networkErrorHandeller } from "../../utils/helpers";
 import Confirmation from "../../components/Confirmation/Confirmation";
 import { Toastify } from "../../components/toastify";
-
-
-
-
+import VendorUpdateModal from "./updateVendorModal";
 
 const customStyles = {
   headCells: {
@@ -44,13 +41,13 @@ const customStyles = {
 
 export default function AllVendorsTable() {
   const [showModal, setShowModal] = useState(false);
+  const [updateModal, setUpdateModal] = useState(false);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [vendor, setVendor] = useState([]);
-  console.log("searchxx", search);
+  const [selectedId, setSelectedId] = useState(null);
 
-  
-  
+  console.log("searchxx", search);
 
   console.log("vendor", vendor);
 
@@ -59,7 +56,7 @@ export default function AllVendorsTable() {
     setLoading(true);
     try {
       const response = await NetworkServices.Vendor.index();
-      console.log("response",response)
+      console.log("response", response);
 
       if (response?.status === 200) {
         setVendor(response?.data?.data || []);
@@ -75,7 +72,7 @@ export default function AllVendorsTable() {
     fetchVendor();
   }, [fetchVendor]);
 
-    const destroy = (id) => {
+  const destroy = (id) => {
     const dialog = Confirmation({
       title: "Confirm Delete",
       message: "Are you sure you want to delete this Vendor?",
@@ -95,72 +92,76 @@ export default function AllVendorsTable() {
     dialog.showDialog();
   };
   const columns = [
-  {
-    name: "SN.",
-    selector: (row, index) => `${(index + 1).toString().padStart(2, "0")}.`,
-    width: "70px",
-    center: true,
-  },
-  {
-    name: "Image",
-    cell: (row) => (
-      <img
-        // src={row.logo}
-        src={`${import.meta.env.VITE_API_SERVER}${row?.logo}`}
-        alt={row.name}
-        className="w-14 h-14 rounded-full object-cover shadow-2xl p-2 transform scale-105 z-10"
-      />
-    ),
-    width: "100px",
-    
-  },
-  {
-    name: "Name",
-    selector: (row) => row?.company_name,
-    sortable: true,
-  },
-  {
-    name: "Category",
-    selector: (row) => row.category,
-    sortable: true,
-  },
-  {
-    name: "Available Products",
-    selector: (row) => row.products,
-    sortable: true,
-    
-  },
-  {
-    name: "Action",
-    cell: (row) => (
-      <div className="flex justify-center gap-2 text-lg">
-        <button
-          // onClick={() => handleToggle(row.status)}
-          className={`w-10 h-6 rounded-full flex items-center px-1 transition ${
-            row.status == 1 ? "bg-green-500" : "bg-gray-300"
-          }`}
-        >
-          <div
-            className={`w-4 h-4 bg-white rounded-full transform transition-transform ${
-              row.status ? "translate-x-4" : ""
+    {
+      name: "SN.",
+      selector: (row, index) => `${(index + 1).toString().padStart(2, "0")}.`,
+      width: "70px",
+      center: true,
+    },
+    {
+      name: "Image",
+      cell: (row) => (
+        <img
+          // src={row.logo}
+          src={`${import.meta.env.VITE_API_SERVER}${row?.logo}`}
+          alt={row.name}
+          className="w-14 h-14 rounded-full object-cover shadow-2xl p-2 transform scale-105 z-10"
+        />
+      ),
+      width: "100px",
+    },
+    {
+      name: "Name",
+      selector: (row) => row?.company_name,
+      sortable: true,
+    },
+    {
+      name: "Category",
+      selector: (row) => row.category,
+      sortable: true,
+    },
+    {
+      name: "Available Products",
+      selector: (row) => row.products,
+      sortable: true,
+    },
+    {
+      name: "Action",
+      cell: (row) => (
+        <div className="flex justify-center gap-2 text-lg">
+          <button
+            // onClick={() => handleToggle(row.status)}
+            className={`w-10 h-6 rounded-full flex items-center px-1 transition ${
+              row.status == 1 ? "bg-green-500" : "bg-gray-300"
             }`}
-          ></div>
-        </button>
-        <button  className="text-[#2D264B] text-xl">
-          
-          <IoDocumentTextOutline  />
-        </button>
+          >
+            <div
+              className={`w-4 h-4 bg-white rounded-full transform transition-transform ${
+                row.status ? "translate-x-4" : ""
+              }`}
+            ></div>
+          </button>
+          <button
+            className="text-[#2D264B] text-xl"
+            onClick={() => {
+              setSelectedId(row.id);
 
+              setUpdateModal(true);
+            }}
+          >
+            <IoDocumentTextOutline />
+          </button>
 
-        <button onClick={() => destroy(row?.id)} className="text-red-500 hover:text-red-700">
-          <FaTrashAlt />
-        </button>
-      </div>
-    ),
-    
-    
-  },
-];
+          <button
+            onClick={() => destroy(row?.id)}
+            className="text-red-500 hover:text-red-700"
+          >
+            <FaTrashAlt />
+          </button>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <div className=" bg-white rounded-lg  mt-3">
@@ -196,6 +197,13 @@ export default function AllVendorsTable() {
       {showModal && (
         <CreateVendorModal
           onClose={() => setShowModal(false)}
+          // onSubmit={handleAddCategory}
+        />
+      )}
+      {updateModal && (
+        <VendorUpdateModal
+          id={selectedId}
+          onClose={() => setUpdateModal(false)}
           // onSubmit={handleAddCategory}
         />
       )}
