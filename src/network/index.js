@@ -4,6 +4,7 @@ import * as Authentication from "../network/auth.network";
 import * as Vendor from "../network/vendor.network";
 import * as Rider from "../network/rider.network";
 import * as User from "../network/user.network"
+import * as Admin from "../network/admin.network"
 
 
 export const NetworkServices = {
@@ -11,6 +12,7 @@ export const NetworkServices = {
   Authentication,
   Vendor,
   Rider,
-  User
+  User,
+  Admin
   
 };

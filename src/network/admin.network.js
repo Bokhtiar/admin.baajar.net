@@ -2,7 +2,7 @@ import { privateRequest } from "../config/axios.config";
 
 /* list of resource */
 export const index = async (params) => {
-  return await privateRequest.get("/admin/user-list?role=user",params);
+  return await privateRequest.get("/admin/user-list?role=admin",params);
 };
 
 /* resource store */
