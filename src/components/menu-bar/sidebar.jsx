@@ -17,6 +17,7 @@ import {
   MdSettingsAccessibility,
   MdOutlineCategory,
   MdStorefront,
+  MdAcUnit,
 } from "react-icons/md";
 import { FiFileText } from "react-icons/fi";
 import { TbPackages, TbTruckDelivery } from "react-icons/tb";
@@ -140,9 +141,9 @@ const Sidebar = ({ setIsSidebarOpen }) => {
       path: "/dashboard/color",
     },
     {
-      title: "Color",
-      icon: <IoIosColorPalette />,
-      path: "/dashboard/color",
+      title: "Unit",
+      icon: <MdAcUnit />,
+      path: "/dashboard/unit",
     },
   ];
   return (

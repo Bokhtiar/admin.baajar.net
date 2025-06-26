@@ -14,6 +14,7 @@ import PendingOrderList from "../pages/order/pending-order";
 import ProcessedOrderList from "../pages/order/processed";
 import ShippedOrderList from "../pages/order/Shipped-orders";
 import ProductTable from "../pages/products";
+import UnitTable from "../pages/unit";
 import User from "../pages/user";
 import AllVendorsTable from "../pages/vendors";
 
@@ -57,6 +58,8 @@ const appRoutes = [
        { path:"earnings", element:  <EarningsTable/> },
       //  color
        { path:"color", element:  <ColorTable/> },
+      //  unit
+       { path:"unit", element:  <UnitTable/> },
      ]
   },
 ];
