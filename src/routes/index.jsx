@@ -2,6 +2,7 @@ import { DashboardLayout } from "../layouts/dashboard.layout";
 import Admins from "../pages/admins";
 import CategoryTable from "../pages/category/allcategory";
 import SubCategoryTable from "../pages/category/subcategory";
+import ColorTable from "../pages/color";
 
 import Dashboard from "../pages/Dashboard/Dashboard";
 import DeliveryMan from "../pages/deliveryMan";
@@ -54,6 +55,8 @@ const appRoutes = [
        { path:"admins", element:  <Admins/> },
       // earningd
        { path:"earnings", element:  <EarningsTable/> },
+      //  color
+       { path:"color", element:  <ColorTable/> },
      ]
   },
 ];

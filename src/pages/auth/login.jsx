@@ -47,7 +47,7 @@ const Login = () => {
       const redirectFrom = queryParams.get("redirectFrom") || "/dashboard";
 
       if (response.status === 200) {
-        if (response?.data?.data?.user?.role === "user") {
+        if (response?.data?.data?.user?.role === "admin") {
           setToken(response?.data?.data?.token);
           navigate(redirectFrom);
           Toastify.Success("Login successfully done");

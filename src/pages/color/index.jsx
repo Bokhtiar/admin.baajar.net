@@ -1,37 +1,37 @@
 import { useCallback, useEffect, useState } from "react";
+import { NetworkServices } from "../../network";
+import { confirmAlert } from "react-confirm-alert";
+import { Toastify } from "../../components/toastify";
 import DataTable from "react-data-table-component";
-
-import CreateCategoryModal from "./CreateCategoryModa";
-import Header from "../../../components/heading/heading";
-import { NetworkServices } from "../../../network";
-import { networkErrorHandeller } from "../../../utils/helpers";
+import ListSkeleton from "../../components/loading/ListLoading";
 import { RiEdit2Fill } from "react-icons/ri";
 import { FaTrashCan } from "react-icons/fa6";
-import { confirmAlert } from "react-confirm-alert";
-import "react-confirm-alert/src/react-confirm-alert.css";
-import { Toastify } from "../../../components/toastify";
-import CategoryUpdateModal from "./CategoryUpdateModal";
-import ListSkeleton from "../../../components/loading/ListLoading";
+import Header from "../../components/heading/heading";
+import { networkErrorHandeller } from "../../utils/helpers";
+import CreateColorModal from "./CreateColorModa";
+import ColorUpdateModal from "./colorUpdateModal";
+// import ColorUpdateModal from "./colorUpdateModal";
 
-export default function CategoryTable() {
+export default function ColorTable() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
+
   const [updateModal, setUpdateModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
 
   console.log("dghdgh", data);
 
   // Fetch categories from API
-  const fetchCategory = useCallback(async () => {
+  const fetchColor = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await NetworkServices.Category.index();
+      const response = await NetworkServices.Color.index();
       console.log("response", response);
 
       if (response?.status === 200) {
-        setData(response?.data?.data?.categories || []);
+        setData(response?.data?.data || []);
       }
     } catch (error) {
       // console.log(error);
@@ -41,8 +41,8 @@ export default function CategoryTable() {
   }, []);
 
   useEffect(() => {
-    fetchCategory();
-  }, [fetchCategory]);
+    fetchColor();
+  }, [fetchColor]);
 
   // const handleToggle = (id) => {
   //   setData((prev) =>
@@ -69,10 +69,10 @@ export default function CategoryTable() {
           label: "Yes",
           onClick: async () => {
             try {
-              const response = await NetworkServices.Category.destroy(id);
+              const response = await NetworkServices.Color.destroy(id);
               if (response?.status === 200) {
-                Toastify.Info("Category deleted successfully.");
-                fetchCategory();
+                Toastify.Info("Color deleted successfully.");
+                fetchColor();
               }
             } catch (error) {
               networkErrorHandeller(error);
@@ -91,27 +91,10 @@ export default function CategoryTable() {
       name: "SN.",
       selector: (row) => row?.serial_num + ".",
     },
-    {
-      name: "Image",
-      selector: (row) => row.category_image,
-      cell: (row) => (
-        <div className="w-12 h-10 bg-[#FFFFFF] shadow-md rounded-sm flex items-center justify-center transition-transform duration-300 hover:shadow-xl scale-105">
-          <img
-            className="w-8 h-6  "
-            src={`${import.meta.env.VITE_API_SERVER}${row?.category_image}`}
-            alt={row.name}
-          />
-        </div>
-      ),
-    },
+
     {
       name: "Name",
-      selector: (row) => row.category_name,
-      sortable: true,
-    },
-    {
-      name: "Available Products",
-      selector: (row) => row.products,
+      selector: (row) => row.name,
       sortable: true,
     },
     {
@@ -120,7 +103,7 @@ export default function CategoryTable() {
         <button
           // onClick={() => handleToggle(row.status)}
           className={`w-10 h-6 rounded-full flex items-center px-1 transition ${
-            row.status == 1 ? "bg-green-500" : "bg-gray-300"
+            row.is_active == 1 ? "bg-green-500" : "bg-gray-300"
           }`}
         >
           <div
@@ -137,7 +120,7 @@ export default function CategoryTable() {
         <div className="flex gap-3 text-lg cursor-pointer">
           <button
             onClick={() => {
-              setSelectedCategoryId(row.category_id);
+              setSelectedId(row.id);
               setUpdateModal(true);
             }}
             className="cursor-pointer"
@@ -145,7 +128,7 @@ export default function CategoryTable() {
             <RiEdit2Fill />
           </button>
           <button className="text-red-500 hover:text-red-700 cursor-pointer">
-            <FaTrashCan onClick={() => destroy(row?.category_id)} />
+            <FaTrashCan onClick={() => destroy(row?.id)} />
           </button>
         </div>
       ),
@@ -153,33 +136,33 @@ export default function CategoryTable() {
   ];
 
   const customStyles = {
-  headCells: {
-    style: {
-      fontWeight: "400",
-      fontSize: "14px",
-      color: "#8B8B8B", 
+    headCells: {
+      style: {
+        fontWeight: "400",
+        fontSize: "14px",
+        color: "#8B8B8B",
+      },
     },
-  },
-  rows: {
-    style: {
-      minHeight: "64px",
-      borderBottom: "1px solid #E5E7EB",
-      color: "#33363F", 
+    rows: {
+      style: {
+        minHeight: "64px",
+        borderBottom: "1px solid #E5E7EB",
+        color: "#33363F",
+      },
     },
-  },
-  cells: {
-    style: {
-      paddingTop: "8px",
-      paddingBottom: "8px",
-      color: "#33363F", 
+    cells: {
+      style: {
+        paddingTop: "8px",
+        paddingBottom: "8px",
+        color: "#33363F",
+      },
     },
-  },
-};
+  };
 
   return (
     <div className="mt-3 bg ">
       <Header
-        title="All Categories"
+        title="All Color"
         searchValue={search}
         onSearchChange={(value) => setSearch(value)}
         onAddClick={() => setShowModal(true)}
@@ -200,18 +183,19 @@ export default function CategoryTable() {
         )}
       </div>
       {showModal && (
-        <CreateCategoryModal
+        <CreateColorModal
           onClose={() => setShowModal(false)}
           // onSubmit={handleAddCategory}
-          fetchCategory={fetchCategory}
+          fetchColor={fetchColor}
         />
       )}
+
       {updateModal && (
-        <CategoryUpdateModal
-          categoryId={selectedCategoryId}
+        <ColorUpdateModal
+          id={selectedId}
           onClose={() => setUpdateModal(false)}
           // onSubmit={handleAddCategory}
-          fetchCategory={fetchCategory}
+          fetchColor={fetchColor}
         />
       )}
     </div>

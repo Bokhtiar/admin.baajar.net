@@ -5,6 +5,7 @@ import * as Vendor from "../network/vendor.network";
 import * as Rider from "../network/rider.network";
 import * as User from "../network/user.network"
 import * as Admin from "../network/admin.network"
+import * as Color from "../network/color.network"
 
 
 export const NetworkServices = {
@@ -13,6 +14,7 @@ export const NetworkServices = {
   Vendor,
   Rider,
   User,
-  Admin
+  Admin,
+  Color
   
 };

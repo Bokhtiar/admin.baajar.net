@@ -23,15 +23,7 @@ export default function SubCategoryTable() {
 
   console.log("dghdgh", data);
 
-  const allChildren = data.flatMap((parent) =>
-    (parent.children || []).map((child) => ({
-      ...child,
-      parent_name: parent.category_name,
-      parent_id: parent.category_id,
-      parent_created_at: parent.created_at,
-      parent_status: parent.status,
-    }))
-  );
+
 
   // Fetch categories from API
   const fetchCategory = useCallback(async () => {
@@ -41,7 +33,7 @@ export default function SubCategoryTable() {
       console.log("response", response);
 
       if (response?.status === 200) {
-        setData(response?.data?.data || []);
+        setData(response?.data?.data?.subcategories || []);
       }
     } catch (error) {
       console.log(error);
@@ -266,7 +258,7 @@ export default function SubCategoryTable() {
         ) : (
           <DataTable
             columns={columns}
-            data={allChildren}
+            data={data}
             customStyles={customStyles}
             pagination
             responsive

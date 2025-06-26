@@ -49,7 +49,7 @@ export default function SubCategoryUpdate({
       console.log("first", response);
       if (response && response.status === 200) {
         // setCategories(response?.data?.data);
-        const categories = response?.data?.data?.parent_category?.map(
+        const categories = response?.data?.data?.categories?.map(
           (item) => ({
             value: item.category_id,
             name: item.category_name,
@@ -73,7 +73,7 @@ export default function SubCategoryUpdate({
     // setLoading(true);
     try {
       const response = await NetworkServices.Category.show(categoryId);
-      console.log("response", response.data.data);
+      console.log("response", response);
       if (response && response.status === 200) {
         const category = response?.data?.data;
         setCategory(category);
@@ -103,6 +103,7 @@ export default function SubCategoryUpdate({
 
       const formData = new FormData();
       formData.append("category_name", data?.category_name);
+      formData.append("parent_id", data?.category);
       formData.append("slug", data?.slug);
       formData.append("isNavbar", "1");
       // formData.append("status", data.status);
@@ -118,7 +119,7 @@ export default function SubCategoryUpdate({
       console.log("response", response);
 
       if (response && response.status === 200) {
-        Toastify.Success("Category created successfully!");
+        Toastify.Success("Category Updated successfully!");
         reset();
         onClose();
         fetchCategory();

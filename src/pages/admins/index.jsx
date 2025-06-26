@@ -1,61 +1,14 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { CiSearch } from "react-icons/ci";
-import { FaTrashAlt, FaEdit } from "react-icons/fa";
-// import img from "../../assets/logo/";
-import img from "/image/bg/starry-night.webp";
-import Header from "../../components/heading/heading";
+import { FaTrashAlt } from "react-icons/fa";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { NetworkServices } from "../../network";
 import { networkErrorHandeller } from "../../utils/helpers";
 import { Toastify } from "../../components/toastify";
 import Confirmation from "../../components/Confirmation/Confirmation";
-// import CreateVendorModal from "./CreateVendorModal";
 
-const data = [
-  {
-    id: 1,
-    image: img, // replace with actual logos
-    name: "Bokhtiar Fashion",
-    Address: "Mogbazar Road , Siddheshwari 017335469825",
-    products: 633,
-  },
-  {
-    id: 2,
-    image: img,
-    name: "Tamim Agro",
-    Address: "Mogbazar Road , Siddheshwari 017335469825",
-    products: 730,
-  },
-  {
-    id: 3,
-    image: img,
-    name: "Rabu Mudi Ghor",
-    Address: "Mogbazar Road , Siddheshwari 017335469825",
-    products: 1152,
-  },
-  {
-    id: 4,
-    image: img,
-    name: "Shibly Juice Bar",
-    Address: "Mogbazar Road , Siddheshwari 017335469825",
-    products: 40,
-  },
-  {
-    id: 5,
-    image: img,
-    name: "Mamun Tailors",
-    Address: "Mogbazar Road , Siddheshwari 017335469825",
-    products: 231,
-  },
-  {
-    id: 6,
-    image: img,
-    name: "Mehedi Store",
-    Address: "Mogbazar Road , Siddheshwari 017335469825",
-    products: 650,
-  },
-];
+
 
 export default function Admins() {
   // const [showModal, setShowModal] = useState(false);

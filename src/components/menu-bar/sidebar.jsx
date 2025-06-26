@@ -21,6 +21,7 @@ import {
 import { FiFileText } from "react-icons/fi";
 import { TbPackages, TbTruckDelivery } from "react-icons/tb";
 import { BsFillBagPlusFill } from "react-icons/bs";
+import { IoIosColorPalette } from "react-icons/io";
 
 const Sidebar = ({ setIsSidebarOpen }) => {
   const [openMenu, setOpenMenu] = useState(null);
@@ -132,6 +133,16 @@ const Sidebar = ({ setIsSidebarOpen }) => {
       title: "Settings",
       icon: <IoSettingsOutline />,
       path: "/dashboard/settings",
+    },
+    {
+      title: "Color",
+      icon: <IoIosColorPalette />,
+      path: "/dashboard/color",
+    },
+    {
+      title: "Color",
+      icon: <IoIosColorPalette />,
+      path: "/dashboard/color",
     },
   ];
   return (
