@@ -8,11 +8,12 @@ import { RiEdit2Fill } from "react-icons/ri";
 import { FaTrashCan } from "react-icons/fa6";
 import Header from "../../components/heading/heading";
 import { networkErrorHandeller } from "../../utils/helpers";
-import CreateColorModal from "./CreateColorModa";
-import ColorUpdateModal from "./colorUpdateModal";
-// import ColorUpdateModal from "./colorUpdateModal";
+import CreateAttributeModal from "./createAttribut";
+import AttributUpdateModal from "./updateAttribute";
 
-export default function ColorTable() {
+
+
+export default function AttributeTable() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -24,11 +25,11 @@ export default function ColorTable() {
   console.log("dghdgh", data);
 
   // Fetch categories from API
-  const fetchColor = useCallback(async () => {
+  const fetchAttribute = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await NetworkServices.Color.index();
-      console.log("res", response);
+      const response = await NetworkServices.Attribute.index();
+      console.log("response", response);
 
       if (response?.status === 200) {
         setData(response?.data?.data || []);
@@ -41,38 +42,29 @@ export default function ColorTable() {
   }, []);
 
   useEffect(() => {
-    fetchColor();
-  }, [fetchColor]);
+    fetchAttribute();
+  }, [fetchAttribute]);
 
-  // const handleToggle = (id) => {
-  //   setData((prev) =>
-  //     prev.map((item) =>
-  //       item.id === id ? { ...item, status: !item.status } : item
-  //     )
-  //   );
-  // };
+
 
   console.log("search", search);
 
-  // const filteredData = data.filter((item) =>
-  //   item.name.toLowerCase().includes(search.toLowerCase())
-  // );
-  // String(index + 1).padStart(2, "0") + ".",
+
 
   const destroy = (id) => {
     console.log("first", id);
     confirmAlert({
       title: "Confirm Delete",
-      message: "Are you sure you want to delete this category?",
+      message: "Are you sure you want to delete this Attribute?",
       buttons: [
         {
           label: "Yes",
           onClick: async () => {
             try {
-              const response = await NetworkServices.Color.destroy(id);
+              const response = await NetworkServices.Attribute.destroy(id);
               if (response?.status === 200) {
-                Toastify.Info("Color deleted successfully.");
-                fetchColor();
+                Toastify.Info("Attribute deleted successfully.");
+                fetchAttribute();
               }
             } catch (error) {
               networkErrorHandeller(error);
@@ -96,23 +88,6 @@ export default function ColorTable() {
       name: "Name",
       selector: (row) => row.name,
       sortable: true,
-    },
-    {
-      name: "Status",
-      cell: (row) => (
-        <button
-          // onClick={() => handleToggle(row.status)}
-          className={`w-10 h-6 rounded-full flex items-center px-1 transition ${
-            row.is_active == 1 ? "bg-green-500" : "bg-gray-300"
-          }`}
-        >
-          <div
-            className={`w-4 h-4 bg-white rounded-full transform transition-transform ${
-              row.status ? "translate-x-4" : ""
-            }`}
-          ></div>
-        </button>
-      ),
     },
     {
       name: "Action",
@@ -162,7 +137,7 @@ export default function ColorTable() {
   return (
     <div className="mt-3 bg ">
       <Header
-        title="All Color"
+        title="All Attribute"
         searchValue={search}
         onSearchChange={(value) => setSearch(value)}
         onAddClick={() => setShowModal(true)}
@@ -183,21 +158,20 @@ export default function ColorTable() {
         )}
       </div>
       {showModal && (
-        <CreateColorModal
+        <CreateAttributeModal
           onClose={() => setShowModal(false)}
           // onSubmit={handleAddCategory}
-          fetchColor={fetchColor}
+          fetchAttribute={fetchAttribute}
         />
       )}
 
-      {updateModal && (
-        <ColorUpdateModal
+     {updateModal && (
+        <AttributUpdateModal
           id={selectedId}
           onClose={() => setUpdateModal(false)}
-          // onSubmit={handleAddCategory}
-          fetchColor={fetchColor}
+          fetchAttribute={fetchAttribute}
         />
-      )}
+      )} 
     </div>
   );
 }

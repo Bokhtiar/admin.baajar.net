@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { NetworkServices } from "../../network";
 import { networkErrorHandeller } from "../../utils/helpers";
@@ -6,15 +6,20 @@ import { Toastify } from "../../components/toastify";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { CiCamera } from "react-icons/ci";
 
-export default function ColorUpdateModal({ onClose, id, fetchColor }) {
-  const { register, handleSubmit, reset, watch, setValue } = useForm();
+export default function AttributUpdateModal({ onClose, id, fetchAttribute }) {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm();
   const modalRef = useRef();
-  const [imageName, setImageName] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [btnloading, setBtnLoading] = useState(false);
-  const [color, setColor] = useState([]);
 
-  console.log("categodry", color);
+  const [btnloading, setBtnLoading] = useState(false);
+  const [unit, setUnit] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState(false);
 
   const handleOutsideClick = (e) => {
     if (modalRef.current && !modalRef.current.contains(e.target)) {
@@ -29,24 +34,44 @@ export default function ColorUpdateModal({ onClose, id, fetchColor }) {
     };
   }, []);
 
-  // Fetch the category details from the API and populate the form
-  const fetchColorList = async (id) => {
+  const fetchUnit = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await NetworkServices.Color.show(id);
-      console.log("responseeeee", response.data.data);
-      if (response && response.status === 200) {
-        const color = response?.data?.data;
-        setColor(color);
+      const response = await NetworkServices.Unit.index();
+      console.log("runoit", response);
 
-        setValue("name", color.name);
-        setValue("status", color.is_active );
+      if (response?.status === 200) {
+        setData(response?.data?.data || []);
+      }
+    } catch (error) {
+      // console.log(error);
+      networkErrorHandeller(error);
+    }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    fetchUnit();
+  }, [fetchUnit]);
+
+  // Fetch the category details from the API and populate the form
+  const fetchColorList = async (id) => {
+    // setLoading(true);
+    try {
+      const response = await NetworkServices.Attribute.show(id);
+      console.log("response", response.data.data);
+      if (response && response.status === 200) {
+        const unit = response?.data?.data;
+        setUnit(unit);
+
+        setValue("name", unit.name);
+        setValue("unit", unit.unit_id);
       }
     } catch (error) {
       // console.error("Error fetching category:", error);
       networkErrorHandeller(error);
     }
-    setLoading(false);
+    // setLoading(false);
   };
 
   useEffect(() => {
@@ -62,18 +87,18 @@ export default function ColorUpdateModal({ onClose, id, fetchColor }) {
 
       const formData = new FormData();
       formData.append("name", data?.name);
-      formData.append("status", data?.status);
+      formData.append("unit_id", data.unit);
 
       formData.append("_method", "PUT");
 
-      const response = await NetworkServices.Color.update(id, formData);
+      const response = await NetworkServices.Attribute.update(id, formData);
       console.log("response", response);
 
       if (response && response.status === 200) {
-        Toastify.Success("Color Update successfully!");
+        Toastify.Success("Attribute Update successfully!");
         reset();
         onClose();
-        fetchColor();
+        fetchAttribute();
       }
     } catch (error) {
       networkErrorHandeller(error);
@@ -82,21 +107,15 @@ export default function ColorUpdateModal({ onClose, id, fetchColor }) {
     }
   };
 
-  const watchImage = watch("category_image");
-
-  useEffect(() => {
-    if (watchImage && watchImage.length > 0) {
-      setImageName(watchImage[0].name);
-    }
-  }, [watchImage]);
-
   return (
     <div className="fixed inset-0 bg-gradient-to-b from-black/85 to-black  flex items-center justify-center z-50 px-4">
       <div
         ref={modalRef}
         className="bg-white p-6 rounded-2xl shadow-md w-[400px] "
       >
-        <h2 className="text-center text-xl font-semibold mb-6">Update Color</h2>
+        <h2 className="text-center text-xl font-semibold mb-6">
+          Update Attribute
+        </h2>
 
         <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4">
           <input
@@ -106,26 +125,33 @@ export default function ColorUpdateModal({ onClose, id, fetchColor }) {
             className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
           />
 
-          <div className="flex flex-col md:flex-row gap-3">
-            <div className="relative  w-full">
-              <select
-                {...register("status", { required: false })}
-                className="appearance-none w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none text-gray-500 pr-8"
-                defaultValue="active"
-              >
-                <option className="text-gray-500" value="1">
-                  Status : Active
-                </option>
-                <option className="text-gray-500" value="0">
-                  Status : Inactive
-                </option>
-              </select>
 
-              {/* Dropdown icon on the left */}
-              <div className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                <RiArrowDropDownLine className="text-3xl" />
-              </div>
+          <div className="relative w-full ">
+            <select
+              {...register("unit", { required: true })}
+              className="appearance-none w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none text-gray-500 pr-8 "
+              defaultValue="active"
+            >
+              <option value="0">Select Attribute</option>
+              {data &&
+                data.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
+                ))}
+            </select>
+            <div
+              className={`pointer-events-none absolute right-3 text-gray-400 ${
+                errors ? "top-2" : "top-1/2 transform -translate-y-1/2"
+              }`}
+            >
+              <RiArrowDropDownLine className="text-3xl " />
             </div>
+            {errors.status && (
+              <p className="text-red-500 text-sm mt-">
+                {errors.status.message}
+              </p>
+            )}
           </div>
 
           <div className="w-full flex justify-center">
@@ -155,7 +181,7 @@ export default function ColorUpdateModal({ onClose, id, fetchColor }) {
                   />
                 </svg>
               )}
-              {btnloading ? "Saving..." : "Update Color"}
+              {btnloading ? "Saving..." : "Update Attribute"}
             </button>
           </div>
         </form>

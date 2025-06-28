@@ -136,7 +136,7 @@ export default function UnitTable() {
   return (
     <div className="mt-3 bg ">
       <Header
-        title="All Color"
+        title="All Unit"
         searchValue={search}
         onSearchChange={(value) => setSearch(value)}
         onAddClick={() => setShowModal(true)}

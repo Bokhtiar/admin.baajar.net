@@ -18,6 +18,7 @@ import {
   MdOutlineCategory,
   MdStorefront,
   MdAcUnit,
+  MdEditAttributes,
 } from "react-icons/md";
 import { FiFileText } from "react-icons/fi";
 import { TbPackages, TbTruckDelivery } from "react-icons/tb";
@@ -144,6 +145,11 @@ const Sidebar = ({ setIsSidebarOpen }) => {
       title: "Unit",
       icon: <MdAcUnit />,
       path: "/dashboard/unit",
+    },
+    {
+      title: "Attribute",
+      icon: <MdEditAttributes />,
+      path: "/dashboard/attribute",
     },
   ];
   return (
