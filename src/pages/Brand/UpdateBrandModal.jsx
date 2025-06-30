@@ -6,15 +6,12 @@ import { Toastify } from "../../components/toastify";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { CiCamera } from "react-icons/ci";
 
-export default function ColorUpdateModal({ onClose, id, fetchColor }) {
-  const { register, handleSubmit, reset, watch, setValue,formState: { errors }, } = useForm();
+export default function BrandUpdateModal({ onClose, id, fetchBrand }) {
+  const { register, handleSubmit, reset, setValue, formState: { errors }, } = useForm();
   const modalRef = useRef();
-  const [imageName, setImageName] = useState("");
   const [loading, setLoading] = useState(false);
   const [btnloading, setBtnLoading] = useState(false);
-  const [color, setColor] = useState([]);
-
-  console.log("categodry", color);
+  const [brand, setBrand] = useState([]);
 
   const handleOutsideClick = (e) => {
     if (modalRef.current && !modalRef.current.contains(e.target)) {
@@ -30,18 +27,18 @@ export default function ColorUpdateModal({ onClose, id, fetchColor }) {
   }, []);
 
   // Fetch the category details from the API and populate the form
-  const fetchColorList = async (id) => {
+  const fetchSingleBrand = async (id) => {
     setLoading(true);
     try {
-      const response = await NetworkServices.Color.show(id);
-      console.log("responseeeee", response.data.data);
+      const response = await NetworkServices.Brand.show(id);
+      console.log("response", response);
       if (response && response.status === 200) {
-        const color = response?.data?.data;
-        setColor(color);
+        const brand = response?.data?.data;
+        setBrand(brand);
 
-        setValue("name", color.name);
-        setValue("code", color.hex_code);
-        setValue("status", color.is_active);
+        setValue("name", brand.name);
+        setValue("status", brand.is_active
+);
       }
     } catch (error) {
       // console.error("Error fetching category:", error);
@@ -52,7 +49,7 @@ export default function ColorUpdateModal({ onClose, id, fetchColor }) {
 
   useEffect(() => {
     if (id) {
-      fetchColorList(id);
+      fetchSingleBrand(id);
     }
   }, [id]);
 
@@ -63,19 +60,17 @@ export default function ColorUpdateModal({ onClose, id, fetchColor }) {
 
       const formData = new FormData();
       formData.append("name", data?.name);
-      formData.append("hex_code", data?.code);
       formData.append("is_active", data?.status);
-
       formData.append("_method", "PUT");
 
-      const response = await NetworkServices.Color.update(id, formData);
+      const response = await NetworkServices.Brand.update(id, formData);
       console.log("response", response);
 
       if (response && response.status === 200) {
-        Toastify.Success("Color Update successfully!");
+        Toastify.Success("Brand Update successfully!");
         reset();
         onClose();
-        fetchColor();
+        fetchBrand();
       }
     } catch (error) {
       networkErrorHandeller(error);
@@ -84,21 +79,13 @@ export default function ColorUpdateModal({ onClose, id, fetchColor }) {
     }
   };
 
-  const watchImage = watch("category_image");
-
-  useEffect(() => {
-    if (watchImage && watchImage.length > 0) {
-      setImageName(watchImage[0].name);
-    }
-  }, [watchImage]);
-
   return (
     <div className="fixed inset-0 bg-gradient-to-b from-black/85 to-black  flex items-center justify-center z-50 px-4">
       <div
         ref={modalRef}
         className="bg-white p-6 rounded-2xl shadow-md w-[400px] "
       >
-        <h2 className="text-center text-xl font-semibold mb-6">Update Color</h2>
+        <h2 className="text-center text-xl font-semibold mb-6">Update Brand</h2>
 
         <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4">
           <input
@@ -107,44 +94,36 @@ export default function ColorUpdateModal({ onClose, id, fetchColor }) {
             {...register("name", { required: false })}
             className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
           />
-          <div>
-            <input
-              type="text"
-              placeholder="Color Code"
-              {...register("code", { required: "Color code is required" })}
-              className={`w-full px-4 py-2 border rounded-full focus:outline-none ${
-                errors.name ? "border-red-500" : "border-gray-300"
+
+                    <div className="relative w-full ">
+            <select
+              {...register("status", { required: true })}
+              className="appearance-none w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none text-gray-500 pr-8 "
+              defaultValue=""
+            >
+              <option value="" disabled>
+                Select Status
+              </option>
+              <option className="text-gray-500" value="1">
+                Active
+              </option>
+              <option className="text-gray-500" value="0">
+                Inactive
+              </option>
+            </select>
+            <div
+              className={`pointer-events-none absolute right-3 text-gray-400 ${
+                errors ? "top-2" : "top-1/2 transform -translate-y-1/2"
               }`}
-            />
-            {errors.name && (
-              <p className="text-red-500 text-sm ">{errors.code.message}</p>
+            >
+              <RiArrowDropDownLine className="text-3xl " />
+            </div>
+            {errors.status && (
+              <p className="text-red-500 text-sm mt-">
+                {errors.status.message}
+              </p>
             )}
           </div>
-
-              <div className="flex flex-col md:flex-row gap-3">
-                <div className="relative  w-full">
-                  <select
-                    {...register("status", { required: false })}
-                    className="appearance-none w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none text-gray-500 pr-8"
-                    defaultValue=""
-                  >
-                    <option value="" disabled>
-                      Select Status
-                    </option>
-                    <option className="text-gray-500" value="1">
-                      Active
-                    </option>
-                    <option className="text-gray-500" value="0">
-                      Inactive
-                    </option>
-                  </select>
-
-                  {/* Dropdown icon on the left */}
-                  <div className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                    <RiArrowDropDownLine className="text-3xl" />
-                  </div>
-                </div>
-              </div>
 
           <div className="w-full flex justify-center">
             <button
@@ -173,7 +152,7 @@ export default function ColorUpdateModal({ onClose, id, fetchColor }) {
                   />
                 </svg>
               )}
-              {btnloading ? "Saving..." : "Update Color"}
+              {btnloading ? "Saving..." : "Update Brand"}
             </button>
           </div>
         </form>

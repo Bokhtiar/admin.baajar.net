@@ -20,27 +20,43 @@ export default function SubCategoryTable() {
   const [loading, setLoading] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
+  const [totalRows, setTotalRows] = useState(0);
 
   console.log("dghdgh", data);
 
+  const handlePageChange = (page) => {
+    if (!loading) {
+      setCurrentPage(page);
+    }
+  };
 
+  const handleRowsPerPageChange = (newPerPage, page) => {
+    setPerPage(newPerPage);
+    setCurrentPage(page);
+  };
 
   // Fetch categories from API
   const fetchCategory = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await NetworkServices.Category.index();
+      const queryParams = new URLSearchParams();
+      queryParams.append("page", currentPage);
+      queryParams.append("per_page", perPage);
+      const response = await NetworkServices.Category.index(queryParams.toString());
       console.log("response", response);
 
       if (response?.status === 200) {
-        setData(response?.data?.data?.subcategories || []);
+        setData(response?.data?.data?.subcategories?.data || []);
+        setTotalRows(response?.data?.data?.subcategories?.total || 0);
       }
     } catch (error) {
       console.log(error);
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, []);
+  }, [currentPage, perPage]);
 
   useEffect(() => {
     fetchCategory();
@@ -86,7 +102,6 @@ export default function SubCategoryTable() {
   // );
 
   // const columns = [
-
 
   //   {
   //     name: "Sub-Category",
@@ -159,9 +174,22 @@ export default function SubCategoryTable() {
   // ];
 
   const columns = [
+    // {
+    //   name: "SN.",
+    //   selector: (row) => row?.serial_num + ".",
+    // },
     {
-      name: "SN.",
-      selector: (row) => row?.serial_num + ".",
+      name: "Image",
+      selector: (row) => row.category_image,
+      cell: (row) => (
+        <div className="w-12 h-10 bg-[#FFFFFF] shadow-md rounded-sm flex items-center justify-center transition-transform duration-300 hover:shadow-xl scale-105">
+          <img
+            className="w-8 h-6  "
+            src={`${import.meta.env.VITE_API_SERVER}${row?.category_image}`}
+            alt={row.name}
+          />
+        </div>
+      ),
     },
 
     {
@@ -170,9 +198,8 @@ export default function SubCategoryTable() {
     },
     {
       name: "Category",
-      selector: (row) => row.parent_name,
+      selector: (row) => row?.parent?.category_name,
     },
-
 
     {
       name: "Status",
@@ -191,7 +218,7 @@ export default function SubCategoryTable() {
         </button>
       ),
     },
-        {
+    {
       name: "Action",
       cell: (row) => (
         <div className="flex gap-3 text-lg cursor-pointer">
@@ -212,7 +239,7 @@ export default function SubCategoryTable() {
           </button>
         </div>
       ),
-    }
+    },
   ];
 
   // if (loading) {
@@ -263,6 +290,12 @@ export default function SubCategoryTable() {
             pagination
             responsive
             highlightOnHover
+            paginationServer
+            paginationTotalRows={totalRows}
+            paginationPerPage={perPage}
+            onChangePage={handlePageChange}
+            onChangeRowsPerPage={handleRowsPerPageChange}
+            paginationDefaultPage={currentPage}
           />
         )}
       </div>

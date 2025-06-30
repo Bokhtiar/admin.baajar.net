@@ -1,6 +1,7 @@
 import { DashboardLayout } from "../layouts/dashboard.layout";
 import Admins from "../pages/admins";
 import AttributeTable from "../pages/attribute";
+import BrandTable from "../pages/Brand";
 import CategoryTable from "../pages/category/allcategory";
 import SubCategoryTable from "../pages/category/subcategory";
 import ColorTable from "../pages/color";
@@ -63,6 +64,8 @@ const appRoutes = [
        { path:"unit", element:  <UnitTable/> },
       //  unit
        { path:"attribute", element:  <AttributeTable/> },
+      //  brand
+       { path:"brand", element:  <BrandTable/> },
      ]
   },
 ];

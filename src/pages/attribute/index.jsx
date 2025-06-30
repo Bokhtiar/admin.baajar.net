@@ -32,7 +32,7 @@ export default function AttributeTable() {
       console.log("response", response);
 
       if (response?.status === 200) {
-        setData(response?.data?.data || []);
+        setData(response?.data?.data?.data || []);
       }
     } catch (error) {
       // console.log(error);

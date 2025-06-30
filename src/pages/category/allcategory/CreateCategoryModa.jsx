@@ -40,10 +40,8 @@ export default function CreateCategoryModal({ onClose, fetchCategory }) {
 
       const formData = new FormData();
       formData.append("category_name", data.name);
-      formData.append("slug", data.slug);
-      formData.append("isNavbar", "1");
       // formData.append("status", data.status);
-      formData.append("status", "1");
+      formData.append("status", data.status);
 
       if (data.image && data.image[0]) {
         formData.append("category_image", data.image[0]);
@@ -101,7 +99,7 @@ export default function CreateCategoryModal({ onClose, fetchCategory }) {
 
           {/* Slug & Status */}
           <div className="flex flex-col md:flex-row gap-4">
-            <div className="w-full">
+            {/* <div className="w-full">
               <input
                 type="text"
                 placeholder="Slug"
@@ -115,19 +113,22 @@ export default function CreateCategoryModal({ onClose, fetchCategory }) {
                   {errors.slug.message}
                 </p>
               )}
-            </div>
+            </div> */}
 
             <div className="relative w-full ">
               <select
                 {...register("status", { required: true })}
                 className="appearance-none w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none text-gray-500 pr-8 "
-                defaultValue="active"
+                defaultValue=""
               >
-                <option className="text-gray-500" value="active">
-                  Status : Active
+                <option value="" disabled>
+                  Select Status
                 </option>
-                <option className="text-gray-500" value="inactive">
-                  Status : Inactive
+                <option className="text-gray-500" value="1">
+                   Active
+                </option>
+                <option className="text-gray-500" value="0">
+                 Inactive
                 </option>
               </select>
               <div

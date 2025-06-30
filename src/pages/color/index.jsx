@@ -20,25 +20,46 @@ export default function ColorTable() {
   const [updateModal, setUpdateModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
+  const [totalRows, setTotalRows] = useState(0);
 
   console.log("dghdgh", data);
+  console.log("totalRows", totalRows);
+
+  const handlePageChange = (page) => {
+    if (!loading) {
+      setCurrentPage(page);
+    }
+  };
+
+  const handleRowsPerPageChange = (newPerPage, page) => {
+    setPerPage(newPerPage);
+    setCurrentPage(page);
+  };
 
   // Fetch categories from API
   const fetchColor = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await NetworkServices.Color.index();
+      const queryParams = new URLSearchParams();
+      queryParams.append("page", currentPage);
+      queryParams.append("per_page", perPage);
+      const response = await NetworkServices.Color.index(
+        queryParams.toString()
+      );
       console.log("res", response);
 
       if (response?.status === 200) {
-        setData(response?.data?.data || []);
+        setData(response?.data?.data?.data || []);
+        setTotalRows(response?.data?.data?.total || 0);
       }
     } catch (error) {
       // console.log(error);
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, []);
+  }, [currentPage,perPage]);
 
   useEffect(() => {
     fetchColor();
@@ -179,6 +200,12 @@ export default function ColorTable() {
             pagination
             responsive
             highlightOnHover
+            paginationServer
+            paginationTotalRows={totalRows}
+            paginationPerPage={perPage}
+            onChangePage={handlePageChange}
+            onChangeRowsPerPage={handleRowsPerPageChange}
+            paginationDefaultPage={currentPage}
           />
         )}
       </div>

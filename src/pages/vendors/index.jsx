@@ -46,28 +46,47 @@ export default function AllVendorsTable() {
   const [loading, setLoading] = useState(false);
   const [statusLoading, setStatusLoading] = useState(false);
   const [vendor, setVendor] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
+  const [totalRows, setTotalRows] = useState(0);
   // const [selectedId, setSelectedId] = useState(null);
 
   console.log("searchxx", search);
 
-  console.log("vendor", vendor);
+  console.log("totalRows", totalRows);
+    const handlePageChange = (page) => {
+    if (!loading) {
+      setCurrentPage(page);
+    }
+  };
+
+  const handleRowsPerPageChange = (newPerPage, page) => {
+    setPerPage(newPerPage);
+    setCurrentPage(page);
+  };
+
 
   // Fetch vendor from API
   const fetchVendor = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await NetworkServices.Vendor.index();
+      const queryParams = new URLSearchParams();
+
+       queryParams.append("page", currentPage);
+      queryParams.append("per_page", perPage);
+      const response = await NetworkServices.Vendor.index(queryParams.toString());
       console.log("response", response);
 
       if (response?.status === 200) {
-        setVendor(response?.data?.data || []);
+        setVendor(response?.data?.data.data || []);
+        setTotalRows(response?.data?.data?.total || 0);
       }
     } catch (error) {
       console.log(error);
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, []);
+  }, [currentPage,perPage]);
 
   useEffect(() => {
     fetchVendor();
@@ -137,42 +156,41 @@ export default function AllVendorsTable() {
       sortable: true,
     },
     {
-      name: "Category",
-      selector: (row) => row.category,
+      name: "Location",
+      selector: (row) => row.company_location,
       sortable: true,
     },
-    {
-      name: "Available Products",
-      selector: (row) => row.products,
-      sortable: true,
-    },
+    // {
+    //   name: "Available Products",
+    //   selector: (row) => row.products,
+    //   sortable: true,
+    // },
     {
       name: "Action",
       cell: (row) => (
-        <div className="flex justify-center gap-2 text-lg">
+        <div className="flex justify-center gap-2 text-lg ">
           <button
             onClick={() => handleToggleStatus(row.id, row.is_active)}
-            className={`w-10 h-6 rounded-full flex items-center px-1 transition ${
+            className={`w-10 h-6 rounded-full flex items-center px-1 transition cursor-pointer ${
               row.is_active == 1 ? "bg-green-500" : "bg-gray-300"
             }`}
           >
             <div
-              className={`w-4 h-4 bg-white rounded-full transform transition-transform ${
+              className={`w-4 h-4 bg-white rounded-full transform transition-transform  ${
                 row.is_active == 1 ? "translate-x-4" : ""
               }`}
             ></div>
           </button>
 
           <button
-            className="text-[#2D264B] text-xl"
-
+            className="text-[#2D264B] text-xl cursor-pointer"
           >
             <IoDocumentTextOutline />
           </button>
 
           <button
             onClick={() => destroy(row?.id)}
-            className="text-red-500 hover:text-red-700"
+            className="text-red-500 hover:text-red-700 cursor-pointer"
           >
             <FaTrashAlt />
           </button>
@@ -196,26 +214,25 @@ export default function AllVendorsTable() {
       )}
 
       <div className="bg-white  rounded overflow-y-auto mb-10">
-        {/* {loading ? (
+        {loading ? (
           <ListSkeleton />
         ) : (
           <DataTable
             columns={columns}
-            data={data}
+            data={vendor}
             customStyles={customStyles}
             pagination
-            highlightOnHover
+            paginationServer
+            paginationTotalRows={totalRows}
+            paginationPerPage={perPage}
+            onChangePage={handlePageChange}
+            onChangeRowsPerPage={handleRowsPerPageChange}
+            paginationDefaultPage={currentPage}
             responsive
+            highlightOnHover
           />
-        )} */}
-        <DataTable
-          columns={columns}
-          data={vendor}
-          customStyles={customStyles}
-          pagination
-          highlightOnHover
-          responsive
-        />
+        )}
+
       </div>
 
 

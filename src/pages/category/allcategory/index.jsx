@@ -20,25 +20,44 @@ export default function CategoryTable() {
   const [updateModal, setUpdateModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
+  const [totalRows, setTotalRows] = useState(0);
 
   console.log("dghdgh", data);
+  console.log("totalRows", totalRows);
+
+  const handlePageChange = (page) => {
+    if (!loading) {
+      setCurrentPage(page);
+    }
+  };
+
+  const handleRowsPerPageChange = (newPerPage, page) => {
+    setPerPage(newPerPage);
+    setCurrentPage(page);
+  };
 
   // Fetch categories from API
   const fetchCategory = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await NetworkServices.Category.index();
+      const queryParams = new URLSearchParams();
+      queryParams.append("page", currentPage);
+      queryParams.append("per_page", perPage);
+      const response = await NetworkServices.Category.index(queryParams.toString());
       console.log("response", response);
 
       if (response?.status === 200) {
-        setData(response?.data?.data?.categories || []);
+        setData(response?.data?.data?.categories.data || []);
+        setTotalRows(response?.data?.data?.categories?.total || 0);
       }
     } catch (error) {
       // console.log(error);
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, []);
+  }, [currentPage, perPage]);
 
   useEffect(() => {
     fetchCategory();
@@ -87,10 +106,10 @@ export default function CategoryTable() {
   };
 
   const columns = [
-    {
-      name: "SN.",
-      selector: (row) => row?.serial_num + ".",
-    },
+    // {
+    //   name: "SN.",
+    //   selector: (row) => row?.serial_num + ".",
+    // },
     {
       name: "Image",
       selector: (row) => row.category_image,
@@ -153,28 +172,28 @@ export default function CategoryTable() {
   ];
 
   const customStyles = {
-  headCells: {
-    style: {
-      fontWeight: "400",
-      fontSize: "14px",
-      color: "#8B8B8B", 
+    headCells: {
+      style: {
+        fontWeight: "400",
+        fontSize: "14px",
+        color: "#8B8B8B",
+      },
     },
-  },
-  rows: {
-    style: {
-      minHeight: "64px",
-      borderBottom: "1px solid #E5E7EB",
-      color: "#33363F", 
+    rows: {
+      style: {
+        minHeight: "64px",
+        borderBottom: "1px solid #E5E7EB",
+        color: "#33363F",
+      },
     },
-  },
-  cells: {
-    style: {
-      paddingTop: "8px",
-      paddingBottom: "8px",
-      color: "#33363F", 
+    cells: {
+      style: {
+        paddingTop: "8px",
+        paddingBottom: "8px",
+        color: "#33363F",
+      },
     },
-  },
-};
+  };
 
   return (
     <div className="mt-3 bg ">
@@ -194,6 +213,12 @@ export default function CategoryTable() {
             data={data}
             customStyles={customStyles}
             pagination
+            paginationServer
+            paginationTotalRows={totalRows}
+            paginationPerPage={perPage}
+            onChangePage={handlePageChange}
+            onChangeRowsPerPage={handleRowsPerPageChange}
+            paginationDefaultPage={currentPage}
             responsive
             highlightOnHover
           />

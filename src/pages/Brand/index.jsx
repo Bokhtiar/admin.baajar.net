@@ -8,10 +8,13 @@ import { RiEdit2Fill } from "react-icons/ri";
 import { FaTrashCan } from "react-icons/fa6";
 import Header from "../../components/heading/heading";
 import { networkErrorHandeller } from "../../utils/helpers";
-import CreateUnitModal from "./CreateModal";
-import UnitUpdateModal from "./updateUnitModal";
+import CreateBrandModal from "./createBrandModal";
+import BrandUpdateModal from "./UpdateBrandModal";
+// import CreateUnitModal from "./CreateModal";
+// import UnitUpdateModal from "./updateUnitModal";
 
-export default function UnitTable() {
+
+export default function BrandTable() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -19,46 +22,31 @@ export default function UnitTable() {
   const [updateModal, setUpdateModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(10);
-  const [totalRows, setTotalRows] = useState(0);
 
   console.log("dghdgh", data);
-  const handlePageChange = (page) => {
-    if (!loading) {
-      setCurrentPage(page);
-    }
-  };
-
-  const handleRowsPerPageChange = (newPerPage, page) => {
-    setPerPage(newPerPage);
-    setCurrentPage(page);
-  };
 
   // Fetch categories from API
-  const fetchUnit = useCallback(async () => {
+  const fetchBrand = useCallback(async () => {
     setLoading(true);
     try {
-      const queryParams = new URLSearchParams();
-      queryParams.append("page", currentPage);
-      queryParams.append("per_page", perPage);
-      const response = await NetworkServices.Unit.index(queryParams.toString());
+      const response = await NetworkServices.Brand.index();
       console.log("response", response);
 
       if (response?.status === 200) {
         setData(response?.data?.data?.data || []);
-        setTotalRows(response?.data?.data?.total || 0);
       }
     } catch (error) {
       // console.log(error);
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, [perPage,currentPage]);
+  }, []);
 
   useEffect(() => {
-    fetchUnit();
-  }, [fetchUnit]);
+    fetchBrand();
+  }, [fetchBrand]);
+
+
 
   console.log("search", search);
 
@@ -66,16 +54,16 @@ export default function UnitTable() {
     console.log("first", id);
     confirmAlert({
       title: "Confirm Delete",
-      message: "Are you sure you want to delete this Unit?",
+      message: "Are you sure you want to delete this Brand?",
       buttons: [
         {
           label: "Yes",
           onClick: async () => {
             try {
-              const response = await NetworkServices.Unit.destroy(id);
+              const response = await NetworkServices.Brand.destroy(id);
               if (response?.status === 200) {
-                Toastify.Info("Unit deleted successfully.");
-                fetchUnit();
+                Toastify.Info("Brand deleted successfully.");
+                fetchBrand();
               }
             } catch (error) {
               networkErrorHandeller(error);
@@ -148,7 +136,7 @@ export default function UnitTable() {
   return (
     <div className="mt-3 bg ">
       <Header
-        title="All Unit"
+        title="All Brand"
         searchValue={search}
         onSearchChange={(value) => setSearch(value)}
         onAddClick={() => setShowModal(true)}
@@ -165,28 +153,22 @@ export default function UnitTable() {
             pagination
             responsive
             highlightOnHover
-            paginationServer
-            paginationTotalRows={totalRows}
-            paginationPerPage={perPage}
-            onChangePage={handlePageChange}
-            onChangeRowsPerPage={handleRowsPerPageChange}
-            paginationDefaultPage={currentPage}
           />
         )}
       </div>
       {showModal && (
-        <CreateUnitModal
+        <CreateBrandModal
           onClose={() => setShowModal(false)}
           // onSubmit={handleAddCategory}
-          fetchUnit={fetchUnit}
+          fetchBrand={fetchBrand}
         />
       )}
 
       {updateModal && (
-        <UnitUpdateModal
+        <BrandUpdateModal
           id={selectedId}
           onClose={() => setUpdateModal(false)}
-          fetchUnit={fetchUnit}
+          fetchBrand={fetchBrand}
         />
       )}
     </div>

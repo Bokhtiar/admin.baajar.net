@@ -6,6 +6,7 @@ import { RiArrowDropDownLine } from "react-icons/ri";
 import { NetworkServices } from "../../../network";
 import { networkErrorHandeller } from "../../../utils/helpers";
 import { Toastify } from "../../../components/toastify";
+import UpdateSkeleton from "../../../components/loading/updateLoading";
 
 // import { useNavigate } from "react-router-dom";
 
@@ -18,6 +19,7 @@ export default function CategoryUpdateModal({
   const modalRef = useRef();
   const [imageName, setImageName] = useState("");
   const [btnloading, setBtnLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [category, setCategory] = useState({});
 
   console.log("categodry", category);
@@ -37,7 +39,7 @@ export default function CategoryUpdateModal({
 
   // Fetch the category details from the API and populate the form
   const fetchParentCategory = async (categoryId) => {
-    // setLoading(true);
+    setLoading(true);
     try {
       const response = await NetworkServices.Category.show(categoryId);
       console.log("response", response.data.data);
@@ -47,14 +49,13 @@ export default function CategoryUpdateModal({
 
         setValue("category_name", category.category_name);
         setValue("category_image", category.category_image);
-        setValue("slug", category.slug);
-        setValue("status", category.status === 1 ? "active" : "inactive");
+        setValue("status", category.status);
       }
     } catch (error) {
       // console.error("Error fetching category:", error);
       networkErrorHandeller(error);
     }
-    // setLoading(false);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -63,6 +64,10 @@ export default function CategoryUpdateModal({
     }
   }, [categoryId]);
 
+  if (loading) {
+    <UpdateSkeleton />;
+  }
+
   const onFormSubmit = async (data) => {
     console.log("formData", data);
     try {
@@ -70,18 +75,12 @@ export default function CategoryUpdateModal({
 
       const formData = new FormData();
       formData.append("category_name", data?.category_name);
-      formData.append("slug", data?.slug);
-      formData.append("isNavbar", "1");
-      // formData.append("status", data.status);
-      formData.append("status", data?.status === "active" ? 1 : 0);
-
-      formData.append("_method", "PUT");
-      //   if (data?.category_image && data?.category_image[0]) {
-      //     formData.append("category_image", data?.category_image[0]);
-      //   }
+      formData.append("status", data?.status);
       if (data?.category_image?.[0] instanceof File) {
         formData.append("category_image", data.category_image[0]);
       }
+
+      formData.append("_method", "PUT");
 
       const response = await NetworkServices.Category.update(
         categoryId,
@@ -111,92 +110,114 @@ export default function CategoryUpdateModal({
   }, [watchImage]);
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-b from-black/85 to-black  flex items-center justify-center z-50 px-4">
-      <div
-        ref={modalRef}
-        className="bg-white p-6 rounded-2xl shadow-md w-[400px] "
-      >
-        <h2 className="text-center text-xl font-semibold mb-6">
-          Update Category
-        </h2>
+    <>
+      <div className="fixed inset-0 bg-gradient-to-b from-black/85 to-black  flex items-center justify-center z-50 px-4">
+        {loading ? (
+          <UpdateSkeleton />
+        ) : (
+          <div
+            ref={modalRef}
+            className="bg-white p-6 rounded-2xl shadow-md w-[400px] "
+          >
+            <h2 className="text-center text-xl font-semibold mb-6">
+              Update Category
+            </h2>
 
-        <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4">
-          <input
-            type="text"
-            placeholder="Category Name"
-            {...register("category_name", { required: false })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
-          />
-
-          <div className="flex flex-col md:flex-row gap-3">
-            <div className="w-full">
-              {" "}
+            <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4">
               <input
                 type="text"
-                placeholder="Slug"
-                {...register("slug", { required: false })}
+                placeholder="Category Name"
+                {...register("category_name", { required: false })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none"
               />
-            </div>
-            <div className="relative  w-full">
-              <select
-                {...register("status", { required: false })}
-                className="appearance-none w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none text-gray-500 pr-8"
-                defaultValue="active"
-              >
-                <option className="text-gray-500" value="active">
-                  Status : Active
-                </option>
-                <option className="text-gray-500" value="inactive">
-                  Status : Inactive
-                </option>
-              </select>
 
-              {/* Dropdown icon on the left */}
-              <div className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                <RiArrowDropDownLine className="text-3xl" />
-              </div>
-            </div>
-          </div>
+              <div className="flex flex-col md:flex-row gap-3">
+                <div className="relative  w-full">
+                  <select
+                    {...register("status", { required: false })}
+                    className="appearance-none w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none text-gray-500 pr-8"
+                    defaultValue=""
+                  >
+                    <option value="" disabled>
+                      Select Status
+                    </option>
+                    <option className="text-gray-500" value="1">
+                      Active
+                    </option>
+                    <option className="text-gray-500" value="0">
+                      Inactive
+                    </option>
+                  </select>
 
-          <label className="w-full block">
-            <div className="w-full   border border-gray-300 rounded-lg bg-white text-gray-500 text-sm cursor-pointer flex items-center gap-2 ">
-              {imageName ? (
-                <>
-                  <div className="flex items-center gap-2 px-3">
-                    <CiCamera className="text-xl" />
-                    <span className="py-2">{imageName}</span>
+                  {/* Dropdown icon on the left */}
+                  <div className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                    <RiArrowDropDownLine className="text-3xl" />
                   </div>
-                </>
-              ) : category.category_image ? (
-                <img
-                  src={`${import.meta.env.VITE_API_SERVER}${
-                    category.category_image
-                  }`}
-                  alt="Current Category"
-                  className="w-10 h-[38px]  rounded"
-                />
-              ) : (
-                <span className="py-2 px-3">Upload Image / Icon</span>
-              )}
-            </div>
-            <input
-              type="file"
-              {...register("category_image", { required: false })}
-              className="hidden"
-            />
-          </label>
+                </div>
+              </div>
 
-          <div className="w-full flex justify-center">
+              <label className="w-full block">
+                <div className="w-full   border border-gray-300 rounded-lg bg-white text-gray-500 text-sm cursor-pointer flex items-center gap-2 ">
+                  {imageName ? (
+                    <>
+                      <div className="flex items-center gap-2 px-3">
+                        <CiCamera className="text-xl" />
+                        <span className="py-2">{imageName}</span>
+                      </div>
+                    </>
+                  ) : category.category_image ? (
+                    <img
+                      src={`${import.meta.env.VITE_API_SERVER}${
+                        category.category_image
+                      }`}
+                      alt="Current Category"
+                      className="w-10 h-[38px]  rounded"
+                    />
+                  ) : (
+                    <span className="py-2 px-3">Upload Image / Icon</span>
+                  )}
+                </div>
+                <input
+                  type="file"
+                  {...register("category_image", { required: false })}
+                  className="hidden"
+                />
+              </label>
+
+              <div className="w-full flex justify-center">
             <button
               type="submit"
-              className="w-[50%] bg-[#13BF00] hover:bg-green-600 text-white py-2 rounded-full mt-4 cursor-pointer"
+              className="w-[50%] bg-[#13BF00] hover:bg-green-600 text-white py-2 rounded-full mt-4 flex items-center justify-center gap-2"
             >
-              Save Category
+              {btnloading && (
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  />
+                </svg>
+              )}
+              {btnloading ? "Saving..." : "Update Category"}
             </button>
+              </div>
+            </form>
           </div>
-        </form>
+        )}
       </div>
-    </div>
+    </>
   );
 }

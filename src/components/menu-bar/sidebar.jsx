@@ -12,10 +12,6 @@ import { FaList, FaUnity, FaUsers } from "react-icons/fa";
 import { CgAttribution } from "react-icons/cg";
 
 import {
-  MdOutlineProductionQuantityLimits,
-  MdBrandingWatermark,
-  MdSettingsAccessibility,
-  MdOutlineCategory,
   MdStorefront,
   MdAcUnit,
   MdEditAttributes,
@@ -29,7 +25,7 @@ const Sidebar = ({ setIsSidebarOpen }) => {
   const [openMenu, setOpenMenu] = useState(null);
   const [open, setOpen] = useState(false);
 
-  console.log("open",open)
+  console.log("open", open);
 
   const location = useLocation();
 
@@ -48,7 +44,7 @@ const Sidebar = ({ setIsSidebarOpen }) => {
 
     {
       title: "Orders",
-      icon: <FiFileText/>,
+      icon: <FiFileText />,
       childrens: [
         {
           title: "All Orders",
@@ -87,7 +83,7 @@ const Sidebar = ({ setIsSidebarOpen }) => {
     {
       title: "Category",
       icon: <FaList />,
-            childrens: [
+      childrens: [
         {
           title: "All Categories",
           icon: <IoColorPaletteOutline />,
@@ -98,7 +94,8 @@ const Sidebar = ({ setIsSidebarOpen }) => {
           title: "Sub Categories",
           icon: <RiProductHuntLine />,
           path: "/dashboard/sub-category",
-        },]
+        },
+      ],
     },
     {
       title: "Vendors",
@@ -108,7 +105,33 @@ const Sidebar = ({ setIsSidebarOpen }) => {
     {
       title: "Product",
       icon: <TbPackages />,
-      path: "/dashboard/product",
+      childrens: [
+        {
+          title: "All Product",
+          icon: <TbPackages />,
+          path: "/dashboard/product",
+        },
+        {
+          title: "Color",
+          icon: <IoIosColorPalette />,
+          path: "/dashboard/color",
+        },
+        {
+          title: "Unit",
+          icon: <MdAcUnit />,
+          path: "/dashboard/unit",
+        },
+        {
+          title: "Attribute",
+          icon: <MdEditAttributes />,
+          path: "/dashboard/attribute",
+        },
+        {
+          title: "Brand",
+          icon: <MdEditAttributes />,
+          path: "/dashboard/brand",
+        },
+      ],
     },
     {
       title: "Delivery Man",
@@ -136,26 +159,11 @@ const Sidebar = ({ setIsSidebarOpen }) => {
       icon: <IoSettingsOutline />,
       path: "/dashboard/settings",
     },
-    {
-      title: "Color",
-      icon: <IoIosColorPalette />,
-      path: "/dashboard/color",
-    },
-    {
-      title: "Unit",
-      icon: <MdAcUnit />,
-      path: "/dashboard/unit",
-    },
-    {
-      title: "Attribute",
-      icon: <MdEditAttributes />,
-      path: "/dashboard/attribute",
-    },
   ];
   return (
     <>
       <div
-      // overflow-y-auto scrollbar-thin
+        // overflow-y-auto scrollbar-thin
         className={`w-64  bg-lightCard dark:bg-darkCard dark:text-darkTitle   transition-all duration-300   mt-[0.5px] `}
       >
         {/* Logo */}
@@ -178,7 +186,7 @@ const Sidebar = ({ setIsSidebarOpen }) => {
           {/* Prevents blue bar from going outside */}
           {menuData.map((item, index) => {
             const isActive = location.pathname === item.path;
-            const bgColor=open ==item.title
+            const bgColor = open == item.title;
 
             return (
               <div
@@ -195,7 +203,8 @@ const Sidebar = ({ setIsSidebarOpen }) => {
                     : " hover:text-black hover:bg-white "
                 }
               `}
-                  onClick={() => {toggleMenu(item.title)
+                  onClick={() => {
+                    toggleMenu(item.title);
                     setOpen(item.title);
                   }}
                 >
@@ -212,7 +221,7 @@ const Sidebar = ({ setIsSidebarOpen }) => {
                   <div className="ml-6 mt-1 flex flex-col space-y-1">
                     {item.childrens.map((subItem, subIndex) => {
                       const isSubActive = location.pathname === subItem.path;
-              
+
                       return (
                         <Link
                           key={subIndex}

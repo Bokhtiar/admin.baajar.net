@@ -35,14 +35,16 @@ export const isValidEmail = () => {
 
 /* Global network error handeller */
 export const networkErrorHandeller = (error) => {
+   
 
     if (
-        error &&
-        error.response &&
-        error.response.data &&
+        error ||
+        error.response ||
+        error.response.data ||
         error.response.data.errors
     ) {
-    return Toastify.Error(error.response.data.errors[0]);
+    return Toastify.Error(error.response.data.message);
+    
     } else {
         return Toastify.Error("Something going wrong, Try again.");
     }

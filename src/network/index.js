@@ -8,6 +8,7 @@ import * as Admin from "../network/admin.network"
 import * as Color from "../network/color.network"
 import * as Unit from "../network/unit.network"
 import * as Attribute from "../network/attribute.network"
+import * as Brand from "../network/brand.network"
 
 
 export const NetworkServices = {
@@ -19,6 +20,7 @@ export const NetworkServices = {
   Admin,
   Color,
   Unit,
-  Attribute
+  Attribute,
+  Brand
   
 };

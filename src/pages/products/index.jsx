@@ -74,7 +74,7 @@ const columns = [
       <div className="flex justify-center gap-2 text-lg">
         <button
           // onClick={() => handleToggle(row.status)}
-          className={`w-10 h-6 rounded-full flex items-center px-1 transition ${
+          className={`w-10 h-6 rounded-full flex items-center px-1 transition cursor-pointer ${
             row.status == 1 ? "bg-green-500" : "bg-gray-300"
           }`}
         >
@@ -84,10 +84,10 @@ const columns = [
             }`}
           ></div>
         </button>
-        <button className="text-blue-500 hover:text-blue-700">
+        <button className="text-blue-500 hover:text-blue-700 cursor-pointer">
           <FaEdit />
         </button>
-        <button className="text-red-500 hover:text-red-700">
+        <button className="text-red-500 hover:text-red-700 cursor-pointer">
           <FaTrashAlt />
         </button>
       </div>

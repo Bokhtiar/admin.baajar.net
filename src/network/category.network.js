@@ -1,8 +1,12 @@
 import { privateRequest } from '../config/axios.config'
 
 /* list of resource */
-export const index = async ( ) => {
-    return await privateRequest.get(`/admin/category` );
+export const index = async ( queryParams) => {
+    return await privateRequest.get(`/admin/category?${queryParams}` );
+};
+/* list of resource */
+export const allCategory = async ( ) => {
+    return await privateRequest.get(`admin/categories/all` );
 };
 
 

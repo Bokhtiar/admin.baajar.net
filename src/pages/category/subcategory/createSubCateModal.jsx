@@ -12,12 +12,14 @@ export default function CreateSubCategoryModal({ onClose, fetchCategory }) {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm();
   const modalRef = useRef();
   //   const [imageName, setImageName] = useState("");
   const [btnloading, setBtnLoading] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [imageName, setImageName] = useState("");
 
   console.log("categories", categories);
 
@@ -41,12 +43,10 @@ export default function CreateSubCategoryModal({ onClose, fetchCategory }) {
       console.log("first", response);
       if (response && response.status === 200) {
         // setCategories(response?.data?.data);
-        const categories = response?.data?.data?.categories.map(
-          (item) => ({
-            value: item.category_id,
-            name: item.category_name,
-          })
-        );
+        const categories = response?.data?.data?.categories.map((item) => ({
+          value: item.category_id,
+          name: item.category_name,
+        }));
         setCategories(categories);
       }
     } catch (error) {
@@ -68,9 +68,11 @@ export default function CreateSubCategoryModal({ onClose, fetchCategory }) {
       const formData = new FormData();
       formData.append("category_name", data.name);
       formData.append("parent_id", data.category);
-      formData.append("isNavbar", "1");
-      // formData.append("status", data.status);
-      formData.append("status", "1");
+
+      formData.append("status", data.status);
+      if (data.image && data.image[0]) {
+        formData.append("category_image", data.image[0]);
+      }
 
       const response = await NetworkServices.Category.store(formData);
       console.log("response", response);
@@ -88,13 +90,13 @@ export default function CreateSubCategoryModal({ onClose, fetchCategory }) {
     }
   };
 
-  //   const watchImage = watch("image");
+  const watchImage = watch("image");
 
-  //   useEffect(() => {
-  //     if (watchImage && watchImage.length > 0) {
-  //       setImageName(watchImage[0].name);
-  //     }
-  //   }, [watchImage]);
+  useEffect(() => {
+    if (watchImage && watchImage.length > 0) {
+      setImageName(watchImage[0].name);
+    }
+  }, [watchImage]);
 
   return (
     <div className="fixed inset-0 bg-gradient-to-b from-black/85 to-black bg-opacity-50 flex items-center justify-center z-50">
@@ -160,24 +162,8 @@ export default function CreateSubCategoryModal({ onClose, fetchCategory }) {
             )}
           </div>
 
-          <div className="flex gap-3">
-            <div className="w-1/2">
-              <input
-                type="text"
-                placeholder="Slug"
-                {...register("slug", { required: "Slug is required" })}
-                className={`w-full px-4 py-2 border rounded-full focus:outline-none ${
-                  errors.slug ? "border-red-500" : "border-gray-300"
-                }`}
-              />
-              {errors.slug && (
-                <p className="text-red-500 text-sm mt-">
-                  {errors.slug.message}
-                </p>
-              )}
-            </div>
-
-            <div className="relative w-1/2">
+          <div className=" ">
+            <div className="relative ">
               <select
                 {...register("status", { required: false })}
                 className={`appearance-none w-full px-4 py-2 border rounded-full focus:outline-none text-gray-500 pr-8 ${
@@ -188,8 +174,8 @@ export default function CreateSubCategoryModal({ onClose, fetchCategory }) {
                 <option value="" disabled>
                   Select Status
                 </option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
+                <option value="1">Active</option>
+                <option value="0">Inactive</option>
               </select>
 
               <div
@@ -206,6 +192,29 @@ export default function CreateSubCategoryModal({ onClose, fetchCategory }) {
                 </p>
               )}
             </div>
+          </div>
+          {/* Image Upload */}
+          <div>
+            <label className="w-full block">
+              <div
+                className={`w-full px-4 py-2 border rounded-lg bg-white text-sm cursor-pointer flex items-center gap-2 pl-4 ${
+                  errors.image
+                    ? "border-red-500 text-red-500"
+                    : "border-gray-300 text-gray-500"
+                }`}
+              >
+                <CiCamera className="text-xl" />
+                <span>{imageName || "Upload Image / Icon"}</span>
+              </div>
+              <input
+                type="file"
+                {...register("image", { required: "Image is required" })}
+                className="hidden"
+              />
+            </label>
+            {errors.image && (
+              <p className="text-red-500 text-sm mt-">{errors.image.message}</p>
+            )}
           </div>
 
           <div className="w-full flex justify-center">
