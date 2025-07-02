@@ -5,6 +5,7 @@ import { CiSearch } from "react-icons/ci";
 import { FaSearch } from "react-icons/fa";
 import { MdSend } from "react-icons/md";
 import PaymentModal from "./paymentModal";
+import ListSkeleton from "../../components/loading/ListLoading";
 
 const earningsData = [
   {
@@ -85,7 +86,8 @@ const columns = [
 
 export default function EarningsTable() {
   const [search, setSearch] = useState([]);
-  const [showmodal,setShowModal]=useState(false)
+  const [showmodal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   return (
     <div className="p-6 bg-white min-h-screen">
       <div className="flex  justify-between">
@@ -116,28 +118,28 @@ export default function EarningsTable() {
       </div>
 
       {/* DataTable */}
-      <DataTable
-        columns={columns}
-        data={earningsData}
-        pagination={false}
-        highlightOnHover
-        striped
-        responsive
-      />
+
+      {loading ? (
+        <ListSkeleton />
+      ) : (
+        <DataTable
+          columns={columns}
+          data={earningsData}
+          pagination={false}
+          highlightOnHover
+          striped
+          responsive
+        />
+      )}
       <div className="text-end">
-        <button onClick={()=>setShowModal(true)} className="text-[#D623FE] mt-4 ">
+        <button
+          onClick={() => setShowModal(true)}
+          className="text-[#D623FE] mt-4 "
+        >
           sent icon here
         </button>
       </div>
-      {
-        showmodal && (
-          <PaymentModal
-          onClose={()=>setShowModal(false)}
-          />
-        )
-      }
-
-
+      {showmodal && <PaymentModal onClose={() => setShowModal(false)} />}
     </div>
   );
 }

@@ -1,40 +1,57 @@
 import React, { useCallback, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { CiSearch } from "react-icons/ci";
-import { FaTrashAlt, FaEdit } from "react-icons/fa";
-// import img from "../../assets/logo/";
+import { FaTrashAlt } from "react-icons/fa";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { NetworkServices } from "../../network";
 import { networkErrorHandeller } from "../../utils/helpers";
 import Confirmation from "../../components/Confirmation/Confirmation";
 import { Toastify } from "../../components/toastify";
-import { destroy } from "../../network/category.network";
-// import CreateVendorModal from "./CreateVendorModal";
+import ListSkeleton from "../../components/loading/ListLoading";
 
 export default function User() {
   // const [showModal, setShowModal] = useState(false);
   const [search, setSearch] = useState("");
   const [user, setUser] = useState([]);
   const [statusLoading, setStatusLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
+  const [totalRows, setTotalRows] = useState(0);
 
   console.log("sxxe", user);
   console.log("sxxearch", search);
 
+  const handlePageChange = (page) => {
+    if (!loading) {
+      setCurrentPage(page);
+    }
+  };
+
+  const handleRowsPerPageChange = (newPerPage, page) => {
+    setPerPage(newPerPage);
+    setCurrentPage(page);
+  };
+
   const fetchUser = useCallback(async () => {
-    // setLoading(true);
+    setLoading(true);
     try {
-      const response = await NetworkServices.User.index();
+      const queryParams = new URLSearchParams();
+      queryParams.append("page", currentPage);
+      queryParams.append("per_page", perPage);
+      const response = await NetworkServices.User.index(queryParams.toString());
       console.log("response", response);
 
       if (response?.status === 200) {
-        setUser(response?.data?.data || []);
+        setUser(response?.data?.data?.data || []);
+        setTotalRows(response?.data?.data?.total || 0);
       }
     } catch (error) {
       console.log(error);
       networkErrorHandeller(error);
     }
-    // setLoading(false);
-  }, []);
+    setLoading(false);
+  }, [perPage, currentPage]);
 
   useEffect(() => {
     fetchUser();
@@ -177,13 +194,23 @@ export default function User() {
         </div>
       </div>
       <div className="bg-white  rounded overflow-y-auto mb-10">
-        <DataTable
-          columns={columns}
-          data={user}
-          pagination
-          highlightOnHover
-          responsive
-        />
+        {loading ? (
+          <ListSkeleton />
+        ) : (
+          <DataTable
+            columns={columns}
+            data={user}
+            pagination
+            highlightOnHover
+            responsive
+            paginationServer
+            paginationTotalRows={totalRows}
+            paginationPerPage={perPage}
+            onChangePage={handlePageChange}
+            onChangeRowsPerPage={handleRowsPerPageChange}
+            paginationDefaultPage={currentPage}
+          />
+        )}
       </div>
       {statusLoading && (
         <div className="fixed  inset-0 bg-black/80  z-[9999] flex items-center justify-center">

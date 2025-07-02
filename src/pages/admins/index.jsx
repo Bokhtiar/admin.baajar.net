@@ -7,38 +7,58 @@ import { NetworkServices } from "../../network";
 import { networkErrorHandeller } from "../../utils/helpers";
 import { Toastify } from "../../components/toastify";
 import Confirmation from "../../components/Confirmation/Confirmation";
-
-
+import ListSkeleton from "../../components/loading/ListLoading";
 
 export default function Admins() {
   // const [showModal, setShowModal] = useState(false);
   const [search, setSearch] = useState("");
   const [admin, setAdmin] = useState([]);
   const [statusLoading, setStatusLoading] = useState(false);
-  // const [loading,setLoading]=useState(false)
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
+  const [totalRows, setTotalRows] = useState(0);
+
   console.log("sxxearch", search);
 
+  const handlePageChange = (page) => {
+    if (!loading) {
+      setCurrentPage(page);
+    }
+  };
+
+  const handleRowsPerPageChange = (newPerPage, page) => {
+    setPerPage(newPerPage);
+    setCurrentPage(page);
+  };
+
   const fetchAdmin = useCallback(async () => {
-    // setLoading(true);
+    setLoading(true);
     try {
-      const response = await NetworkServices.Admin.index();
+      const queryParams = new URLSearchParams();
+      queryParams.append("page", currentPage);
+      queryParams.append("per_page", perPage);
+      const response = await NetworkServices.Admin.index(
+        queryParams.toString()
+      );
       console.log("response", response);
 
       if (response?.status === 200) {
-        setAdmin(response?.data?.data || []);
+        setAdmin(response?.data?.data?.data || []);
+        setTotalRows(response?.data?.data?.total || 0);
       }
     } catch (error) {
       console.log(error);
       networkErrorHandeller(error);
     }
-    // setLoading(false);
-  }, []);
+    setLoading(false);
+  }, [currentPage, perPage]);
 
   useEffect(() => {
     fetchAdmin();
   }, [fetchAdmin]);
 
-    const destroy = (id) => {
+  const destroy = (id) => {
     const dialog = Confirmation({
       title: "Confirm Delete",
       message: "Are you sure you want to delete this user?",
@@ -134,7 +154,10 @@ export default function Admins() {
           <button className="text-[#2D264B] text-xl">
             <IoDocumentTextOutline />
           </button>
-          <button onClick={() => destroy(row?.id)} className="text-red-500 hover:text-red-700">
+          <button
+            onClick={() => destroy(row?.id)}
+            className="text-red-500 hover:text-red-700"
+          >
             <FaTrashAlt />
           </button>
         </div>
@@ -172,13 +195,23 @@ export default function Admins() {
         </div>
       </div>
       <div className="bg-white shadow rounded overflow-y-auto mb-10">
+        {loading ? (
+          <ListSkeleton />
+        ) : (
         <DataTable
           columns={columns}
           data={admin}
           pagination
           highlightOnHover
           responsive
+          paginationServer
+          paginationTotalRows={totalRows}
+          paginationPerPage={perPage}
+          onChangePage={handlePageChange}
+          onChangeRowsPerPage={handleRowsPerPageChange}
+          paginationDefaultPage={currentPage}
         />
+        )}
       </div>
       {statusLoading && (
         <div className="fixed  inset-0 bg-black/80  z-[9999] flex items-center justify-center">

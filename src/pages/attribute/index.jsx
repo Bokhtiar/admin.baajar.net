@@ -11,8 +11,6 @@ import { networkErrorHandeller } from "../../utils/helpers";
 import CreateAttributeModal from "./createAttribut";
 import AttributUpdateModal from "./updateAttribute";
 
-
-
 export default function AttributeTable() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
@@ -21,35 +19,50 @@ export default function AttributeTable() {
   const [updateModal, setUpdateModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
+  const [totalRows, setTotalRows] = useState(0);
 
   console.log("dghdgh", data);
+  console.log("totalRows", totalRows);
+
+  const handlePageChange = (page) => {
+    if (!loading) {
+      setCurrentPage(page);
+    }
+  };
+
+  const handleRowsPerPageChange = (newPerPage, page) => {
+    setPerPage(newPerPage);
+    setCurrentPage(page);
+  };
 
   // Fetch categories from API
   const fetchAttribute = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await NetworkServices.Attribute.index();
+      const queryParams = new URLSearchParams();
+      queryParams.append("page", currentPage);
+      queryParams.append("per_page", perPage);
+      const response = await NetworkServices.Attribute.index(queryParams.toString());
       console.log("response", response);
 
       if (response?.status === 200) {
         setData(response?.data?.data?.data || []);
+        setTotalRows(response?.data?.data?.total || 0);
       }
     } catch (error) {
       // console.log(error);
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, []);
+  }, [currentPage,perPage]);
 
   useEffect(() => {
     fetchAttribute();
   }, [fetchAttribute]);
 
-
-
   console.log("search", search);
-
-
 
   const destroy = (id) => {
     console.log("first", id);
@@ -154,6 +167,12 @@ export default function AttributeTable() {
             pagination
             responsive
             highlightOnHover
+            paginationServer
+            paginationTotalRows={totalRows}
+            paginationPerPage={perPage}
+            onChangePage={handlePageChange}
+            onChangeRowsPerPage={handleRowsPerPageChange}
+            paginationDefaultPage={currentPage}
           />
         )}
       </div>
@@ -165,13 +184,13 @@ export default function AttributeTable() {
         />
       )}
 
-     {updateModal && (
+      {updateModal && (
         <AttributUpdateModal
           id={selectedId}
           onClose={() => setUpdateModal(false)}
           fetchAttribute={fetchAttribute}
         />
-      )} 
+      )}
     </div>
   );
 }

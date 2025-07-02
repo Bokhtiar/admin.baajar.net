@@ -57,7 +57,7 @@ const Login = () => {
       }
     } catch (error) {
       setBtnLoading(false);
-      networkErrorHandeller(error);
+      // networkErrorHandeller(error);
     } finally {
       setBtnLoading(false);
     }

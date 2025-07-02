@@ -43,7 +43,8 @@ export const networkErrorHandeller = (error) => {
         error.response.data ||
         error.response.data.errors
     ) {
-    return Toastify.Error(error.response.data.message);
+    return Toastify.Error(error.response.data.message ||error.response.data.error[0]);
+    
     
     } else {
         return Toastify.Error("Something going wrong, Try again.");

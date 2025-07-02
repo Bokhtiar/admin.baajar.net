@@ -86,7 +86,7 @@ export default function CreateBrandModal({ onClose, fetchBrand }) {
 
           <div className="relative w-full ">
             <select
-              {...register("status", { required: true })}
+              {...register("status", { required: "Status is required"})}
               className="appearance-none w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none text-gray-500 pr-8 "
               defaultValue=""
             >
