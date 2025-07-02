@@ -11,7 +11,6 @@ import Confirmation from "../../components/Confirmation/Confirmation";
 import { Toastify } from "../../components/toastify";
 import ListSkeleton from "../../components/loading/ListLoading";
 
-
 export default function DeliveryMan() {
   const [showModal, setShowModal] = useState(false);
   const [search, setSearch] = useState("");
@@ -21,7 +20,17 @@ export default function DeliveryMan() {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [totalRows, setTotalRows] = useState(0);
+  const [filterSearch, setFilterSearch] = useState("");
   console.log("sxxearch", search);
+
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFilterSearch(search);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [search]);
 
   const handlePageChange = (page) => {
     if (!loading) {
@@ -40,6 +49,9 @@ export default function DeliveryMan() {
       const queryParams = new URLSearchParams();
       queryParams.append("page", currentPage);
       queryParams.append("per_page", perPage);
+      if (filterSearch) {
+        queryParams.append("search", filterSearch);
+      }
       const response = await NetworkServices.Rider.index(
         queryParams.toString()
       );
@@ -54,7 +66,7 @@ export default function DeliveryMan() {
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, [currentPage, perPage]);
+  }, [currentPage, perPage, filterSearch]);
 
   useEffect(() => {
     fetchRider();
@@ -111,7 +123,7 @@ export default function DeliveryMan() {
       cell: (row) => (
         <img
           src={`${import.meta.env.VITE_API_SERVER}${row?.profile_image}`}
-          alt={row.name}
+          alt={row?.name}
           className="w-14 h-14 rounded-full object-cover shadow-2xl p-2 transform scale-105 z-10"
         />
       ),
@@ -120,15 +132,15 @@ export default function DeliveryMan() {
     },
     {
       name: "Name",
-      selector: (row) => row.name,
+      selector: (row) => row?.name,
       sortable: true,
       width: "180px",
     },
     {
-      name: "Address",
+      name: "Phone",
       cell: (row) => (
         <div className="whitespace-normal break-words max-w-[220px] ">
-          {row.Address}
+          {row?.phone_number}
         </div>
       ),
     },
@@ -137,32 +149,35 @@ export default function DeliveryMan() {
       cell: (row) => (
         <div className="flex justify-center gap-2 text-lg">
           <button
-            onClick={() => handleToggleStatus(row.id, row.is_active)}
-            className={`w-10 h-6 rounded-full flex items-center px-1 transition ${
+            title="Status"
+            onClick={() => handleToggleStatus(row?.id, row?.is_active)}
+            className={`w-10 h-6 rounded-full flex items-center px-1 transition cursor-pointer ${
               row.is_active == 1 ? "bg-green-500" : "bg-gray-300"
             }`}
           >
             <div
               className={`w-4 h-4 bg-white rounded-full transform transition-transform ${
-                row.is_active == 1 ? "translate-x-4" : ""
+                row?.is_active == 1 ? "translate-x-4" : ""
               }`}
             ></div>
           </button>
           <button
+            title="Show Details"
             onClick={() => setShowModal(true)}
-            className="text-[#2D264B] text-xl"
+            className="text-[#2D264B] text-xl cursor-pointer"
           >
             <IoDocumentTextOutline />
           </button>
-          <button className="text-[#2D264B] text-xl">
+          {/* <button className="text-[#2D264B] text-xl">
             <FaEdit />
-          </button>
-          <button className="text-[#2D264B] text-xl">
+          </button> */}
+          <button className="text-[#2D264B] text-xl cursor-pointer">
             <RiWallet3Fill />
           </button>
           <button
+            title="Delete"
             onClick={() => destroy(row?.id)}
-            className="text-red-500 hover:text-red-700"
+            className="text-red-500 hover:text-red-700 cursor-pointer"
           >
             <FaTrashAlt />
           </button>
@@ -185,8 +200,8 @@ export default function DeliveryMan() {
               // placeholder="Search"
             />
             {
-              <div className="absolute left-28 top-1/2 transform -translate-y-1/2 flex items-center text-gray-400 pointer-events-none">
-                <CiSearch className="text-lg mr-1" />
+              <div className="absolute left-28 top-1/2 transform -translate-y-1/2 flex items-center text-gray-400 pointer-events-none ">
+                <CiSearch className="text-lg mr-1 " />
                 <span className="text-sm">search</span>
               </div>
             }

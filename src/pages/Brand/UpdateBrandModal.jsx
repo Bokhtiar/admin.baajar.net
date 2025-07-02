@@ -5,6 +5,7 @@ import { networkErrorHandeller } from "../../utils/helpers";
 import { Toastify } from "../../components/toastify";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { CiCamera } from "react-icons/ci";
+import UpdateSkeleton from "../../components/loading/updateLoading";
 
 export default function BrandUpdateModal({ onClose, id, fetchBrand }) {
   const { register, handleSubmit, reset, setValue, formState: { errors }, } = useForm();
@@ -81,6 +82,9 @@ export default function BrandUpdateModal({ onClose, id, fetchBrand }) {
 
   return (
     <div className="fixed inset-0 bg-gradient-to-b from-black/85 to-black  flex items-center justify-center z-50 px-4">
+            {loading ? (
+        <UpdateSkeleton />
+      ) : (
       <div
         ref={modalRef}
         className="bg-white p-6 rounded-2xl shadow-md w-[400px] "
@@ -156,12 +160,9 @@ export default function BrandUpdateModal({ onClose, id, fetchBrand }) {
             </button>
           </div>
         </form>
-        {loading && (
-          <div className="fixed  inset-0 bg-black/80  z-[9999] flex items-center justify-center">
-            <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
-          </div>
-        )}
+
       </div>
+      )}
     </div>
   );
 }

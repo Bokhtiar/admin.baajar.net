@@ -45,6 +45,9 @@ export default function ColorTable() {
       const queryParams = new URLSearchParams();
       queryParams.append("page", currentPage);
       queryParams.append("per_page", perPage);
+      if (search) {
+        queryParams.append("search", search);
+      }
       const response = await NetworkServices.Color.index(
         queryParams.toString()
       );
@@ -59,19 +62,11 @@ export default function ColorTable() {
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, [currentPage,perPage]);
+  }, [currentPage, perPage,search]);
 
   useEffect(() => {
     fetchColor();
   }, [fetchColor]);
-
-  // const handleToggle = (id) => {
-  //   setData((prev) =>
-  //     prev.map((item) =>
-  //       item.id === id ? { ...item, status: !item.status } : item
-  //     )
-  //   );
-  // };
 
   console.log("search", search);
 
@@ -110,12 +105,12 @@ export default function ColorTable() {
   const columns = [
     {
       name: "SN.",
-      selector: (row) => row?.serial_num + ".",
+      selector: (row, index) => `${(index + 1).toString().padStart(2, "0")}.`,
     },
 
     {
       name: "Name",
-      selector: (row) => row.name,
+      selector: (row) => row?.name,
       sortable: true,
     },
     {
@@ -124,12 +119,12 @@ export default function ColorTable() {
         <button
           // onClick={() => handleToggle(row.status)}
           className={`w-10 h-6 rounded-full flex items-center px-1 transition ${
-            row.is_active == 1 ? "bg-green-500" : "bg-gray-300"
+            row?.is_active == 1 ? "bg-green-500" : "bg-gray-300"
           }`}
         >
           <div
             className={`w-4 h-4 bg-white rounded-full transform transition-transform ${
-              row.status ? "translate-x-4" : ""
+              row?.status ? "translate-x-4" : ""
             }`}
           ></div>
         </button>
@@ -138,17 +133,21 @@ export default function ColorTable() {
     {
       name: "Action",
       cell: (row) => (
-        <div className="flex gap-3 text-lg cursor-pointer">
+        <div className="flex gap-3 text-lg ">
           <button
+            title="Edit"
             onClick={() => {
-              setSelectedId(row.id);
+              setSelectedId(row?.id);
               setUpdateModal(true);
             }}
             className="cursor-pointer"
           >
             <RiEdit2Fill />
           </button>
-          <button className="text-red-500 hover:text-red-700 cursor-pointer">
+          <button
+            title="Delete"
+            className="text-red-500 hover:text-red-700 cursor-pointer"
+          >
             <FaTrashCan onClick={() => destroy(row?.id)} />
           </button>
         </div>

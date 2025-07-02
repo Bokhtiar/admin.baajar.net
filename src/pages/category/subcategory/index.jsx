@@ -44,7 +44,12 @@ export default function SubCategoryTable() {
       const queryParams = new URLSearchParams();
       queryParams.append("page", currentPage);
       queryParams.append("per_page", perPage);
-      const response = await NetworkServices.Category.index(queryParams.toString());
+      if (search) {
+        queryParams.append("search", search);
+      }
+      const response = await NetworkServices.Category.index(
+        queryParams.toString()
+      );
       console.log("response", response);
 
       if (response?.status === 200) {
@@ -56,7 +61,7 @@ export default function SubCategoryTable() {
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, [currentPage, perPage]);
+  }, [currentPage, perPage,search]);
 
   useEffect(() => {
     fetchCategory();
@@ -97,82 +102,6 @@ export default function SubCategoryTable() {
     });
   };
 
-  // const filteredData = data.filter((item) =>
-  //   item.name.toLowerCase().includes(search.toLowerCase())
-  // );
-
-  // const columns = [
-
-  //   {
-  //     name: "Sub-Category",
-  //     selector: (row) => row?.category_name,
-  //     sortable: true,
-  //   },
-  //   {
-  //     name: "Category",
-  //     selector: (row) => row.name,
-  //     sortable: true,
-  //   },
-
-  //   {
-  //     name: "Sub-Subcategories",
-  //     cell: (row) =>
-  //       row.children && row.children.length > 0 ? (
-  //         <div className="flex flex-wrap gap-2">
-  //           {row.children.map((child, idx) => (
-  //             <span
-  //               key={idx}
-  //               className="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full"
-  //             >
-  //               {child.category_name}
-  //             </span>
-  //           ))}
-  //         </div>
-  //       ) : (
-  //         <span className="text-gray-400 text-sm">No sub-items</span>
-  //       ),
-  //   },
-  //   {
-  //     name: "Status",
-  //     cell: (row) => (
-  //       <button
-  //         onClick={() => handleToggle(row.status)}
-  //         className={`w-10 h-6 rounded-full flex items-center px-1 transition ${
-  //           row.status == 1 ? "bg-green-500" : "bg-gray-300"
-  //         }`}
-  //       >
-  //         <div
-  //           className={`w-4 h-4 bg-white rounded-full transform transition-transform ${
-  //             row.status ? "translate-x-4" : ""
-  //           }`}
-  //         ></div>
-  //       </button>
-  //     ),
-  //   },
-  //   {
-  //     name: "Action",
-  //     cell: (row) => (
-  //       <div className="flex gap-3 text-lg cursor-pointer">
-  //         <button
-  //           onClick={() => {
-  //             setSelectedCategoryId(row.category_id);
-  //             setUpdateModal(true);
-  //           }}
-  //           className=""
-  //         >
-  //           <RiEdit2Fill className="cursor-pointer" />
-  //         </button>
-  //         <button
-  //           className="text-red-500 hover:text-red-700 cursor-pointer"
-  //           onClick={() => destroy(row?.category_id)}
-  //         >
-  //           <FaTrashCan />
-  //         </button>
-  //       </div>
-  //     ),
-  //   },
-  // ];
-
   const columns = [
     // {
     //   name: "SN.",
@@ -180,7 +109,7 @@ export default function SubCategoryTable() {
     // },
     {
       name: "Image",
-      selector: (row) => row.category_image,
+      selector: (row) => row?.category_image,
       cell: (row) => (
         <div className="w-12 h-10 bg-[#FFFFFF] shadow-md rounded-sm flex items-center justify-center transition-transform duration-300 hover:shadow-xl scale-105">
           <img
@@ -194,7 +123,7 @@ export default function SubCategoryTable() {
 
     {
       name: "Child Name",
-      selector: (row) => row.category_name,
+      selector: (row) => row?.category_name,
     },
     {
       name: "Category",
@@ -207,12 +136,12 @@ export default function SubCategoryTable() {
         <button
           onClick={() => handleToggle(row.status)}
           className={`w-10 h-6 rounded-full flex items-center px-1 transition ${
-            row.status == 1 ? "bg-green-500" : "bg-gray-300"
+            row?.status == 1 ? "bg-green-500" : "bg-gray-300"
           }`}
         >
           <div
             className={`w-4 h-4 bg-white rounded-full transform transition-transform ${
-              row.status ? "translate-x-4" : ""
+              row?.status ? "translate-x-4" : ""
             }`}
           ></div>
         </button>
@@ -223,8 +152,9 @@ export default function SubCategoryTable() {
       cell: (row) => (
         <div className="flex gap-3 text-lg cursor-pointer">
           <button
+            title="Edit"
             onClick={() => {
-              setSelectedCategoryId(row.category_id);
+              setSelectedCategoryId(row?.category_id);
               setUpdateModal(true);
             }}
             className=""
@@ -232,6 +162,7 @@ export default function SubCategoryTable() {
             <RiEdit2Fill className="cursor-pointer" />
           </button>
           <button
+            title="Delete"
             className="text-red-500 hover:text-red-700 cursor-pointer"
             onClick={() => destroy(row?.category_id)}
           >

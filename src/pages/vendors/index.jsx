@@ -46,7 +46,7 @@ export default function AllVendorsTable() {
   const [loading, setLoading] = useState(false);
   const [statusLoading, setStatusLoading] = useState(false);
   const [vendor, setVendor] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [totalRows, setTotalRows] = useState(0);
   // const [selectedId, setSelectedId] = useState(null);
@@ -54,7 +54,7 @@ export default function AllVendorsTable() {
   console.log("searchxx", search);
 
   console.log("totalRows", totalRows);
-    const handlePageChange = (page) => {
+  const handlePageChange = (page) => {
     if (!loading) {
       setCurrentPage(page);
     }
@@ -65,16 +65,20 @@ export default function AllVendorsTable() {
     setCurrentPage(page);
   };
 
-
   // Fetch vendor from API
   const fetchVendor = useCallback(async () => {
     setLoading(true);
     try {
       const queryParams = new URLSearchParams();
 
-       queryParams.append("page", currentPage);
+      queryParams.append("page", currentPage);
       queryParams.append("per_page", perPage);
-      const response = await NetworkServices.Vendor.index(queryParams.toString());
+      if (search) {
+        queryParams.append("search", search);
+      }
+      const response = await NetworkServices.Vendor.index(
+        queryParams.toString()
+      );
       console.log("response", response);
 
       if (response?.status === 200) {
@@ -86,7 +90,7 @@ export default function AllVendorsTable() {
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, [currentPage,perPage]);
+  }, [currentPage, perPage,search]);
 
   useEffect(() => {
     fetchVendor();
@@ -144,7 +148,7 @@ export default function AllVendorsTable() {
         <img
           // src={row.logo}
           src={`${import.meta.env.VITE_API_SERVER}${row?.logo}`}
-          alt={row.name}
+          alt={row?.name}
           className="w-14 h-14 rounded-full object-cover shadow-2xl p-2 transform scale-105 z-10"
         />
       ),
@@ -157,7 +161,7 @@ export default function AllVendorsTable() {
     },
     {
       name: "Location",
-      selector: (row) => row.company_location,
+      selector: (row) => row?.company_location,
       sortable: true,
     },
     // {
@@ -170,25 +174,28 @@ export default function AllVendorsTable() {
       cell: (row) => (
         <div className="flex justify-center gap-2 text-lg ">
           <button
-            onClick={() => handleToggleStatus(row.id, row.is_active)}
+            title="Status"
+            onClick={() => handleToggleStatus(row?.id, row?.is_active)}
             className={`w-10 h-6 rounded-full flex items-center px-1 transition cursor-pointer ${
               row.is_active == 1 ? "bg-green-500" : "bg-gray-300"
             }`}
           >
             <div
               className={`w-4 h-4 bg-white rounded-full transform transition-transform  ${
-                row.is_active == 1 ? "translate-x-4" : ""
+                row?.is_active == 1 ? "translate-x-4" : ""
               }`}
             ></div>
           </button>
 
           <button
+            title="Show Details"
             className="text-[#2D264B] text-xl cursor-pointer"
           >
             <IoDocumentTextOutline />
           </button>
 
           <button
+            title="Delete"
             onClick={() => destroy(row?.id)}
             className="text-red-500 hover:text-red-700 cursor-pointer"
           >
@@ -232,10 +239,7 @@ export default function AllVendorsTable() {
             highlightOnHover
           />
         )}
-
       </div>
-
-
     </div>
   );
 }

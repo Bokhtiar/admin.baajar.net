@@ -18,9 +18,19 @@ export default function User() {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [totalRows, setTotalRows] = useState(0);
+   const [filterSearch, setFilterSearch] = useState("");
 
   console.log("sxxe", user);
   console.log("sxxearch", search);
+
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFilterSearch(search);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [search]);
 
   const handlePageChange = (page) => {
     if (!loading) {
@@ -39,6 +49,9 @@ export default function User() {
       const queryParams = new URLSearchParams();
       queryParams.append("page", currentPage);
       queryParams.append("per_page", perPage);
+      if (filterSearch) {
+        queryParams.append("search", filterSearch);
+      }
       const response = await NetworkServices.User.index(queryParams.toString());
       console.log("response", response);
 
@@ -51,7 +64,7 @@ export default function User() {
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, [perPage, currentPage]);
+  }, [perPage, currentPage,filterSearch]);
 
   useEffect(() => {
     fetchUser();
@@ -85,7 +98,7 @@ export default function User() {
       formData.append("_method", "PUT");
 
       const response = await NetworkServices.User.update(id, formData);
-      if (response && response.status === 200) {
+      if (response && response?.status === 200) {
         Toastify.Success("User status updated!");
         fetchUser();
       }
@@ -108,54 +121,54 @@ export default function User() {
       cell: (row) => (
         <img
           src={`${import.meta.env.VITE_API_SERVER}${row?.image}`}
-          alt={row.name}
+          alt={row?.name}
           className="w-14 h-14 rounded-full object-cover shadow-2xl p-2 transform scale-105 z-10"
         />
       ),
-      width: "100px",
+      width: "200px",
       center: true,
     },
     {
       name: "Name",
-      selector: (row) => row.name,
+      selector: (row) => row?.name,
       sortable: true,
     },
     {
-      name: "Address",
+      name: "Phone",
       cell: (row) => (
         <div className="whitespace-normal break-words max-w-[220px] ">
-          {row.Address}
+          {row?.phone}
         </div>
       ),
     },
-    {
-      name: "Total Orders",
-      selector: (row) => row.products,
-      sortable: true,
-      center: true,
-    },
+
     {
       name: "Action",
       cell: (row) => (
         <div className="flex justify-center gap-2 text-lg">
           <button
-            onClick={() => handleToggleStatus(row.id, row.is_active)}
-            className={`w-10 h-6 rounded-full flex items-center px-1 transition ${
-              row.is_active == 1 ? "bg-green-500" : "bg-gray-300"
+            title="Starus"
+            onClick={() => handleToggleStatus(row?.id, row?.is_active)}
+            className={`w-10 h-6 rounded-full flex items-center px-1 transition cursor-pointer ${
+              row?.is_active == 1 ? "bg-green-500" : "bg-gray-300"
             }`}
           >
             <div
               className={`w-4 h-4 bg-white rounded-full transform transition-transform ${
-                row.is_active == 1 ? "translate-x-4" : ""
+                row?.is_active == 1 ? "translate-x-4" : ""
               }`}
             ></div>
           </button>
-          <button className="text-[#2D264B] text-xl">
+          <button
+            title="View Details"
+            className="text-[#2D264B] text-xl cursor-pointer"
+          >
             <IoDocumentTextOutline />
           </button>
           <button
+            title="Delete"
             onClick={() => destroy(row?.id)}
-            className="text-red-500 hover:text-red-700"
+            className="text-red-500 hover:text-red-700 cursor-pointer"
           >
             <FaTrashAlt />
           </button>

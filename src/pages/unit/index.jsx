@@ -42,6 +42,9 @@ export default function UnitTable() {
       const queryParams = new URLSearchParams();
       queryParams.append("page", currentPage);
       queryParams.append("per_page", perPage);
+      if (search) {
+        queryParams.append("search", search);
+      }
       const response = await NetworkServices.Unit.index(queryParams.toString());
       console.log("response", response);
 
@@ -54,7 +57,7 @@ export default function UnitTable() {
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, [perPage,currentPage]);
+  }, [perPage, currentPage,search]);
 
   useEffect(() => {
     fetchUnit();
@@ -92,28 +95,32 @@ export default function UnitTable() {
   const columns = [
     {
       name: "SN.",
-      selector: (row) => row?.serial_num + ".",
+      selector: (row, index) => `${(index + 1).toString().padStart(2, "0")}.`,
     },
 
     {
       name: "Name",
-      selector: (row) => row.name,
+      selector: (row) => row?.name,
       sortable: true,
     },
     {
       name: "Action",
       cell: (row) => (
-        <div className="flex gap-3 text-lg cursor-pointer">
+        <div className="flex gap-3 text-lg ">
           <button
+            title="Edit"
             onClick={() => {
-              setSelectedId(row.id);
+              setSelectedId(row?.id);
               setUpdateModal(true);
             }}
             className="cursor-pointer"
           >
             <RiEdit2Fill />
           </button>
-          <button className="text-red-500 hover:text-red-700 cursor-pointer">
+          <button
+            title="Delete"
+            className="text-red-500 hover:text-red-700 cursor-pointer"
+          >
             <FaTrashCan onClick={() => destroy(row?.id)} />
           </button>
         </div>

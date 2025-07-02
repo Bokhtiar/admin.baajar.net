@@ -25,7 +25,7 @@ export default function CategoryTable() {
   const [totalRows, setTotalRows] = useState(0);
 
   console.log("dghdgh", data);
-  console.log("totalRows", totalRows);
+  console.log("search", search);
 
   const handlePageChange = (page) => {
     if (!loading) {
@@ -45,7 +45,12 @@ export default function CategoryTable() {
       const queryParams = new URLSearchParams();
       queryParams.append("page", currentPage);
       queryParams.append("per_page", perPage);
-      const response = await NetworkServices.Category.index(queryParams.toString());
+      if (search) {
+        queryParams.append("search", search); 
+      }
+      const response = await NetworkServices.Category.index(
+        queryParams.toString()
+      );
       console.log("response", response);
 
       if (response?.status === 200) {
@@ -57,7 +62,7 @@ export default function CategoryTable() {
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, [currentPage, perPage]);
+  }, [currentPage, perPage,search]);
 
   useEffect(() => {
     fetchCategory();
@@ -112,7 +117,7 @@ export default function CategoryTable() {
     // },
     {
       name: "Image",
-      selector: (row) => row.category_image,
+      selector: (row) => row?.category_image,
       cell: (row) => (
         <div className="w-12 h-10 bg-[#FFFFFF] shadow-md rounded-sm flex items-center justify-center transition-transform duration-300 hover:shadow-xl scale-105">
           <img
@@ -125,12 +130,12 @@ export default function CategoryTable() {
     },
     {
       name: "Name",
-      selector: (row) => row.category_name,
+      selector: (row) => row?.category_name,
       sortable: true,
     },
     {
       name: "Available Products",
-      selector: (row) => row.products,
+      selector: (row) => row?.products,
       sortable: true,
     },
     {
@@ -139,12 +144,12 @@ export default function CategoryTable() {
         <button
           // onClick={() => handleToggle(row.status)}
           className={`w-10 h-6 rounded-full flex items-center px-1 transition ${
-            row.status == 1 ? "bg-green-500" : "bg-gray-300"
+            row?.status == 1 ? "bg-green-500" : "bg-gray-300"
           }`}
         >
           <div
             className={`w-4 h-4 bg-white rounded-full transform transition-transform ${
-              row.status ? "translate-x-4" : ""
+              row?.status ? "translate-x-4" : ""
             }`}
           ></div>
         </button>
@@ -155,15 +160,19 @@ export default function CategoryTable() {
       cell: (row) => (
         <div className="flex gap-3 text-lg cursor-pointer">
           <button
+            title="Edit"
             onClick={() => {
-              setSelectedCategoryId(row.category_id);
+              setSelectedCategoryId(row?.category_id);
               setUpdateModal(true);
             }}
             className="cursor-pointer"
           >
             <RiEdit2Fill />
           </button>
-          <button className="text-red-500 hover:text-red-700 cursor-pointer">
+          <button
+            title="Delete"
+            className="text-red-500 hover:text-red-700 cursor-pointer"
+          >
             <FaTrashCan onClick={() => destroy(row?.category_id)} />
           </button>
         </div>

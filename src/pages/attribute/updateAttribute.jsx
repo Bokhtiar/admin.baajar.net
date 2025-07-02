@@ -5,6 +5,7 @@ import { networkErrorHandeller } from "../../utils/helpers";
 import { Toastify } from "../../components/toastify";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { CiCamera } from "react-icons/ci";
+import UpdateSkeleton from "../../components/loading/updateLoading";
 
 export default function AttributUpdateModal({ onClose, id, fetchAttribute }) {
   const {
@@ -41,7 +42,7 @@ export default function AttributUpdateModal({ onClose, id, fetchAttribute }) {
       console.log("runoit", response);
 
       if (response?.status === 200) {
-        setData(response?.data?.data || []);
+        setData(response?.data?.data.data || []);
       }
     } catch (error) {
       // console.log(error);
@@ -109,6 +110,9 @@ export default function AttributUpdateModal({ onClose, id, fetchAttribute }) {
 
   return (
     <div className="fixed inset-0 bg-gradient-to-b from-black/85 to-black  flex items-center justify-center z-50 px-4">
+            {loading ? (
+        <UpdateSkeleton />
+      ) : (
       <div
         ref={modalRef}
         className="bg-white p-6 rounded-2xl shadow-md w-[400px] "
@@ -185,12 +189,9 @@ export default function AttributUpdateModal({ onClose, id, fetchAttribute }) {
             </button>
           </div>
         </form>
-        {loading && (
-          <div className="fixed  inset-0 bg-black/80  z-[9999] flex items-center justify-center">
-            <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
-          </div>
-        )}
+
       </div>
+      )}
     </div>
   );
 }

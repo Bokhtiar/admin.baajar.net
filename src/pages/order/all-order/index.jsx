@@ -1,12 +1,19 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import DataTable from "react-data-table-component";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import CreateRider from "../pending-order/createRider";
+import { NetworkServices } from "../../../network";
+import { networkErrorHandeller } from "../../../utils/helpers";
 
 const AllOrderList = () => {
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
+  const [totalRows, setTotalRows] = useState(0);
+  const [data, setData] = useState([]);
 
   const handleAssignClick = (row) => {
     setSelectedOrder(row);
@@ -14,53 +21,36 @@ const AllOrderList = () => {
   };
 
   console.log("selectedOrder", selectedOrder);
-  const orders = [
-    {
-      date: "26 Apr 25",
-      time: "10.30 AM",
-      orderNo: "48956486",
-      customer: "Bakhtiar Tashar",
-      address: "23/2 Jailroad Road, Sylhet",
-      vendor: "Luis Vutton",
-      price: 480,
-      status: "Pending",
-      deliveryMan: null,
-    },
-    {
-      date: "24 Apr 25",
-      time: "10.30 AM",
-      orderNo: "48956486",
-      customer: "Bakhtiar Tashar",
-      address: "23/2 Jailroad Road, Sylhet",
-      vendor: "Luis Vutton",
-      price: 480,
-      status: "Delivered",
-      deliveryMan: "Rabu Sheikh",
-    },
-    {
-      date: "24 Apr 25",
-      time: "10.30 AM",
-      orderNo: "48956486",
-      customer: "Bakhtiar Tashar",
-      address: "23/2 Jailroad Road, Sylhet",
-      vendor: "Luis Vutton",
-      price: 480,
-      status: "Shipped",
-      deliveryMan: "Rabu Sheikh",
-    },
-    {
-      date: "24 Apr 25",
-      time: "10.30 AM",
-      orderNo: "48956486",
-      customer: "Bakhtiar Tashar",
-      address: "23/2 Jailroad Road, Sylhet",
-      vendor: "Luis Vutton",
-      price: 480,
-      status: "Cancelled",
-      deliveryMan: "Rabu Sheikh",
-    },
-    // Add more entries like this
-  ];
+  console.log("data", data);
+
+    // Fetch categories from API
+    const fetchOrder = useCallback(async () => {
+      setLoading(true);
+      try {
+        const queryParams = new URLSearchParams();
+        queryParams.append("page", currentPage);
+        queryParams.append("per_page", perPage);
+        const response = await NetworkServices.Order.index(
+          queryParams.toString()
+        );
+        console.log("res", response);
+  
+        if (response?.status === 200) {
+          setData(response?.data?.data?.data || []);
+          setTotalRows(response?.data?.data?.total || 0);
+        }
+      } catch (error) {
+        // console.log(error);
+        networkErrorHandeller(error);
+      }
+      setLoading(false);
+    }, [currentPage,perPage]);
+  
+    useEffect(() => {
+      fetchOrder();
+    }, [fetchOrder]);
+
+
 
   const getStatusBadge = (status) => {
     const colorMap = {
@@ -87,18 +77,19 @@ const AllOrderList = () => {
         </div>
       ),
     },
-    { name: "Order No.", selector: (row) => row.orderNo },
-    { name: "Customer", selector: (row) => row.customer },
+    { name: "Order No.", selector: (row) => row.id },
+    { name: "Customer", selector: (row) => row?.user?.name },
     {
-      name: "Address",
+      name: "Phone",
       cell: (row) => (
         <div className="whitespace-normal break-words max-w-[220px]">
-          {row.address}
+          {row?.user?.phone}
         </div>
       ),
     },
-    { name: "Vendor", selector: (row) => row.vendor },
-    { name: "Price", selector: (row) => row.price },
+    { name: "Vendor", selector: (row) => row.sub_orders[0].vendor.company_name },
+    { name: "Price", selector: (row) => row.total_amount
+ },
 
     {
       name: "Order Status",
@@ -151,7 +142,7 @@ const AllOrderList = () => {
       <div className=" bg-white  rounded overflow-y-auto mb-10">
         <DataTable
           columns={columns}
-          data={orders}
+          data={data}
           customStyles={customStyles}
           pagination
           highlightOnHover

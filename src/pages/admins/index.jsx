@@ -18,6 +18,15 @@ export default function Admins() {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [totalRows, setTotalRows] = useState(0);
+  const [filterSearch, setFilterSearch] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFilterSearch(search);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [search]);
 
   console.log("sxxearch", search);
 
@@ -38,6 +47,9 @@ export default function Admins() {
       const queryParams = new URLSearchParams();
       queryParams.append("page", currentPage);
       queryParams.append("per_page", perPage);
+      if (filterSearch) {
+        queryParams.append("search", filterSearch);
+      }
       const response = await NetworkServices.Admin.index(
         queryParams.toString()
       );
@@ -52,7 +64,7 @@ export default function Admins() {
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, [currentPage, perPage]);
+  }, [currentPage, perPage,filterSearch]);
 
   useEffect(() => {
     fetchAdmin();
@@ -109,54 +121,54 @@ export default function Admins() {
       cell: (row) => (
         <img
           src={`${import.meta.env.VITE_API_SERVER}${row?.image}`}
-          alt={row.name}
+          alt={row?.name}
           className="w-14 h-14 rounded-full object-cover shadow-2xl p-2 transform scale-105 z-10"
         />
       ),
-      width: "100px",
+      width: "200px",
       center: true,
     },
     {
       name: "Name",
-      selector: (row) => row.name,
+      selector: (row) => row?.name,
       sortable: true,
     },
     {
-      name: "Address",
+      name: "Phone",
       cell: (row) => (
         <div className="whitespace-normal break-words max-w-[220px] ">
-          {row.Address}
+          {row?.phone}
         </div>
       ),
     },
-    {
-      name: "Total Orders",
-      selector: (row) => row.products,
-      sortable: true,
-      center: true,
-    },
+
     {
       name: "Action",
       cell: (row) => (
         <div className="flex justify-center gap-2 text-lg">
           <button
-            onClick={() => handleToggleStatus(row.id, row.is_active)}
-            className={`w-10 h-6 rounded-full flex items-center px-1 transition ${
-              row.is_active == 1 ? "bg-green-500" : "bg-gray-300"
+            title="Status"
+            onClick={() => handleToggleStatus(row?.id, row?.is_active)}
+            className={`w-10 h-6 rounded-full flex items-center px-1 transition cursor-pointer ${
+              row?.is_active == 1 ? "bg-green-500" : "bg-gray-300"
             }`}
           >
             <div
               className={`w-4 h-4 bg-white rounded-full transform transition-transform ${
-                row.is_active == 1 ? "translate-x-4" : ""
+                row?.is_active == 1 ? "translate-x-4" : ""
               }`}
             ></div>
           </button>
-          <button className="text-[#2D264B] text-xl">
+          <button
+            title="Show Details"
+            className="text-[#2D264B] text-xl cursor-pointer"
+          >
             <IoDocumentTextOutline />
           </button>
           <button
+            title="Delete"
             onClick={() => destroy(row?.id)}
-            className="text-red-500 hover:text-red-700"
+            className="text-red-500 hover:text-red-700 cursor-pointer"
           >
             <FaTrashAlt />
           </button>
@@ -198,19 +210,19 @@ export default function Admins() {
         {loading ? (
           <ListSkeleton />
         ) : (
-        <DataTable
-          columns={columns}
-          data={admin}
-          pagination
-          highlightOnHover
-          responsive
-          paginationServer
-          paginationTotalRows={totalRows}
-          paginationPerPage={perPage}
-          onChangePage={handlePageChange}
-          onChangeRowsPerPage={handleRowsPerPageChange}
-          paginationDefaultPage={currentPage}
-        />
+          <DataTable
+            columns={columns}
+            data={admin}
+            pagination
+            highlightOnHover
+            responsive
+            paginationServer
+            paginationTotalRows={totalRows}
+            paginationPerPage={perPage}
+            onChangePage={handlePageChange}
+            onChangeRowsPerPage={handleRowsPerPageChange}
+            paginationDefaultPage={currentPage}
+          />
         )}
       </div>
       {statusLoading && (

@@ -43,7 +43,7 @@ export default function CreateSubCategoryModal({ onClose, fetchCategory }) {
       console.log("first", response);
       if (response && response.status === 200) {
         // setCategories(response?.data?.data);
-        const categories = response?.data?.data?.categories.map((item) => ({
+        const categories = response?.data?.data?.categories?.data.map((item) => ({
           value: item.category_id,
           name: item.category_name,
         }));
