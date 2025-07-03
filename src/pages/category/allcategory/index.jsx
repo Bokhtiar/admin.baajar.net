@@ -133,11 +133,11 @@ export default function CategoryTable() {
       selector: (row) => row?.category_name,
       sortable: true,
     },
-    {
-      name: "Available Products",
-      selector: (row) => row?.products,
-      sortable: true,
-    },
+    // {
+    //   name: "Available Products",
+    //   selector: (row) => row?.products,
+    //   sortable: true,
+    // },
     {
       name: "Status",
       cell: (row) => (

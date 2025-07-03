@@ -165,7 +165,7 @@ export default function SubCategoryUpdate({
                 {...register("category", {
                   required: "Please select a parent category",
                 })}
-                className={`appearance-none w-full px-4 py-2 border rounded-full focus:outline-none text-gray-500 pr-8 ${
+                className={`appearance-none w-full px-4 py-2 border rounded-full focus:outline-none text-gray-500 pr-8 cursor-pointer ${
                   errors.category ? "border-red-500" : "border-gray-300"
                 }`}
                 
@@ -203,7 +203,7 @@ export default function SubCategoryUpdate({
               <div className="relative ">
                 <select
                   {...register("status", { required: false })}
-                  className={`appearance-none w-full px-4 py-2 border rounded-full focus:outline-none text-gray-500 pr-8 ${
+                  className={`appearance-none w-full px-4 py-2 border rounded-full focus:outline-none text-gray-500 pr-8 cursor-pointer ${
                     errors.status ? "border-red-500" : "border-gray-300"
                   }`}
                   defaultValue=""
@@ -264,7 +264,7 @@ export default function SubCategoryUpdate({
             <div className="w-full flex justify-center">
             <button
               type="submit"
-              className="w-[50%] bg-[#13BF00] hover:bg-green-600 text-white py-2 rounded-full mt-4 flex items-center justify-center gap-2"
+              className="w-[50%] bg-[#13BF00] hover:bg-green-600 text-white py-2 rounded-full mt-4 flex items-center justify-center gap-2 cursor-pointer"
             >
               {btnloading && (
                 <svg
