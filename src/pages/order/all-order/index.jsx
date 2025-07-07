@@ -5,15 +5,27 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import CreateRider from "../pending-order/createRider";
 import { NetworkServices } from "../../../network";
 import { networkErrorHandeller } from "../../../utils/helpers";
+import ListSkeleton from "../../../components/loading/ListLoading";
 
 const AllOrderList = () => {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
-    const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [totalRows, setTotalRows] = useState(0);
   const [data, setData] = useState([]);
+
+  const handlePageChange = (page) => {
+    if (!loading) {
+      setCurrentPage(page);
+    }
+  };
+
+  const handleRowsPerPageChange = (newPerPage, page) => {
+    setPerPage(newPerPage);
+    setCurrentPage(page);
+  };
 
   const handleAssignClick = (row) => {
     setSelectedOrder(row);
@@ -23,41 +35,41 @@ const AllOrderList = () => {
   console.log("selectedOrder", selectedOrder);
   console.log("data", data);
 
-    // Fetch categories from API
-    const fetchOrder = useCallback(async () => {
-      setLoading(true);
-      try {
-        const queryParams = new URLSearchParams();
-        queryParams.append("page", currentPage);
-        queryParams.append("per_page", perPage);
-        const response = await NetworkServices.Order.index(
-          queryParams.toString()
-        );
-        console.log("res", response);
-  
-        if (response?.status === 200) {
-          setData(response?.data?.data?.data || []);
-          setTotalRows(response?.data?.data?.total || 0);
-        }
-      } catch (error) {
-        // console.log(error);
-        networkErrorHandeller(error);
+  // Fetch categories from API
+  const fetchOrder = useCallback(async () => {
+    setLoading(true);
+    try {
+      const queryParams = new URLSearchParams();
+      queryParams.append("page", currentPage);
+      queryParams.append("per_page", perPage);
+      const response = await NetworkServices.Order.index(
+        queryParams.toString()
+      );
+      console.log("res", response);
+
+      if (response?.status === 200) {
+        setData(response?.data?.data?.data || []);
+        setTotalRows(response?.data?.data?.total || 0);
       }
-      setLoading(false);
-    }, [currentPage,perPage]);
-  
-    useEffect(() => {
-      fetchOrder();
-    }, [fetchOrder]);
+    } catch (error) {
+      // console.log(error);
+      networkErrorHandeller(error);
+    }
+    setLoading(false);
+  }, [currentPage, perPage]);
 
-
+  useEffect(() => {
+    fetchOrder();
+  }, [fetchOrder]);
 
   const getStatusBadge = (status) => {
+    console.log("V", status);
     const colorMap = {
-      Pending: "bg-[#FF6600] text-white rounded-full px-3",
-      Shipped: "bg-[#A600FF] text-white rounded-full px-3",
-      Delivered: "bg-[#13BF00] text-white rounded-full px-3",
-      Cancelled: "bg-[#DC2626] text-white rounded-full px-3",
+      pending: "bg-[#FF6600] text-white rounded-full px-3",
+      shipped: "bg-[#A600FF] text-white rounded-full px-3",
+      delivered: "bg-[#13BF00] text-white rounded-full px-3",
+      cancelled: "bg-[#DC2626] text-white rounded-full px-3",
+      processing: "bg-[#3ABFEF] text-white rounded-full px-3",
     };
     return (
       <span className={`px-2 py-1 rounded text-sm ${colorMap[status] || ""}`}>
@@ -68,40 +80,51 @@ const AllOrderList = () => {
 
   const columns = [
     {
+      name: "SN.",
+      selector: (row, index) => `${(index + 1).toString().padStart(2, "0")}.`,
+      // width: "70px",
+      // center: true,
+    },
+    {
       name: "Date",
       sortable: true,
-      cell: (row) => (
-        <div>
-          <div className="font-medium">{row.date}</div>
-          <div className="text-xs text-gray-500">{row.time}</div>
-        </div>
-      ),
+      cell: (row) => {
+        const date = new Date(row.created_at).toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "2-digit",
+        });
+
+        return <div className="font-medium">{date}</div>;
+      },
     },
     { name: "Order No.", selector: (row) => row.id },
     { name: "Customer", selector: (row) => row?.user?.name },
     {
       name: "Phone",
       cell: (row) => (
-        <div className="whitespace-normal break-words max-w-[220px]">
-          {row?.user?.phone}
-        </div>
+        <div className="whitespace-normal break-words ">{row?.user?.phone}</div>
       ),
     },
-    { name: "Vendor", selector: (row) => row.sub_orders[0].vendor.company_name },
-    { name: "Price", selector: (row) => row.total_amount
- },
+
+    { name: "Price", selector: (row) => row.total_amount },
 
     {
       name: "Order Status",
       cell: (row) => (
-        <div className="text-nowrap">{getStatusBadge(row.status)}</div>
+        <div className="text-nowrap">{getStatusBadge(row?.order_status)}</div>
       ),
     },
     {
       name: "Delivery Man",
       cell: (row) =>
         row.deliveryMan || (
-          <button  onClick={() => handleAssignClick(row)} className="text-blue-500 underline">Assign</button>
+          <button
+            onClick={() => handleAssignClick(row)}
+            className="text-blue-500 underline"
+          >
+            Assign
+          </button>
         ),
     },
     {
@@ -140,6 +163,10 @@ const AllOrderList = () => {
   return (
     <>
       <div className=" bg-white  rounded overflow-y-auto mb-10">
+
+        {loading ? (
+          <ListSkeleton />
+        ) : (
         <DataTable
           columns={columns}
           data={data}
@@ -147,7 +174,14 @@ const AllOrderList = () => {
           pagination
           highlightOnHover
           responsive
+          paginationServer
+          paginationTotalRows={totalRows}
+          paginationPerPage={perPage}
+          onChangePage={handlePageChange}
+          onChangeRowsPerPage={handleRowsPerPageChange}
+          paginationDefaultPage={currentPage}
         />
+        )}
       </div>
       {showModal && (
         <CreateRider

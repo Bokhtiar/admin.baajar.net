@@ -20,6 +20,7 @@ export default function CreateSubCategoryModal({ onClose, fetchCategory }) {
   const [btnloading, setBtnLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [imageName, setImageName] = useState("");
+   const [loading, setLoading] = useState(false);
 
   console.log("categories", categories);
 
@@ -36,29 +37,54 @@ export default function CreateSubCategoryModal({ onClose, fetchCategory }) {
     };
   }, []);
 
-  const fetchCategoryItem = useCallback(async () => {
-    // setLoading(true);
-    try {
-      const response = await NetworkServices.Category.index();
-      console.log("first", response);
-      if (response && response.status === 200) {
-        // setCategories(response?.data?.data);
-        const categories = response?.data?.data?.categories?.data.map((item) => ({
-          value: item.category_id,
-          name: item.category_name,
-        }));
-        setCategories(categories);
-      }
-    } catch (error) {
-      networkErrorHandeller(error);
-    }
-    // setLoading(false);
-  }, []);
+  // const fetchCategoryItem = useCallback(async () => {
 
-  // category api fetch
-  useEffect(() => {
-    fetchCategoryItem();
-  }, [fetchCategoryItem]);
+  //   // setLoading(true);
+  //   try {
+  //     const response = await NetworkServices.Category.index();
+  //     console.log("first", response);
+  //     if (response && response.status === 200) {
+  //       // setCategories(response?.data?.data);
+  //       const categories = response?.data?.data?.categories?.data.map((item) => ({
+  //         value: item.category_id,
+  //         name: item.category_name,
+  //       }));
+  //       setCategories(categories);
+  //     }
+  //   } catch (error) {
+  //     networkErrorHandeller(error);
+  //   }
+  //   // setLoading(false);
+  // }, []);
+
+  // // category api fetch
+  // useEffect(() => {
+  //   fetchCategoryItem();
+  // }, [fetchCategoryItem]);
+
+    const fetchCategoryItem = useCallback(async () => {
+      setLoading(true);
+      try {
+        const response = await NetworkServices.Category.allCategory();
+        console.log("first", response);
+        if (response && response.status === 200) {
+          // setCategories(response?.data?.data);
+          const categories = response?.data?.data?.map((item) => ({
+            value: item?.category_id,
+            name: item.category_name,
+          }));
+          setCategories(categories);
+        }
+      } catch (error) {
+        networkErrorHandeller(error);
+      }
+      setLoading(false);
+    }, []);
+  
+    // category api fetch
+    useEffect(() => {
+      fetchCategoryItem();
+    }, [fetchCategoryItem]);
 
   const onFormSubmit = async (data) => {
     console.log("formData", data);
