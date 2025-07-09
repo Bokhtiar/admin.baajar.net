@@ -80,7 +80,7 @@ export default function BannerTable() {
         <img
           src={`${import.meta.env.VITE_API_SERVER}${row?.banner_image}`}
           alt={row?.name}
-          className="w-14 h-14 rounded-full object-cover shadow-2xl p-2 transform scale-105 z-10"
+          className="w-40 h-14  object-cover shadow-2xl p-2 transform scale-105 z-10"
         />
       ),
 
