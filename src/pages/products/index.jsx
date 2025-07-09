@@ -1,108 +1,168 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { CiSearch } from "react-icons/ci";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
 import Header from "../../components/heading/heading";
-
-// Sample Data
-const products = [
-  {
-    id: 1,
-    name: "Men's Tshirt Sky Blue",
-    store: "Bokhtiar Fashion",
-    sku: "MTLV8454",
-    stock: 25,
-    sold: 3,
-  },
-  {
-    id: 2,
-    name: "Men's Tshirt Premium Blue",
-    store: "Mamun Tailors",
-    sku: "MTLV35975",
-    stock: 12,
-    sold: 0,
-  },
-  {
-    id: 3,
-    name: "Men's Tshirt Black with Print",
-    store: "Bokhtiar Fashion",
-    sku: "MTLV8454",
-    stock: 17,
-    sold: 5,
-  },
-  // Add more rows similarly...
-];
-
-// Columns for the table
-const columns = [
-  {
-    name: "SN",
-    selector: (row, index) => `${(index + 1).toString().padStart(2, "0")}.`,
-    width: "70px",
-  },
-  {
-    name: "Name",
-    selector: (row) => row.name,
-    sortable: true,
-  },
-  {
-    name: "Store",
-    selector: (row) => row.store,
-    sortable: true,
-  },
-  {
-    name: "SKU",
-    selector: (row) => row.sku,
-    sortable: true,
-  },
-  {
-    name: "Stock",
-    selector: (row) => row.stock,
-    sortable: true,
-    
-  },
-  {
-    name: "Sold",
-    selector: (row) => row.sold,
-    sortable: true,
-    
-  },
-  {
-    name: "Action",
-    cell: (row) => (
-      <div className="flex justify-center gap-2 text-lg">
-        <button
-          // onClick={() => handleToggle(row.status)}
-          className={`w-10 h-6 rounded-full flex items-center px-1 transition cursor-pointer ${
-            row.status == 1 ? "bg-green-500" : "bg-gray-300"
-          }`}
-        >
-          <div
-            className={`w-4 h-4 bg-white rounded-full transform transition-transform ${
-              row.status ? "translate-x-4" : ""
-            }`}
-          ></div>
-        </button>
-        <button className="text-blue-500 hover:text-blue-700 cursor-pointer">
-          <FaEdit />
-        </button>
-        <button className="text-red-500 hover:text-red-700 cursor-pointer">
-          <FaTrashAlt />
-        </button>
-      </div>
-    ),
-   
-   
-  },
-];
+import { NetworkServices } from "../../network";
+import { networkErrorHandeller } from "../../utils/helpers";
+import ListSkeleton from "../../components/loading/ListLoading";
+import { Toastify } from "../../components/toastify";
+import { IoDocumentTextOutline } from "react-icons/io5";
+import Confirmation from "../../components/Confirmation/Confirmation";
 
 export default function ProductTable() {
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [statusLoading, setStatusLoading] = useState(false);
+  const [data, setData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
+  const [totalRows, setTotalRows] = useState(0);
 
-  const filteredData = products.filter((item) =>
-    item.name.toLowerCase().includes(search.toLowerCase())
-  );
+  console.log("data", data);
+
+  const handlePageChange = (page) => {
+    if (!loading) {
+      setCurrentPage(page);
+    }
+  };
+
+  const handleRowsPerPageChange = (newPerPage, page) => {
+    setPerPage(newPerPage);
+    setCurrentPage(page);
+  };
+
+  const fetchProduct = useCallback(async () => {
+    setLoading(true);
+    try {
+      const queryParams = new URLSearchParams();
+
+      queryParams.append("page", currentPage);
+      queryParams.append("per_page", perPage);
+      if (search) {
+        queryParams.append("search", search);
+      }
+      const response = await NetworkServices.Product.index(
+        queryParams.toString()
+      );
+      console.log("response", response);
+
+      if (response?.status === 200) {
+        setData(response?.data?.data.data || []);
+        setTotalRows(response?.data?.data?.total || 0);
+      }
+    } catch (error) {
+      console.log(error);
+      networkErrorHandeller(error);
+    }
+    setLoading(false);
+  }, [currentPage, perPage, search]);
+
+  useEffect(() => {
+    fetchProduct();
+  }, [fetchProduct]);
+
+  const handleToggleStatus = async (ProductId, currentStatus) => {
+    try {
+      setStatusLoading(true);
+      const formData = new FormData();
+      formData.append("status", currentStatus === 1 ? 0 : 1);
+      formData.append("_method", "PUT");
+
+      const response = await NetworkServices.Product.update(
+        ProductId,
+        formData
+      );
+      if (response && response.status === 200) {
+        Toastify.Success("Product status updated!");
+        fetchProduct();
+      }
+    } catch (error) {
+      networkErrorHandeller(error);
+    } finally {
+      setStatusLoading(false);
+    }
+  };
+
+  const destroy = (id) => {
+    const dialog = Confirmation({
+      title: "Confirm Delete",
+      message: "Are you sure you want to delete this Product?",
+      onConfirm: async () => {
+        try {
+          const response = await NetworkServices.Product.destroy(id);
+          if (response?.status === 200) {
+            Toastify.Info("Product deleted successfully.");
+            fetchProduct();
+          }
+        } catch (error) {
+          networkErrorHandeller(error);
+        }
+      },
+    });
+
+    dialog.showDialog();
+  };
+
+  // Columns for the table
+  const columns = [
+    {
+      name: "SN",
+      selector: (row, index) => `${(index + 1).toString().padStart(2, "0")}.`,
+      width: "70px",
+    },
+    {
+      name: "Name",
+      selector: (row) => row.product_name,
+      sortable: true,
+    },
+    {
+      name: "Vendor",
+      selector: (row) => row?.vendor?.company_name,
+      sortable: true,
+    },
+
+    {
+      name: "Stock",
+      selector: (row) => row.stock,
+      sortable: true,
+    },
+    {
+      name: "Sold",
+      selector: (row) => row.sold,
+      sortable: true,
+    },
+    {
+      name: "Action",
+      cell: (row) => (
+        <div className="flex justify-center gap-2 text-lg">
+          <button
+            title="Status"
+            onClick={() => handleToggleStatus(row?.id, row?.status)}
+            className={`w-10 h-6 rounded-full flex items-center px-1 transition cursor-pointer ${
+              row.status == 1 ? "bg-green-500" : "bg-gray-300"
+            }`}
+          >
+            <div
+              className={`w-4 h-4 bg-white rounded-full transform transition-transform  ${
+                row?.status == 1 ? "translate-x-4" : ""
+              }`}
+            ></div>
+          </button>
+          <button
+            title="Show Details"
+            className="text-[#2D264B] text-xl cursor-pointer"
+          >
+            <IoDocumentTextOutline />
+          </button>
+          <button onClick={() => destroy(row?.id)} className="text-red-500 hover:text-red-700 cursor-pointer">
+            <FaTrashAlt />
+          </button>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <div className=" bg-white rounded-md mt-3">
@@ -128,13 +188,24 @@ export default function ProductTable() {
       </div>
 
       <div className="bg-white  rounded overflow-y-auto mb-10">
-        <DataTable
-          columns={columns}
-          data={filteredData}
-          pagination
-          responsive
-          highlightOnHover
-        />
+        {loading ? (
+          <ListSkeleton />
+        ) : (
+          <DataTable
+            columns={columns}
+            data={data}
+            // customStyles={customStyles}
+            pagination
+            paginationServer
+            paginationTotalRows={totalRows}
+            paginationPerPage={perPage}
+            onChangePage={handlePageChange}
+            onChangeRowsPerPage={handleRowsPerPageChange}
+            paginationDefaultPage={currentPage}
+            responsive
+            highlightOnHover
+          />
+        )}
       </div>
     </div>
   );
