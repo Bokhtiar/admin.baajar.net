@@ -4,10 +4,18 @@ import userimg from "../../assets/logo/userimg.jpg";
 import { CiSettings } from "react-icons/ci";
 import { MdOutlineNotificationsActive } from "react-icons/md";
 import { RiMenuUnfold3Fill } from "react-icons/ri";
+import { removeToken } from "../../utils/helpers";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Header = ({ toggleSidebar }) => {
   const [showPopup, setShowPopup] = useState(false);
   const popupRef = useRef(null);
+  const navigate = useNavigate();
+
+  const logout = () => {
+    removeToken();
+    navigate(`/login?redirectFrom=${window.location.pathname}`);
+  };
 
   return (
     <div
@@ -65,7 +73,10 @@ const Header = ({ toggleSidebar }) => {
                     <span className="absolute bottom-1 left-1/2 w-0 h-0.5 bg-current transition-all duration-700 group-hover:w-[80%] group-hover:left-[10%]"></span>
                   </li>
 
-                  <li className="flex items-center gap-3 px-4 py-2 cursor-pointer text-red-500 group relative">
+                  <li
+                    onClick={() => logout()}
+                    className="flex items-center gap-3 px-4 py-2 cursor-pointer text-red-500 group relative"
+                  >
                     <FiLogOut className="text-lg" />
                     <span>Logout</span>
                     <span className="absolute bottom-1 left-1/2 w-0 h-0.5 bg-red-500 transition-all duration-700 group-hover:w-[80%] group-hover:left-[10%]"></span>

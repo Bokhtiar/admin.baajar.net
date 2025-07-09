@@ -63,7 +63,7 @@ const AllOrderList = () => {
   }, [fetchOrder]);
 
   const getStatusBadge = (status) => {
-    console.log("V", status);
+    
     const colorMap = {
       pending: "bg-[#FF6600] text-white rounded-full px-3",
       shipped: "bg-[#A600FF] text-white rounded-full px-3",

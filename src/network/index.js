@@ -10,6 +10,7 @@ import * as Unit from "../network/unit.network"
 import * as Attribute from "../network/attribute.network"
 import * as Brand from "../network/brand.network"
 import * as Order from "../network/order.network"
+import * as Banner from "../network/banner.network"
 
 
 export const NetworkServices = {
@@ -23,6 +24,7 @@ export const NetworkServices = {
   Unit,
   Attribute,
   Brand,
-  Order
+  Order,
+  Banner
   
 };

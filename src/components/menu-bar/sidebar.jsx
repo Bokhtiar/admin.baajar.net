@@ -20,6 +20,7 @@ import { FiFileText } from "react-icons/fi";
 import { TbPackages, TbTruckDelivery } from "react-icons/tb";
 import { BsFillBagPlusFill } from "react-icons/bs";
 import { IoIosColorPalette } from "react-icons/io";
+import { PiFlagBannerFill } from "react-icons/pi";
 
 const Sidebar = ({ setIsSidebarOpen }) => {
   const [openMenu, setOpenMenu] = useState(null);
@@ -153,6 +154,11 @@ const Sidebar = ({ setIsSidebarOpen }) => {
       title: "Earnings",
       icon: <BsFillBagPlusFill />,
       path: "/dashboard/earnings",
+    },
+    {
+      title: "Banner",
+      icon: <PiFlagBannerFill />,
+      path: "/dashboard/banner",
     },
     {
       title: "Settings",
