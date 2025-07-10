@@ -49,7 +49,16 @@ export default function AllVendorsTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [totalRows, setTotalRows] = useState(0);
-  // const [selectedId, setSelectedId] = useState(null);
+ const [filterSearch, setFilterSearch] = useState("");
+
+   useEffect(() => {
+     const timer = setTimeout(() => {
+       setFilterSearch(search);
+     }, 1000);
+ 
+     return () => clearTimeout(timer);
+   }, [search]);
+ 
 
   console.log("searchxx", search);
 
@@ -73,8 +82,8 @@ export default function AllVendorsTable() {
 
       queryParams.append("page", currentPage);
       queryParams.append("per_page", perPage);
-      if (search) {
-        queryParams.append("search", search);
+      if (filterSearch) {
+        queryParams.append("search", filterSearch);
       }
       const response = await NetworkServices.Vendor.index(
         queryParams.toString()
@@ -90,7 +99,7 @@ export default function AllVendorsTable() {
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, [currentPage, perPage,search]);
+  }, [currentPage, perPage, filterSearch]);
 
   useEffect(() => {
     fetchVendor();
@@ -186,13 +195,13 @@ export default function AllVendorsTable() {
               }`}
             ></div>
           </button>
-
+{/* 
           <button
             title="Show Details"
             className="text-[#2D264B] text-xl cursor-pointer"
           >
             <IoDocumentTextOutline />
-          </button>
+          </button> */}
 
           <button
             title="Delete"
@@ -208,12 +217,26 @@ export default function AllVendorsTable() {
 
   return (
     <div className=" bg-white rounded-lg  mt-3">
-      <Header
-        title="All Vendors"
-        searchValue={search}
-        onSearchChange={(value) => setSearch(value)}
-        // onAddClick={() => setShowModal(true)}
-      />
+      <div className="flex flex-col md:flex-row justify-between items-center mb-4 mt-5">
+        <h2 className="text-xl font-semibold text-primary">All Vendors</h2>
+        <div className="flex flex-col md:flex-row gap-2 mt-2 md:mt-0">
+          <div className="relative w-80">
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-10 pr-3 py-2 w-full border border-lightBorder rounded-full focus:outline-none text-sm"
+              // placeholder="Search"
+            />
+            {
+              <div className="absolute left-28 top-1/2 transform -translate-y-1/2 flex items-center text-gray-400 pointer-events-none">
+                <CiSearch className="text-lg mr-1" />
+                <span className="text-sm">search</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
       {statusLoading && (
         <div className="fixed  inset-0 bg-black/80  z-[9999] flex items-center justify-center">
           <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>

@@ -19,6 +19,15 @@ export default function ProductTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [totalRows, setTotalRows] = useState(0);
+  const [filterSearch, setFilterSearch] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFilterSearch(search);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [search]);
 
   console.log("data", data);
 
@@ -40,8 +49,8 @@ export default function ProductTable() {
 
       queryParams.append("page", currentPage);
       queryParams.append("per_page", perPage);
-      if (search) {
-        queryParams.append("search", search);
+      if (filterSearch) {
+        queryParams.append("search", filterSearch);
       }
       const response = await NetworkServices.Product.index(
         queryParams.toString()
@@ -57,7 +66,7 @@ export default function ProductTable() {
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, [currentPage, perPage, search]);
+  }, [currentPage, perPage,filterSearch]);
 
   useEffect(() => {
     fetchProduct();
@@ -156,7 +165,10 @@ export default function ProductTable() {
           >
             <IoDocumentTextOutline />
           </button>
-          <button onClick={() => destroy(row?.id)} className="text-red-500 hover:text-red-700 cursor-pointer">
+          <button
+            onClick={() => destroy(row?.id)}
+            className="text-red-500 hover:text-red-700 cursor-pointer"
+          >
             <FaTrashAlt />
           </button>
         </div>
