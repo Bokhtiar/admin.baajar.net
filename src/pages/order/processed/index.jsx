@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 
 import DataTable from "react-data-table-component";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 import CreateRider from "../pending-order/createRider";
 import { NetworkServices } from "../../../network";
 import { networkErrorHandeller } from "../../../utils/helpers";
 import ListSkeleton from "../../../components/loading/ListLoading";
+import DetailsModal from "../details/details";
 
 const customStyles = {
   headCells: {
@@ -34,6 +35,8 @@ const customStyles = {
 const ProcessedOrderList = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [detailsModal, setDetailsModal] = useState(false);
+  const [selectedDetails, setSelectedDetails] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [totalRows, setTotalRows] = useState(0);
@@ -41,8 +44,6 @@ const ProcessedOrderList = () => {
   const [loading, setLoading] = useState(false);
 
   console.log("dataaaaa", data);
-
-
 
   const handlePageChange = (page) => {
     if (!loading) {
@@ -58,6 +59,11 @@ const ProcessedOrderList = () => {
   const handleAssignClick = (row) => {
     setSelectedOrder(row);
     setShowModal(true);
+  };
+
+  const handleDetails = (row) => {
+    setSelectedDetails(row);
+    setDetailsModal(true);
   };
 
   const fetchOrder = useCallback(async () => {
@@ -87,9 +93,7 @@ const ProcessedOrderList = () => {
     fetchOrder();
   }, [fetchOrder]);
 
-
   const getStatusBadge = (status) => {
-    
     const colorMap = {
       pending: "bg-[#FF6600] text-white rounded-full px-3",
       shipped: "bg-[#A600FF] text-white rounded-full px-3",
@@ -104,71 +108,76 @@ const ProcessedOrderList = () => {
     );
   };
 
-   const columns = [
-     {
-       name: "SN.",
-       selector: (row, index) => `${(index + 1).toString().padStart(2, "0")}.`,
-       // width: "70px",
-       // center: true,
-     },
-     {
-       name: "Date",
-       sortable: true,
-       cell: (row) => {
-         const date = new Date(row.created_at).toLocaleDateString("en-GB", {
-           day: "2-digit",
-           month: "short",
-           year: "2-digit",
-         });
- 
-         return <div className="font-medium">{date}</div>;
-       },
-     },
-     { name: "Order No.", selector: (row) => row.id },
-     { name: "Customer", selector: (row) => row?.user?.name },
-     {
-       name: "Phone",
-       cell: (row) => (
-         <div className="whitespace-normal break-words ">{row?.user?.phone}</div>
-       ),
-     },
- 
-     { name: "Price", selector: (row) => row.total_amount },
- 
-     {
-       name: "Order Status",
-       cell: (row) => (
-         <div className="text-nowrap">{getStatusBadge(row?.order_status)}</div>
-       ),
-     },
-     {
-       name: "Delivery Man",
-       cell: (row) =>
-         row.deliveryMan || (
-           <button
-             onClick={() => handleAssignClick(row)}
-             className="text-blue-500 underline"
-           >
-             Assign
-           </button>
-         ),
-     },
-     {
-       name: "Action",
-       cell: (row) => (
-         <div className="flex space-x-2">
-           <FaEdit className="text-blue-600 cursor-pointer" />
-           <FaTrash className="text-red-600 cursor-pointer" />
-         </div>
-       ),
-     },
-   ];
+  const columns = [
+    {
+      name: "SN.",
+      selector: (row, index) => `${(index + 1).toString().padStart(2, "0")}.`,
+      // width: "70px",
+      // center: true,
+    },
+    {
+      name: "Date",
+      sortable: true,
+      cell: (row) => {
+        const date = new Date(row.created_at).toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "2-digit",
+        });
+
+        return <div className="font-medium">{date}</div>;
+      },
+    },
+    { name: "Order No.", selector: (row) => row.id },
+    { name: "Customer", selector: (row) => row?.user?.name },
+    {
+      name: "Phone",
+      cell: (row) => (
+        <div className="whitespace-normal break-words ">{row?.user?.phone}</div>
+      ),
+    },
+
+    { name: "Price", selector: (row) => row.total_amount },
+
+    {
+      name: "Order Status",
+      cell: (row) => (
+        <div className="text-nowrap">{getStatusBadge(row?.order_status)}</div>
+      ),
+    },
+    {
+      name: "Delivery Man",
+      cell: (row) =>
+        row.deliveryMan || (
+          <button
+            onClick={() => handleAssignClick(row)}
+            className="text-blue-500 underline"
+          >
+            Assign
+          </button>
+        ),
+    },
+    {
+      name: "Action",
+      cell: (row) => (
+        <div className="flex space-x-2">
+          <button
+            onClick={() => handleDetails(row)}
+            title="Show Details"
+            className="text-blue-600 text-xl cursor-pointer"
+          >
+            <FaEye />
+          </button>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <div className=" bg-white  rounded overflow-y-auto mb-10">
-        {loading ? (
-          <ListSkeleton />
-        ) : (
+      {loading ? (
+        <ListSkeleton />
+      ) : (
         <DataTable
           columns={columns}
           data={data}
@@ -183,12 +192,19 @@ const ProcessedOrderList = () => {
           onChangeRowsPerPage={handleRowsPerPageChange}
           paginationDefaultPage={currentPage}
         />
-        )}
+      )}
       {showModal && (
         <CreateRider
           onClose={() => setShowModal(false)}
           // fetchCategory={fetchCategory}
           // onSubmit={handleAddCategory}
+        />
+      )}
+      {detailsModal && (
+        <DetailsModal
+          isOpen={detailsModal}
+          onClose={() => setDetailsModal(false)}
+          selectedDetails={selectedDetails}
         />
       )}
     </div>

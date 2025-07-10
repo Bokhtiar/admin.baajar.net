@@ -1,14 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 
 import DataTable from "react-data-table-component";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 import { NetworkServices } from "../../../network";
 import { networkErrorHandeller } from "../../../utils/helpers";
 import ListSkeleton from "../../../components/loading/ListLoading";
 import CreateRider from "../pending-order/createRider";
-
-
-
+import DetailsModal from "../details/details";
 
 const customStyles = {
   headCells: {
@@ -40,8 +38,10 @@ const ShippedOrderList = () => {
   const [totalRows, setTotalRows] = useState(0);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-   const [selectedOrder, setSelectedOrder] = useState(null);
-    const [showModal, setShowModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [detailsModal, setDetailsModal] = useState(false);
+  const [selectedDetails, setSelectedDetails] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const handlePageChange = (page) => {
     if (!loading) {
@@ -53,9 +53,14 @@ const ShippedOrderList = () => {
     setPerPage(newPerPage);
     setCurrentPage(page);
   };
-    const handleAssignClick = (row) => {
+  const handleAssignClick = (row) => {
     setSelectedOrder(row);
     setShowModal(true);
+  };
+
+  const handleDetails = (row) => {
+    setSelectedDetails(row);
+    setDetailsModal(true);
   };
 
   const fetchOrder = useCallback(async () => {
@@ -153,8 +158,13 @@ const ShippedOrderList = () => {
       name: "Action",
       cell: (row) => (
         <div className="flex space-x-2">
-          <FaEdit className="text-blue-600 cursor-pointer" />
-          <FaTrash className="text-red-600 cursor-pointer" />
+          <button
+            onClick={() => handleDetails(row)}
+            title="Show Details"
+            className="text-blue-600 text-xl cursor-pointer"
+          >
+            <FaEye />
+          </button>
         </div>
       ),
     },
@@ -162,9 +172,9 @@ const ShippedOrderList = () => {
 
   return (
     <div className=" bg-white  rounded overflow-y-auto mb-10">
-        {loading ? (
-          <ListSkeleton />
-        ) : (
+      {loading ? (
+        <ListSkeleton />
+      ) : (
         <DataTable
           columns={columns}
           data={data}
@@ -179,12 +189,19 @@ const ShippedOrderList = () => {
           onChangeRowsPerPage={handleRowsPerPageChange}
           paginationDefaultPage={currentPage}
         />
-        )}
+      )}
       {showModal && (
         <CreateRider
           onClose={() => setShowModal(false)}
           // fetchCategory={fetchCategory}
           // onSubmit={handleAddCategory}
+        />
+      )}
+      {detailsModal && (
+        <DetailsModal
+          isOpen={detailsModal}
+          onClose={() => setDetailsModal(false)}
+          selectedDetails={selectedDetails}
         />
       )}
     </div>

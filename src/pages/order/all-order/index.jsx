@@ -6,15 +6,21 @@ import CreateRider from "../pending-order/createRider";
 import { NetworkServices } from "../../../network";
 import { networkErrorHandeller } from "../../../utils/helpers";
 import ListSkeleton from "../../../components/loading/ListLoading";
+import { FaEye } from "react-icons/fa6";
+import DetailsModal from "../details/details";
 
 const AllOrderList = () => {
   const [showModal, setShowModal] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [detailsModal, setDetailsModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [selectedDetails, setSelectedDetails] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [totalRows, setTotalRows] = useState(0);
   const [data, setData] = useState([]);
+
+  console.log("data", data);
 
   const handlePageChange = (page) => {
     if (!loading) {
@@ -30,6 +36,11 @@ const AllOrderList = () => {
   const handleAssignClick = (row) => {
     setSelectedOrder(row);
     setShowModal(true);
+  };
+
+  const handleDetails = (row) => {
+    setSelectedDetails(row);
+    setDetailsModal(true);
   };
 
   console.log("selectedOrder", selectedOrder);
@@ -63,7 +74,6 @@ const AllOrderList = () => {
   }, [fetchOrder]);
 
   const getStatusBadge = (status) => {
-    
     const colorMap = {
       pending: "bg-[#FF6600] text-white rounded-full px-3",
       shipped: "bg-[#A600FF] text-white rounded-full px-3",
@@ -118,7 +128,7 @@ const AllOrderList = () => {
     {
       name: "Delivery Man",
       cell: (row) =>
-        row.deliveryMan || (
+        row?.deliveryMan || (
           <button
             onClick={() => handleAssignClick(row)}
             className="text-blue-500 underline"
@@ -131,8 +141,13 @@ const AllOrderList = () => {
       name: "Action",
       cell: (row) => (
         <div className="flex space-x-2">
-          <FaEdit className="text-blue-600 cursor-pointer" />
-          <FaTrash className="text-red-600 cursor-pointer" />
+          <button
+            onClick={() => handleDetails(row)}
+            title="Show Details"
+            className="text-blue-600 text-xl cursor-pointer"
+          >
+            <FaEye />
+          </button>
         </div>
       ),
     },
@@ -163,24 +178,23 @@ const AllOrderList = () => {
   return (
     <>
       <div className=" bg-white  rounded overflow-y-auto mb-10">
-
         {loading ? (
           <ListSkeleton />
         ) : (
-        <DataTable
-          columns={columns}
-          data={data}
-          customStyles={customStyles}
-          pagination
-          highlightOnHover
-          responsive
-          paginationServer
-          paginationTotalRows={totalRows}
-          paginationPerPage={perPage}
-          onChangePage={handlePageChange}
-          onChangeRowsPerPage={handleRowsPerPageChange}
-          paginationDefaultPage={currentPage}
-        />
+          <DataTable
+            columns={columns}
+            data={data}
+            customStyles={customStyles}
+            pagination
+            highlightOnHover
+            responsive
+            paginationServer
+            paginationTotalRows={totalRows}
+            paginationPerPage={perPage}
+            onChangePage={handlePageChange}
+            onChangeRowsPerPage={handleRowsPerPageChange}
+            paginationDefaultPage={currentPage}
+          />
         )}
       </div>
       {showModal && (
@@ -188,6 +202,14 @@ const AllOrderList = () => {
           onClose={() => setShowModal(false)}
           // fetchCategory={fetchCategory}
           // onSubmit={handleAddCategory}
+        />
+      )}
+      {detailsModal && (
+        <DetailsModal
+          isOpen={detailsModal}
+          onClose={() => setDetailsModal(false)}
+          selectedDetails={selectedDetails}
+
         />
       )}
     </>
