@@ -26,3 +26,9 @@ export const destroy = async (id) => {
   return await privateRequest.delete(`/admin/user-list/${id}`);
 };
 
+
+/* profail show*/
+export const Profail = async () => {
+  return await privateRequest.get(`/user/profile`);
+};
+

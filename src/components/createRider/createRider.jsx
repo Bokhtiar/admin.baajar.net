@@ -1,13 +1,13 @@
-import React, {  useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { CiCamera } from "react-icons/ci";
-import { NetworkServices } from "../../../network";
-import { Toastify } from "../../../components/toastify";
+import { NetworkServices } from "../../network";
+import { Toastify } from "../toastify";
 // import { networkErrorHandeller } from "../../../utils/helpers/index";
 import { RiArrowDropDownLine } from "react-icons/ri";
-import { networkErrorHandeller } from "../../../utils/helpers";
+import { networkErrorHandeller } from "../../utils/helpers";
 
-export default function CreateRider({ onClose, fetchCategory }) {
+export default function CreateRider({ onClose, fetchOrder, selectedOrder }) {
   const {
     register,
     handleSubmit,
@@ -15,11 +15,11 @@ export default function CreateRider({ onClose, fetchCategory }) {
     formState: { errors },
   } = useForm();
   const modalRef = useRef();
-  //   const [imageName, setImageName] = useState("");
+  const [loading, setLoading] = useState("");
   const [btnloading, setBtnLoading] = useState(false);
-//   const [categories, setCategories] = useState([]);
+  const [rider, setRider] = useState([]);
 
-//   console.log("categories", categories);
+  
 
   const handleOutsideClick = (e) => {
     if (modalRef.current && !modalRef.current.contains(e.target)) {
@@ -34,31 +34,25 @@ export default function CreateRider({ onClose, fetchCategory }) {
     };
   }, []);
 
-//   const fetchCategoryItem = useCallback(async () => {
-//     // setLoading(true);
-//     try {
-//       const response = await NetworkServices.Category.index();
-//       console.log("first", response);
-//       if (response && response.status === 200) {
-//         // setCategories(response?.data?.data);
-//         const categories = response?.data?.data?.parent_category?.map(
-//           (item) => ({
-//             value: item.category_id,
-//             name: item.category_name,
-//           })
-//         );
-//         setCategories(categories);
-//       }
-//     } catch (error) {
-//       networkErrorHandeller(error);
-//     }
-//     // setLoading(false);
-//   }, []);
+  const fetchRider = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await NetworkServices.Rider.index();
+      console.log("runoit", response);
 
-//   // category api fetch
-//   useEffect(() => {
-//     fetchCategoryItem();
-//   }, [fetchCategoryItem]);
+      if (response?.status === 200) {
+        setRider(response?.data?.data.data || []);
+      }
+    } catch (error) {
+      // console.log(error);
+      networkErrorHandeller(error);
+    }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    fetchRider();
+  }, [fetchRider]);
 
   const onFormSubmit = async (data) => {
     console.log("formData", data);
@@ -66,20 +60,18 @@ export default function CreateRider({ onClose, fetchCategory }) {
       setBtnLoading(true); // Loader চালু
 
       const formData = new FormData();
-      formData.append("category_name", data.name);
-      formData.append("parent_id", data.category);
-      formData.append("isNavbar", "1");
-      // formData.append("status", data.status);
-      formData.append("status", "1");
+      formData.append("order_id", selectedOrder.id);
+      formData.append("rider_id", data.rider);
+      formData.append("_method", "PUT");
 
-      const response = await NetworkServices.Category.store(formData);
+      const response = await NetworkServices.Rider.riderAssign(formData);
       console.log("response", response);
 
       if (response && response.status === 200) {
-        Toastify.Success("Category created successfully!");
+        Toastify.Success("Rider Assign successfully!");
         reset();
         onClose();
-        fetchCategory();
+        fetchOrder();
       }
     } catch (error) {
       networkErrorHandeller(error);
@@ -107,11 +99,9 @@ export default function CreateRider({ onClose, fetchCategory }) {
         </h2>
 
         <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4">
-
-
           <div className="relative mt-20 mb-16">
             <select
-              {...register("category", {
+              {...register("rider", {
                 required: "Please select a parent category",
               })}
               className={`appearance-none w-full px-4 py-2 border rounded-full focus:outline-none text-gray-500 pr-8  ${
@@ -123,12 +113,12 @@ export default function CreateRider({ onClose, fetchCategory }) {
               <option value="" disabled>
                 Select A Person
               </option>
-
-              {/* {categories.map((cat) => (
-                <option key={cat.value} value={cat.value}>
-                  {cat.name}
-                </option>
-              ))} */}
+              {rider &&
+                rider.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
+                ))}
             </select>
 
             <div
@@ -145,7 +135,7 @@ export default function CreateRider({ onClose, fetchCategory }) {
               </p>
             )}
           </div>
-                    <div className="w-full flex justify-center">
+          <div className="w-full flex justify-center">
             <button
               type="submit"
               className="w-[50%] bg-[#13BF00] hover:bg-green-600 text-white py-2 rounded-full mt-4 cursor-pointer flex items-center justify-center gap-2"
@@ -175,8 +165,6 @@ export default function CreateRider({ onClose, fetchCategory }) {
               {btnloading ? "Saving..." : "Assign Delivery Man"}
             </button>
           </div>
-
-
         </form>
       </div>
     </div>

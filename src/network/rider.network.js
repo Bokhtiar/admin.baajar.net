@@ -27,3 +27,8 @@ export const destroy = async (id) => {
   return await privateRequest.delete(`/admin/rider-list/${id}`);
 };
 
+export const riderAssign = async ( data) => {
+  return await privateRequest.post(`/admin/rider-assign`, data);
+};
+
+

@@ -2,12 +2,13 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import DataTable from "react-data-table-component";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import CreateRider from "../pending-order/createRider";
+
 import { NetworkServices } from "../../../network";
 import { networkErrorHandeller } from "../../../utils/helpers";
 import ListSkeleton from "../../../components/loading/ListLoading";
 import { FaEye } from "react-icons/fa6";
 import DetailsModal from "../details/details";
+import CreateRider from "../../../components/createRider/createRider";
 
 const AllOrderList = () => {
   const [showModal, setShowModal] = useState(false);
@@ -128,7 +129,7 @@ const AllOrderList = () => {
     {
       name: "Delivery Man",
       cell: (row) =>
-        row?.deliveryMan || (
+        row?.rider?.name || (
           <button
             onClick={() => handleAssignClick(row)}
             className="text-blue-500 underline"
@@ -200,6 +201,8 @@ const AllOrderList = () => {
       {showModal && (
         <CreateRider
           onClose={() => setShowModal(false)}
+          selectedOrder={selectedOrder}
+          fetchOrder={fetchOrder}
           // fetchCategory={fetchCategory}
           // onSubmit={handleAddCategory}
         />

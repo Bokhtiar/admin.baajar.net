@@ -187,7 +187,7 @@ const Sidebar = ({ setIsSidebarOpen }) => {
         </div>
 
         {/* Menu List */}
-        <nav className="mt-1 overflow-y-auto max-h-[calc(100vh-60px)] pb-14">
+        <nav className="mt-1 overflow-y-auto  pb-14">
           {" "}
           {/* Prevents blue bar from going outside */}
           {menuData.map((item, index) => {

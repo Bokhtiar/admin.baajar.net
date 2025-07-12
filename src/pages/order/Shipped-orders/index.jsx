@@ -5,8 +5,9 @@ import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 import { NetworkServices } from "../../../network";
 import { networkErrorHandeller } from "../../../utils/helpers";
 import ListSkeleton from "../../../components/loading/ListLoading";
-import CreateRider from "../pending-order/createRider";
+
 import DetailsModal from "../details/details";
+import CreateRider from "../../../components/createRider/createRider";
 
 const customStyles = {
   headCells: {

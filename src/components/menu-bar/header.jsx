@@ -1,21 +1,57 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import { FiUser, FiSettings, FiLogOut } from "react-icons/fi";
 import userimg from "../../assets/logo/userimg.jpg";
 import { CiSettings } from "react-icons/ci";
 import { MdOutlineNotificationsActive } from "react-icons/md";
-import { RiMenuUnfold3Fill } from "react-icons/ri";
-import { removeToken } from "../../utils/helpers";
+import { RiFullscreenFill, RiMenuUnfold3Fill } from "react-icons/ri";
+import { networkErrorHandeller, removeToken } from "../../utils/helpers";
 import { Navigate, useNavigate } from "react-router-dom";
+import { NetworkServices } from "../../network";
+import { FaPhoneAlt } from "react-icons/fa";
 
 const Header = ({ toggleSidebar }) => {
   const [showPopup, setShowPopup] = useState(false);
+  const [profile, setProfile] = useState(false);
   const popupRef = useRef(null);
   const navigate = useNavigate();
+
+  console.log("profile",profile)
 
   const logout = () => {
     removeToken();
     navigate(`/login?redirectFrom=${window.location.pathname}`);
   };
+
+    const handleFullscreen = () => {
+    const element = document.documentElement; // You can also use any specific element
+    if (!document.fullscreenElement) {
+      element.requestFullscreen().catch((err) => {
+        console.error("Failed to enable fullscreen mode:", err);
+      });
+    } else {
+      document.exitFullscreen();
+    }
+  };
+
+    const fetchUser = useCallback(async () => {
+    // setLoading(true); 
+    try {
+      const response = await NetworkServices.Admin.Profail();
+      console.log("response",response)
+           if (response && response.status === 200) {
+        setProfile(response?.data.data);
+      }
+    } catch (error) {
+      // console.error("Fetch User Error:", error);
+       networkErrorHandeller(error);
+    }
+    // setLoading(false); 
+  }, []);
+
+  // category api fetch
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
 
   return (
     <div
@@ -34,8 +70,12 @@ const Header = ({ toggleSidebar }) => {
         />
 
         <div className="flex gap-3 items-center">
-          <div className="relative">
+          {/* <div className="relative">
             <MdOutlineNotificationsActive className="text-2xl " />
+          </div> */}
+
+          <div className="hidden lg:flex" onClick={handleFullscreen}>
+            <RiFullscreenFill className="text-4xl bg-gray-200 p-2 rounded-full cursor-pointer hidden md:block" />
           </div>
 
           {/* User Profile Section */}
@@ -47,29 +87,29 @@ const Header = ({ toggleSidebar }) => {
               <img src={userimg} alt="User" className="w-9 h-9 rounded-full" />
               <div className="flex items-center flex-col dark:text-darkTitle">
                 <span className="font-bold text-[14px] text-left block">
-                  Jone
+                  {profile?.name}
                 </span>
-                <span className="text-[12px]">Admin</span>
+                <span className="text-[12px]">{profile?.role}</span>
               </div>
             </div>
 
             {/* Popup Dropdown with Animation */}
             {showPopup && (
               <div
-                className={`absolute right-0 mt-2 w-48 bg-light shadow-lg rounded-lg py-2 dark:bg-darkCard dark:text-darkTitle 
+                className={`absolute right-0 mt-2 w-64 bg-light shadow-lg rounded-lg py-2 dark:bg-darkCard dark:text-darkTitle 
    transition-all duration-300 z-50 `}
               >
                 <ul>
                   <li className="flex items-center gap-3 px-4 py-2 cursor-pointer group relative">
                     <FiUser className="text-lg" />
-                    <span>Profile</span>
+                    <span>Profile:  {profile?.name}</span>
                     {/* Hover underline */}
                     <span className="absolute bottom-1 left-1/2 w-0 h-0.5 bg-current transition-all duration-700 group-hover:w-[80%] group-hover:left-[10%]"></span>
                   </li>
 
                   <li className="flex items-center gap-3 px-4 py-2 cursor-pointer group relative">
-                    <FiSettings className="text-lg" />
-                    <span>Settings</span>
+                    <FaPhoneAlt className="text-lg" />
+                    <span>Phone: {profile?.phone}</span>
                     <span className="absolute bottom-1 left-1/2 w-0 h-0.5 bg-current transition-all duration-700 group-hover:w-[80%] group-hover:left-[10%]"></span>
                   </li>
 

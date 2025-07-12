@@ -2,11 +2,12 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import DataTable from "react-data-table-component";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
-import CreateRider from "../pending-order/createRider";
+
 import { NetworkServices } from "../../../network";
 import { networkErrorHandeller } from "../../../utils/helpers";
 import ListSkeleton from "../../../components/loading/ListLoading";
 import DetailsModal from "../details/details";
+import CreateRider from "../../../components/createRider/createRider";
 
 const customStyles = {
   headCells: {
