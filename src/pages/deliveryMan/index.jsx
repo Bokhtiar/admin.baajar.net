@@ -23,7 +23,6 @@ export default function DeliveryMan() {
   const [filterSearch, setFilterSearch] = useState("");
   console.log("sxxearch", search);
 
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setFilterSearch(search);
@@ -185,6 +184,9 @@ export default function DeliveryMan() {
       ),
     },
   ];
+  useEffect(() => {
+    document.title = "Admin | Delivery-Man";
+  }, []);
 
   return (
     <div className=" bg-white rounded-lg  mt-3">

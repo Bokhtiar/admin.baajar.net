@@ -110,12 +110,7 @@ const CompleteOrderList = () => {
   };
 
   const columns = [
-    {
-      name: "SN.",
-      selector: (row, index) => `${(index + 1).toString().padStart(2, "0")}.`,
-      // width: "70px",
-      // center: true,
-    },
+    { name: "Order No.", selector: (row) => ` #${row.id}` },
     {
       name: "Date",
       sortable: true,
@@ -129,7 +124,7 @@ const CompleteOrderList = () => {
         return <div className="font-medium">{date}</div>;
       },
     },
-    { name: "Order No.", selector: (row) => row.id },
+
     { name: "Customer", selector: (row) => row?.user?.name },
     {
       name: "Phone",
@@ -173,6 +168,10 @@ const CompleteOrderList = () => {
       ),
     },
   ];
+
+  useEffect(() => {
+    document.title = "Admin | Completed-Order";
+  }, []);
 
   return (
     <div className=" bg-white  rounded overflow-y-auto mb-10">

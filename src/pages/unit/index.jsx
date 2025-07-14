@@ -57,7 +57,7 @@ export default function UnitTable() {
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, [perPage, currentPage,search]);
+  }, [perPage, currentPage, search]);
 
   useEffect(() => {
     fetchUnit();
@@ -151,7 +151,9 @@ export default function UnitTable() {
       },
     },
   };
-
+  useEffect(() => {
+    document.title = "Admin | Unit";
+  }, []);
   return (
     <div className="mt-3 bg ">
       <Header

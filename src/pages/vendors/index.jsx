@@ -2,10 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { CiSearch } from "react-icons/ci";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
-// import img from "../../assets/logo/";
-import img from "/image/bg/starry-night.webp";
-import CreateVendorModal from "./CreateVendorModal";
-import Header from "../../components/heading/heading";
 import ListSkeleton from "../../components/loading/ListLoading";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { RiWallet3Fill } from "react-icons/ri";
@@ -13,7 +9,6 @@ import { NetworkServices } from "../../network";
 import { networkErrorHandeller } from "../../utils/helpers";
 import Confirmation from "../../components/Confirmation/Confirmation";
 import { Toastify } from "../../components/toastify";
-import VendorUpdateModal from "./updateVendorModal";
 
 const customStyles = {
   headCells: {
@@ -49,16 +44,15 @@ export default function AllVendorsTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [totalRows, setTotalRows] = useState(0);
- const [filterSearch, setFilterSearch] = useState("");
+  const [filterSearch, setFilterSearch] = useState("");
 
-   useEffect(() => {
-     const timer = setTimeout(() => {
-       setFilterSearch(search);
-     }, 1000);
- 
-     return () => clearTimeout(timer);
-   }, [search]);
- 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFilterSearch(search);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [search]);
 
   console.log("searchxx", search);
 
@@ -195,7 +189,7 @@ export default function AllVendorsTable() {
               }`}
             ></div>
           </button>
-{/* 
+          {/* 
           <button
             title="Show Details"
             className="text-[#2D264B] text-xl cursor-pointer"
@@ -215,54 +209,60 @@ export default function AllVendorsTable() {
     },
   ];
 
+  useEffect(() => {
+    document.title = "Admin | Vendor";
+  }, []);
+
   return (
-    <div className=" bg-white rounded-lg  mt-3">
-      <div className="flex flex-col md:flex-row justify-between items-center mb-4 mt-5">
-        <h2 className="text-xl font-semibold text-primary">All Vendors</h2>
-        <div className="flex flex-col md:flex-row gap-2 mt-2 md:mt-0">
-          <div className="relative w-80">
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-10 pr-3 py-2 w-full border border-lightBorder rounded-full focus:outline-none text-sm"
-              // placeholder="Search"
-            />
-            {
-              <div className="absolute left-28 top-1/2 transform -translate-y-1/2 flex items-center text-gray-400 pointer-events-none">
-                <CiSearch className="text-lg mr-1" />
-                <span className="text-sm">search</span>
-              </div>
-            }
+    <>
+      <div className=" bg-white rounded-lg  mt-3">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-4 mt-5">
+          <h2 className="text-xl font-semibold text-primary">All Vendors</h2>
+          <div className="flex flex-col md:flex-row gap-2 mt-2 md:mt-0">
+            <div className="relative w-80">
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-10 pr-3 py-2 w-full border border-lightBorder rounded-full focus:outline-none text-sm"
+                // placeholder="Search"
+              />
+              {
+                <div className="absolute left-28 top-1/2 transform -translate-y-1/2 flex items-center text-gray-400 pointer-events-none">
+                  <CiSearch className="text-lg mr-1" />
+                  <span className="text-sm">search</span>
+                </div>
+              }
+            </div>
           </div>
         </div>
-      </div>
-      {statusLoading && (
-        <div className="fixed  inset-0 bg-black/80  z-[9999] flex items-center justify-center">
-          <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      )}
-
-      <div className="bg-white  rounded overflow-y-auto mb-10">
-        {loading ? (
-          <ListSkeleton />
-        ) : (
-          <DataTable
-            columns={columns}
-            data={vendor}
-            customStyles={customStyles}
-            pagination
-            paginationServer
-            paginationTotalRows={totalRows}
-            paginationPerPage={perPage}
-            onChangePage={handlePageChange}
-            onChangeRowsPerPage={handleRowsPerPageChange}
-            paginationDefaultPage={currentPage}
-            responsive
-            highlightOnHover
-          />
+        {statusLoading && (
+          <div className="fixed  inset-0 bg-black/80  z-[9999] flex items-center justify-center">
+            <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+          </div>
         )}
+
+        <div className="bg-white  rounded overflow-y-auto mb-10">
+          {loading ? (
+            <ListSkeleton />
+          ) : (
+            <DataTable
+              columns={columns}
+              data={vendor}
+              customStyles={customStyles}
+              pagination
+              paginationServer
+              paginationTotalRows={totalRows}
+              paginationPerPage={perPage}
+              onChangePage={handlePageChange}
+              onChangeRowsPerPage={handleRowsPerPageChange}
+              paginationDefaultPage={currentPage}
+              responsive
+              highlightOnHover
+            />
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

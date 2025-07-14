@@ -61,7 +61,7 @@ export default function SubCategoryTable() {
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, [currentPage, perPage,search]);
+  }, [currentPage, perPage, search]);
 
   useEffect(() => {
     fetchCategory();
@@ -200,6 +200,10 @@ export default function SubCategoryTable() {
       },
     },
   };
+
+  useEffect(() => {
+    document.title = "Admin | Sub-Category";
+  }, []);
 
   return (
     <div className="mt-3 bg ">

@@ -1,5 +1,5 @@
 // EarningsTable.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { CiSearch } from "react-icons/ci";
 import { FaSearch } from "react-icons/fa";
@@ -88,6 +88,10 @@ export default function EarningsTable() {
   const [search, setSearch] = useState([]);
   const [showmodal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    document.title = "Admin | Earning";
+  }, []);
   return (
     <div className="p-6 bg-white min-h-screen">
       <div className="flex  justify-between">

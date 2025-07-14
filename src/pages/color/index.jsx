@@ -62,7 +62,7 @@ export default function ColorTable() {
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, [currentPage, perPage,search]);
+  }, [currentPage, perPage, search]);
 
   useEffect(() => {
     fetchColor();
@@ -178,6 +178,9 @@ export default function ColorTable() {
       },
     },
   };
+  useEffect(() => {
+    document.title = "Admin | Color";
+  }, []);
 
   return (
     <div className="mt-3 bg ">

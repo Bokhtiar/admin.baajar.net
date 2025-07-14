@@ -46,7 +46,7 @@ export default function CategoryTable() {
       queryParams.append("page", currentPage);
       queryParams.append("per_page", perPage);
       if (search) {
-        queryParams.append("search", search); 
+        queryParams.append("search", search);
       }
       const response = await NetworkServices.Category.index(
         queryParams.toString()
@@ -62,7 +62,7 @@ export default function CategoryTable() {
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, [currentPage, perPage,search]);
+  }, [currentPage, perPage, search]);
 
   useEffect(() => {
     fetchCategory();
@@ -204,50 +204,56 @@ export default function CategoryTable() {
     },
   };
 
-  return (
-    <div className="mt-3 bg ">
-      <Header
-        title="All Categories"
-        searchValue={search}
-        onSearchChange={(value) => setSearch(value)}
-        onAddClick={() => setShowModal(true)}
-      />
+  useEffect(() => {
+    document.title = "Admin | Category";
+  }, []);
 
-      <div className=" bg-white  rounded overflow-y-auto mb-10">
-        {loading ? (
-          <ListSkeleton />
-        ) : (
-          <DataTable
-            columns={columns}
-            data={data}
-            customStyles={customStyles}
-            pagination
-            paginationServer
-            paginationTotalRows={totalRows}
-            paginationPerPage={perPage}
-            onChangePage={handlePageChange}
-            onChangeRowsPerPage={handleRowsPerPageChange}
-            paginationDefaultPage={currentPage}
-            responsive
-            highlightOnHover
+  return (
+    <>
+      <div className="mt-3 bg ">
+        <Header
+          title="All Categories"
+          searchValue={search}
+          onSearchChange={(value) => setSearch(value)}
+          onAddClick={() => setShowModal(true)}
+        />
+
+        <div className=" bg-white  rounded overflow-y-auto mb-10">
+          {loading ? (
+            <ListSkeleton />
+          ) : (
+            <DataTable
+              columns={columns}
+              data={data}
+              customStyles={customStyles}
+              pagination
+              paginationServer
+              paginationTotalRows={totalRows}
+              paginationPerPage={perPage}
+              onChangePage={handlePageChange}
+              onChangeRowsPerPage={handleRowsPerPageChange}
+              paginationDefaultPage={currentPage}
+              responsive
+              highlightOnHover
+            />
+          )}
+        </div>
+        {showModal && (
+          <CreateCategoryModal
+            onClose={() => setShowModal(false)}
+            // onSubmit={handleAddCategory}
+            fetchCategory={fetchCategory}
+          />
+        )}
+        {updateModal && (
+          <CategoryUpdateModal
+            categoryId={selectedCategoryId}
+            onClose={() => setUpdateModal(false)}
+            // onSubmit={handleAddCategory}
+            fetchCategory={fetchCategory}
           />
         )}
       </div>
-      {showModal && (
-        <CreateCategoryModal
-          onClose={() => setShowModal(false)}
-          // onSubmit={handleAddCategory}
-          fetchCategory={fetchCategory}
-        />
-      )}
-      {updateModal && (
-        <CategoryUpdateModal
-          categoryId={selectedCategoryId}
-          onClose={() => setUpdateModal(false)}
-          // onSubmit={handleAddCategory}
-          fetchCategory={fetchCategory}
-        />
-      )}
-    </div>
+    </>
   );
 }

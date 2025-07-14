@@ -61,7 +61,7 @@ export default function AttributeTable() {
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, [currentPage, perPage,search]);
+  }, [currentPage, perPage, search]);
 
   useEffect(() => {
     fetchAttribute();
@@ -155,6 +155,10 @@ export default function AttributeTable() {
       },
     },
   };
+
+  useEffect(() => {
+    document.title = "Admin | Attribute";
+  }, []);
 
   return (
     <div className="mt-3 bg ">

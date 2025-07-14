@@ -29,6 +29,6 @@ export const destroy = async (id) => {
 
 /* profail show*/
 export const Profail = async () => {
-  return await privateRequest.get(`/user/profile`);
+  return await privateRequest.get(`/admin/profile`);
 };
 

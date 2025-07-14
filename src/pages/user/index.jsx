@@ -18,11 +18,10 @@ export default function User() {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [totalRows, setTotalRows] = useState(0);
-   const [filterSearch, setFilterSearch] = useState("");
+  const [filterSearch, setFilterSearch] = useState("");
 
   console.log("sxxe", user);
   console.log("sxxearch", search);
-
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -64,7 +63,7 @@ export default function User() {
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, [perPage, currentPage,filterSearch]);
+  }, [perPage, currentPage, filterSearch]);
 
   useEffect(() => {
     fetchUser();
@@ -178,6 +177,10 @@ export default function User() {
       width: "120px",
     },
   ];
+
+  useEffect(() => {
+    document.title = "Admin | User";
+  }, []);
   return (
     <div className=" bg-white rounded-lg  mt-3">
       {/* <Header

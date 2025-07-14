@@ -62,7 +62,7 @@ export default function BrandTable() {
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, [currentPage, perPage,search]);
+  }, [currentPage, perPage, search]);
 
   useEffect(() => {
     fetchBrand();
@@ -156,6 +156,10 @@ export default function BrandTable() {
       },
     },
   };
+
+  useEffect(() => {
+    document.title = "Admin | Brand";
+  }, []);
 
   return (
     <div className="mt-3 bg ">

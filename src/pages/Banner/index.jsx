@@ -83,7 +83,6 @@ export default function BannerTable() {
           className="w-40 h-14  object-cover shadow-2xl p-2 transform scale-105 z-10"
         />
       ),
-
     },
     {
       name: "Action",
@@ -133,6 +132,10 @@ export default function BannerTable() {
       },
     },
   };
+
+  useEffect(() => {
+    document.title = "Admin | Banner";
+  }, []);
 
   return (
     <div className="mt-3 bg ">

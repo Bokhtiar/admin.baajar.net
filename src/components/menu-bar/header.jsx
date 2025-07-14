@@ -37,7 +37,7 @@ const Header = ({ toggleSidebar }) => {
     // setLoading(true); 
     try {
       const response = await NetworkServices.Admin.Profail();
-      console.log("response",response)
+      console.log("responsprrrre",response)
            if (response && response.status === 200) {
         setProfile(response?.data.data);
       }

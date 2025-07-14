@@ -64,7 +64,7 @@ export default function Admins() {
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, [currentPage, perPage,filterSearch]);
+  }, [currentPage, perPage, filterSearch]);
 
   useEffect(() => {
     fetchAdmin();
@@ -178,6 +178,9 @@ export default function Admins() {
       width: "120px",
     },
   ];
+  useEffect(() => {
+    document.title = "Admin | Admins";
+  }, []);
   return (
     <div className=" bg-white rounded-lg  mt-3">
       {/* <Header

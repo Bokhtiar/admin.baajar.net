@@ -20,6 +20,7 @@ import ProductTable from "../pages/products";
 import UnitTable from "../pages/unit";
 import User from "../pages/user";
 import AllVendorsTable from "../pages/vendors";
+import { getToken } from "../utils/helpers";
 
 // import { getToken } from "../utils/helpers";
 
@@ -75,11 +76,11 @@ const appRoutes = [
 
 /* Generate permitted routes */
 export const permittedRoutes = () => {
-  // const token = getToken();
+  const token = getToken();
 
-  // if (token) {
+  if (token) {
     return appRoutes;
-  // }
+  }
 
-  // return [];
+  return [];
 };

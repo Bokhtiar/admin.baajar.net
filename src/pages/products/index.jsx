@@ -66,7 +66,7 @@ export default function ProductTable() {
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, [currentPage, perPage,filterSearch]);
+  }, [currentPage, perPage, filterSearch]);
 
   useEffect(() => {
     fetchProduct();
@@ -175,6 +175,10 @@ export default function ProductTable() {
       ),
     },
   ];
+
+  useEffect(() => {
+    document.title = "Admin | All-Product";
+  }, []);
 
   return (
     <div className=" bg-white rounded-md mt-3">
