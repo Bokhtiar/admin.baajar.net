@@ -9,6 +9,7 @@ import ListSkeleton from "../../../components/loading/ListLoading";
 import DetailsModal from "../details/details";
 import { FaEye } from "react-icons/fa6";
 import CreateRider from "../../../components/createRider/createRider";
+import { Link } from "react-router-dom";
 
 const customStyles = {
   headCells: {
@@ -158,13 +159,11 @@ const CanceledOrderList = () => {
       name: "Action",
       cell: (row) => (
         <div className="flex space-x-2">
-          <button
-            onClick={() => handleDetails(row)}
-            title="Show Details"
-            className="text-blue-600 text-xl cursor-pointer"
-          >
-            <FaEye />
-          </button>
+          <Link to={`/dashboard/canceled-order/${row.id}`} title="Show Details">
+            <button className="text-blue-600 text-xl cursor-pointer">
+               <FaEye />
+            </button>
+          </Link>
         </div>
       ),
     },

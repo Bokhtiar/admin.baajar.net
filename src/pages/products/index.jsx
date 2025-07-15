@@ -1,15 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { CiSearch } from "react-icons/ci";
-import { FaEdit, FaTrashAlt } from "react-icons/fa";
-import { IoMdAdd } from "react-icons/io";
-import Header from "../../components/heading/heading";
+import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 import { NetworkServices } from "../../network";
 import { networkErrorHandeller } from "../../utils/helpers";
 import ListSkeleton from "../../components/loading/ListLoading";
 import { Toastify } from "../../components/toastify";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import Confirmation from "../../components/Confirmation/Confirmation";
+import { Link } from "react-router-dom";
 
 export default function ProductTable() {
   const [search, setSearch] = useState("");
@@ -145,7 +144,7 @@ export default function ProductTable() {
     {
       name: "Action",
       cell: (row) => (
-        <div className="flex justify-center gap-2 text-lg">
+        <div className="flex justify-center gap-4 items-center text-lg">
           <button
             title="Status"
             onClick={() => handleToggleStatus(row?.id, row?.status)}
@@ -159,12 +158,16 @@ export default function ProductTable() {
               }`}
             ></div>
           </button>
-          <button
-            title="Show Details"
-            className="text-[#2D264B] text-xl cursor-pointer"
-          >
-            <IoDocumentTextOutline />
-          </button>
+          <div className="mt-2">
+            <Link
+              to={`/dashboard/product/${row.id}`}
+              title="Show Details"
+            >
+              <button className="text-blue-600 text-xl cursor-pointer">
+                <FaEye />
+              </button>
+            </Link>
+          </div>
           <button
             onClick={() => destroy(row?.id)}
             className="text-red-500 hover:text-red-700 cursor-pointer"

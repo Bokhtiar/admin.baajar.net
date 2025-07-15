@@ -1,13 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
-
 import DataTable from "react-data-table-component";
-import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
+import {  FaEye } from "react-icons/fa";
 import { NetworkServices } from "../../../network";
 import { networkErrorHandeller } from "../../../utils/helpers";
 import ListSkeleton from "../../../components/loading/ListLoading";
-
-import DetailsModal from "../details/details";
 import CreateRider from "../../../components/createRider/createRider";
+import { Link } from "react-router-dom";
 
 const customStyles = {
   headCells: {
@@ -39,9 +37,8 @@ const ShippedOrderList = () => {
   const [totalRows, setTotalRows] = useState(0);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState(null);
-  const [detailsModal, setDetailsModal] = useState(false);
-  const [selectedDetails, setSelectedDetails] = useState(null);
+
+
   const [showModal, setShowModal] = useState(false);
 
   const handlePageChange = (page) => {
@@ -54,15 +51,12 @@ const ShippedOrderList = () => {
     setPerPage(newPerPage);
     setCurrentPage(page);
   };
-  const handleAssignClick = (row) => {
-    setSelectedOrder(row);
+  const handleAssignClick = () => {
+    
     setShowModal(true);
   };
 
-  const handleDetails = (row) => {
-    setSelectedDetails(row);
-    setDetailsModal(true);
-  };
+
 
   const fetchOrder = useCallback(async () => {
     setLoading(true);
@@ -154,13 +148,11 @@ const ShippedOrderList = () => {
       name: "Action",
       cell: (row) => (
         <div className="flex space-x-2">
-          <button
-            onClick={() => handleDetails(row)}
-            title="Show Details"
-            className="text-blue-600 text-xl cursor-pointer"
-          >
-            <FaEye />
-          </button>
+          <Link to={`/dashboard/shipped-order/${row.id}`} title="Show Details">
+            <button className="text-blue-600 text-xl cursor-pointer">
+              <FaEye />
+            </button>
+          </Link>
         </div>
       ),
     },
@@ -196,13 +188,7 @@ const ShippedOrderList = () => {
           // onSubmit={handleAddCategory}
         />
       )}
-      {detailsModal && (
-        <DetailsModal
-          isOpen={detailsModal}
-          onClose={() => setDetailsModal(false)}
-          selectedDetails={selectedDetails}
-        />
-      )}
+
     </div>
   );
 };

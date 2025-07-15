@@ -1,3 +1,4 @@
+import Details from "../components/details/Details";
 import { DashboardLayout } from "../layouts/dashboard.layout";
 import Admins from "../pages/admins";
 import AttributeTable from "../pages/attribute";
@@ -17,6 +18,7 @@ import PendingOrderList from "../pages/order/pending-order";
 import ProcessedOrderList from "../pages/order/processed";
 import ShippedOrderList from "../pages/order/Shipped-orders";
 import ProductTable from "../pages/products";
+import ProductDetails from "../pages/products/productaDetails/productDetails";
 import UnitTable from "../pages/unit";
 import User from "../pages/user";
 import AllVendorsTable from "../pages/vendors";
@@ -24,53 +26,59 @@ import { getToken } from "../utils/helpers";
 
 // import { getToken } from "../utils/helpers";
 
- 
 const appRoutes = [
   {
     path: "dashboard",
     element: <DashboardLayout />,
-     children:[
-      { index:true, element:  <Dashboard></Dashboard> },
+    children: [
+      { index: true, element: <Dashboard></Dashboard> },
       // category
-      { path:"all-category", element:  <CategoryTable/> },
+      { path: "all-category", element: <CategoryTable /> },
       //sub  category
-      { path:"sub-category", element:  <SubCategoryTable/> },
+      { path: "sub-category", element: <SubCategoryTable /> },
       // order
       // all order
-      { path:"all-order", element:  <AllOrderList/> },
+      { path: "all-order", element: <AllOrderList /> },
+      { path: "all-order/:id", element: <Details /> },
       // pending order
-      { path:"pending-order", element:  <PendingOrderList/> },
+      { path: "pending-order", element: <PendingOrderList /> },
+      { path: "pending-order/:id", element: <Details /> },
       // processed order
-      { path:"processed-order", element:  <ProcessedOrderList/> },
-      // shipped-order 
-      { path:"shipped-order", element:  <ShippedOrderList/> },
-      // complete-order 
-      { path:"complete-order", element:  <CompleteOrderList/> },
-      // canceled-order 
-      { path:"canceled-order", element:  <CanceledOrderList/> },
+      { path: "processed-order", element: <ProcessedOrderList /> },
+      { path: "processed-order/:id", element: <Details /> },
+      // shipped-order
+      { path: "shipped-order", element: <ShippedOrderList /> },
+      { path: "shipped-order/:id", element: <Details /> },
+      // complete-order
+      { path: "complete-order", element: <CompleteOrderList /> },
+      { path: "complete-order/:id", element: <Details /> },
+      // canceled-order
+      { path: "canceled-order", element: <CanceledOrderList /> },
+      { path: "canceled-order/:id", element: <Details /> },
       // vendors
-       { path:"vendors", element:  <AllVendorsTable/> },
+      { path: "vendors", element: <AllVendorsTable /> },
       // product
-       { path:"product", element:  <ProductTable/> },
+      { path: "product", element: <ProductTable /> },
+      { path: "product/:id", element: <ProductDetails /> },
       // delivery man
-       { path:"delivery-man", element:  <DeliveryMan/> },
+      { path: "delivery-man", element: <DeliveryMan /> },
       // user
-       { path:"users", element:  <User/> },
+      { path: "users", element: <User /> },
       // admin
-       { path:"admins", element:  <Admins/> },
+      { path: "admins", element: <Admins /> },
       // earningd
-       { path:"earnings", element:  <EarningsTable/> },
+      { path: "earnings", element: <EarningsTable /> },
       //  color
-       { path:"color", element:  <ColorTable/> },
+      { path: "color", element: <ColorTable /> },
       //  unit
-       { path:"unit", element:  <UnitTable/> },
+      { path: "unit", element: <UnitTable /> },
       //  unit
-       { path:"attribute", element:  <AttributeTable/> },
+      { path: "attribute", element: <AttributeTable /> },
       //  brand
-       { path:"brand", element:  <BrandTable/> },
+      { path: "brand", element: <BrandTable /> },
       //  banner
-       { path:"banner", element:  <BannerTable/> },
-     ]
+      { path: "banner", element: <BannerTable /> },
+    ],
   },
 ];
 
