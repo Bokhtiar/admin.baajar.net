@@ -22,6 +22,7 @@ import ProductDetails from "../pages/products/productaDetails/productDetails";
 import UnitTable from "../pages/unit";
 import User from "../pages/user";
 import AllVendorsTable from "../pages/vendors";
+import VendorDetails from "../pages/vendors/vendorDetails";
 import { getToken } from "../utils/helpers";
 
 // import { getToken } from "../utils/helpers";
@@ -57,6 +58,7 @@ const appRoutes = [
       { path: "canceled-order/:id", element: <Details /> },
       // vendors
       { path: "vendors", element: <AllVendorsTable /> },
+      { path: "vendors/:id", element: <VendorDetails /> },
       // product
       { path: "product", element: <ProductTable /> },
       { path: "product/:id", element: <ProductDetails /> },

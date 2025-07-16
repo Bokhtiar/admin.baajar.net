@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { CiSearch } from "react-icons/ci";
-import { FaTrashAlt, FaEdit } from "react-icons/fa";
+import { FaTrashAlt, FaEdit, FaEye } from "react-icons/fa";
 import ListSkeleton from "../../components/loading/ListLoading";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { RiWallet3Fill } from "react-icons/ri";
@@ -9,6 +9,7 @@ import { NetworkServices } from "../../network";
 import { networkErrorHandeller } from "../../utils/helpers";
 import Confirmation from "../../components/Confirmation/Confirmation";
 import { Toastify } from "../../components/toastify";
+import { Link } from "react-router-dom";
 
 const customStyles = {
   headCells: {
@@ -175,7 +176,7 @@ export default function AllVendorsTable() {
     {
       name: "Action",
       cell: (row) => (
-        <div className="flex justify-center gap-2 text-lg ">
+        <div className="flex justify-center items-center gap-4 text-lg ">
           <button
             title="Status"
             onClick={() => handleToggleStatus(row?.id, row?.is_active)}
@@ -189,13 +190,16 @@ export default function AllVendorsTable() {
               }`}
             ></div>
           </button>
-          {/* 
-          <button
-            title="Show Details"
-            className="text-[#2D264B] text-xl cursor-pointer"
-          >
-            <IoDocumentTextOutline />
-          </button> */}
+          <div className="mt-2">
+            <Link
+              to={`/dashboard/vendors/${row.id}`}
+              title="Show Details"
+            >
+              <button className="text-blue-600 text-xl cursor-pointer">
+                <FaEye />
+              </button>
+            </Link>
+          </div>
 
           <button
             title="Delete"

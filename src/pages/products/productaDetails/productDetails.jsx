@@ -98,11 +98,11 @@ const ProductDetails = () => {
             className="w-16 h-16 rounded-full object-cover "
           />
           <div>
-            <p className="text-md font-semibold text-[#8B8B8B]">
-              {product?.vendor?.company_name}
+            <p className="text-md font-semibold ">
+              <span className="text-[#8B8B8B]">Vendor : </span>{product?.vendor?.company_name}
             </p>
             <p className="text-sm ">
-              {product?.vendor?.company_location}
+              <span className="text-[#8B8B8B]">Address : </span>{product?.vendor?.company_location}
             </p>
           </div>
         </div>
