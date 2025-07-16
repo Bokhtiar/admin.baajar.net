@@ -31,4 +31,7 @@ export const destroy = async (id) => {
 export const Profail = async () => {
   return await privateRequest.get(`/admin/profile`);
 };
+export const ProfailUpdate = async (data) => {
+  return await privateRequest.post(`/user/update-profile`,data);
+};
 

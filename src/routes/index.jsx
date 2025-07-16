@@ -20,6 +20,8 @@ import ProcessedOrderList from "../pages/order/processed";
 import ShippedOrderList from "../pages/order/Shipped-orders";
 import ProductTable from "../pages/products";
 import ProductDetails from "../pages/products/productaDetails/productDetails";
+import Profile from "../pages/profile/Profile";
+import ResetPassword from "../pages/ResetPassword/ResetPassword";
 import UnitTable from "../pages/unit";
 import User from "../pages/user";
 import AllVendorsTable from "../pages/vendors";
@@ -82,6 +84,10 @@ const appRoutes = [
       { path: "brand", element: <BrandTable /> },
       //  banner
       { path: "banner", element: <BannerTable /> },
+      //  profile
+      { path: "profile", element: <Profile /> },
+      //  reset pass
+      { path: "reset-password", element: <ResetPassword /> },
     ],
   },
 ];
