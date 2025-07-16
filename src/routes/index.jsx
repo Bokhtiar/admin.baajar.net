@@ -10,6 +10,7 @@ import ColorTable from "../pages/color";
 
 import Dashboard from "../pages/Dashboard/Dashboard";
 import DeliveryMan from "../pages/deliveryMan";
+import DeliveryManDetails from "../pages/deliveryMan/deliveryManDetails";
 import EarningsTable from "../pages/earnings";
 import AllOrderList from "../pages/order/all-order";
 import CanceledOrderList from "../pages/order/canceled-order";
@@ -64,6 +65,7 @@ const appRoutes = [
       { path: "product/:id", element: <ProductDetails /> },
       // delivery man
       { path: "delivery-man", element: <DeliveryMan /> },
+      { path: "delivery-man/:id", element:<DeliveryManDetails /> },
       // user
       { path: "users", element: <User /> },
       // admin

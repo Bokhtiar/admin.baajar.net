@@ -5,7 +5,6 @@ import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 import { NetworkServices } from "../../../network";
 import { networkErrorHandeller } from "../../../utils/helpers";
 import ListSkeleton from "../../../components/loading/ListLoading";
-import DetailsModal from "../details/details";
 import CreateRider from "../../../components/createRider/createRider";
 import { Link } from "react-router-dom";
 
@@ -35,9 +34,9 @@ const customStyles = {
 
 const PendingOrderList = () => {
   const [showModal, setShowModal] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState(null);
-  const [detailsModal, setDetailsModal] = useState(false);
-  const [selectedDetails, setSelectedDetails] = useState(null);
+  // const [selectedOrder, setSelectedOrder] = useState(null);
+  // const [detailsModal, setDetailsModal] = useState(false);
+  // const [selectedDetails, setSelectedDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
@@ -58,15 +57,15 @@ const PendingOrderList = () => {
   };
 
   const handleAssignClick = (row) => {
-    setSelectedOrder(row);
+    // setSelectedOrder(row);
     setShowModal(true);
   };
-  const handleDetails = (row) => {
-    setSelectedDetails(row);
-    setDetailsModal(true);
-  };
+  // const handleDetails = (row) => {
+  //   setSelectedDetails(row);
+  //   setDetailsModal(true);
+  // };
 
-  console.log("selectedOrder", selectedOrder);
+  // console.log("selectedOrder", selectedOrder);
 
   const fetchOrder = useCallback(async () => {
     setLoading(true);
@@ -201,13 +200,7 @@ const PendingOrderList = () => {
           // onSubmit={handleAddCategory}
         />
       )}
-      {/* {detailsModal && (
-        <DetailsModal
-          isOpen={detailsModal}
-          onClose={() => setDetailsModal(false)}
-          selectedDetails={selectedDetails}
-        />
-      )} */}
+
     </>
   );
 };

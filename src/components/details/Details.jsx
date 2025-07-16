@@ -167,7 +167,7 @@ const Details = () => {
                       <td className="p-2">
                         <img
                           src={`${import.meta.env.VITE_API_SERVER}${
-                            product?.product.thumbnail
+                            product?.product?.thumbnail
                           }`}
                           alt={product?.name}
                           className="w-10 h-10 object-cover rounded"

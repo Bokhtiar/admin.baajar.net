@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { CiSearch } from "react-icons/ci";
-import { FaTrashAlt, FaEdit } from "react-icons/fa";
+import { FaTrashAlt, FaEdit, FaEye } from "react-icons/fa";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { RiWallet3Fill } from "react-icons/ri";
 import DeliveryEarningsModal from "./earningModal";
@@ -10,6 +10,7 @@ import { networkErrorHandeller } from "../../utils/helpers";
 import Confirmation from "../../components/Confirmation/Confirmation";
 import { Toastify } from "../../components/toastify";
 import ListSkeleton from "../../components/loading/ListLoading";
+import { Link } from "react-router-dom";
 
 export default function DeliveryMan() {
   const [showModal, setShowModal] = useState(false);
@@ -146,7 +147,7 @@ export default function DeliveryMan() {
     {
       name: "Action",
       cell: (row) => (
-        <div className="flex justify-center gap-2 text-lg">
+        <div className="flex justify-center items-center gap-2 text-lg">
           <button
             title="Status"
             onClick={() => handleToggleStatus(row?.id, row?.is_active)}
@@ -167,12 +168,14 @@ export default function DeliveryMan() {
           >
             <IoDocumentTextOutline />
           </button>
-          {/* <button className="text-[#2D264B] text-xl">
-            <FaEdit />
-          </button> */}
-          <button className="text-[#2D264B] text-xl cursor-pointer">
-            <RiWallet3Fill />
-          </button>
+          <div className="mt-2">
+            <Link to={`/dashboard/delivery-man/${row.id}`} title="Show Details">
+              <button className="text-blue-600 text-xl cursor-pointer">
+                <FaEye />
+              </button>
+            </Link>
+          </div>
+
           <button
             title="Delete"
             onClick={() => destroy(row?.id)}
