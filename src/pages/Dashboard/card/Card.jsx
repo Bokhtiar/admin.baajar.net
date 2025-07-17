@@ -1,18 +1,90 @@
-import { FaShoppingBag, FaTruck, FaMoneyBillWave } from 'react-icons/fa';
+import { useEffect, useState } from "react";
+import { FaShoppingBag, FaTruck, FaMoneyBillWave } from "react-icons/fa";
+import { NetworkServices } from "../../../network";
+import { networkErrorHandeller } from "../../../utils/helpers";
+import { privateRequest } from "../../../config/axios.config";
 
-const stats = [
-  { title: "Today's Orders", value: 33, bgColor: 'bg-gradient-to-r from-[#86D32C] to-[#2E8900]', icon: <FaShoppingBag size={80} /> },
-  { title: "Shipped Today", value: 27, bgColor: 'bg-gradient-to-r from-[#6BAAFC] to-[#305FEC]', icon: <FaTruck size={80} /> },
-  { title: "Pending Today", value: 6, bgColor: 'bg-gradient-to-r from-[#D623FE] to-[#A530F2]', icon: <FaShoppingBag size={80} /> },
-  { title: "Total Orders", value: 98, bgColor: 'bg-gradient-to-r from-[#86D32C] to-[#2E8900]', icon: <FaShoppingBag size={80} /> },
-  { title: "Total Shipped", value: 73, bgColor: 'bg-gradient-to-r from-[#6BAAFC] to-[#305FEC]', icon: <FaTruck size={80} /> },
-  { title: "Canceled Orders", value: 15, bgColor: 'bg-gradient-to-r from-[#FA6464] to-[#DC2626]', icon: <FaShoppingBag size={80} /> },
-  { title: "Sold Today", value: 5100, bgColor: 'bg-gradient-to-r from-[#F8BB21] to-[#FFA100]', icon: <FaMoneyBillWave size={80} /> },
-  { title: "Total Sold", value: 98891, bgColor: 'bg-gradient-to-r from-[#F8BB21] to-[#FFA100]', icon: <FaMoneyBillWave size={80} /> },
-  { title: "Total Revenue", value: 105400, bgColor: 'bg-gradient-to-r from-[#F8BB21] to-[#FFA100]', icon: <FaMoneyBillWave size={80} /> },
-];
+
 
 const Card = () => {
+   const [loading, setLoading] = useState(false);
+    const [data, setData] = useState([]);
+    
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const response = await privateRequest.get("admin/dashboard")
+      console.log("responeeeese",response)
+      if (response?.status === 200) {
+        setData(response?.data?.data);
+      }
+    } catch (error) {
+      networkErrorHandeller(error);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+  
+      fetchData();
+ 
+  }, []);
+  const stats = [
+  {
+    title: "Todays Order",
+    value: data?.today_orders || 0,
+    bgColor: "bg-gradient-to-r from-[#86D32C] to-[#2E8900]",
+    icon: <FaShoppingBag size={80} />,
+  },
+  {
+    title: "Shipped Today",
+    value: data?.today_shipped || 0,
+    bgColor: "bg-gradient-to-r from-[#6BAAFC] to-[#305FEC]",
+    icon: <FaTruck size={80} />,
+  },
+  {
+    title: "Pending Today",
+    value: data?.today_pending || 0,
+    bgColor: "bg-gradient-to-r from-[#D623FE] to-[#A530F2]",
+    icon: <FaShoppingBag size={80} />,
+  },
+  {
+    title: "Total Orders",
+    value: data?.total_orders || 0,
+    bgColor: "bg-gradient-to-r from-[#86D32C] to-[#2E8900]",
+    icon: <FaShoppingBag size={80} />,
+  },
+  {
+    title: "Total Shipped",
+    value: data?.total_shipped || 0,
+    bgColor: "bg-gradient-to-r from-[#6BAAFC] to-[#305FEC]",
+    icon: <FaTruck size={80} />,
+  },
+  {
+    title: "Canceled Orders",
+    value: data?.total_cancelled || 0,
+    bgColor: "bg-gradient-to-r from-[#FA6464] to-[#DC2626]",
+    icon: <FaShoppingBag size={80} />,
+  },
+  {
+    title: "Sold Today",
+    value: 5100,
+    bgColor: "bg-gradient-to-r from-[#F8BB21] to-[#FFA100]",
+    icon: <FaMoneyBillWave size={80} />,
+  },
+  {
+    title: "Total Sold",
+    value: 98891,
+    bgColor: "bg-gradient-to-r from-[#F8BB21] to-[#FFA100]",
+    icon: <FaMoneyBillWave size={80} />,
+  },
+  {
+    title: "Total Revenue",
+    value: 105400,
+    bgColor: "bg-gradient-to-r from-[#F8BB21] to-[#FFA100]",
+    icon: <FaMoneyBillWave size={80} />,
+  },
+];
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-5 mt-1">
       {stats.map((item, idx) => (

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { NetworkServices } from "../../network";
 import { networkErrorHandeller } from "../../utils/helpers";
+import DetailsSkeleton from "../../components/loading/detailsLoading";
 
 
 const VendorDetails = () => {
@@ -29,6 +30,13 @@ const VendorDetails = () => {
       fetchVendor();
     }
   }, [id]);
+
+     if(loading){
+    
+      return  <DetailsSkeleton></DetailsSkeleton>
+    
+  }
+
   return (
 <div className="max-w-6xl mx-auto p-6 space-y-8">
       {/* Personal Information */}

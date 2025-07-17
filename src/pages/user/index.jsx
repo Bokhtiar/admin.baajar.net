@@ -144,7 +144,7 @@ export default function User() {
     {
       name: "Action",
       cell: (row) => (
-        <div className="flex justify-center gap-2 text-lg">
+        <div className="flex justify-center gap-4 text-lg">
           <button
             title="Starus"
             onClick={() => handleToggleStatus(row?.id, row?.is_active)}
@@ -158,12 +158,12 @@ export default function User() {
               }`}
             ></div>
           </button>
-          <button
+          {/* <button
             title="View Details"
             className="text-[#2D264B] text-xl cursor-pointer"
           >
             <IoDocumentTextOutline />
-          </button>
+          </button> */}
           <button
             title="Delete"
             onClick={() => destroy(row?.id)}

@@ -59,9 +59,11 @@ const Header = ({ toggleSidebar }) => {
     >
       <div className="flex justify-between gap-5 items-center relative ">
         <div>
-          <h1 className="text-2xl text-red-600 font-bold pl-5 hidden lg:block">
-            Bajjar
-          </h1>
+          <Link to="/dashboard">
+            <h1 className="text-2xl text-red-600 font-bold pl-5 hidden lg:block">
+              Bajjar
+            </h1>
+          </Link>
         </div>
 
         <RiMenuUnfold3Fill
@@ -100,27 +102,30 @@ const Header = ({ toggleSidebar }) => {
    transition-all duration-300 z-50 `}
               >
                 <ul>
-                  <li className="flex items-center gap-3 px-4 py-2 cursor-pointer group relative">
-                    <FiUser className="text-lg" />
-                    <Link to="/dashboard/profile">
+                  <Link to="/dashboard/profile">
+                    <li className="flex items-center gap-3 px-4 py-2 cursor-pointer group relative">
+                      <FiUser className="text-lg" />
+
                       <span>Profile</span>
-                    </Link>
-                    <span className="absolute bottom-1 left-1/2 w-0 h-0.5 bg-current transition-all duration-700 group-hover:w-[80%] group-hover:left-[10%]"></span>
-                  </li>
+
+                      <span className="absolute bottom-1 left-1/2 w-0 h-0.5 bg-current transition-all duration-700 group-hover:w-[80%] group-hover:left-[10%]"></span>
+                    </li>
+                  </Link>
 
                   <li className="flex items-center gap-3 px-4 py-2 cursor-pointer group relative">
                     <FaPhoneAlt className="text-lg" />
                     <span>Phone: {profile?.phone}</span>
                     <span className="absolute bottom-1 left-1/2 w-0 h-0.5 bg-current transition-all duration-700 group-hover:w-[80%] group-hover:left-[10%]"></span>
                   </li>
+                  <Link to="/dashboard/reset-password">
+                    <li className="flex items-center gap-3 px-4 py-2 cursor-pointer group relative">
+                      <MdVpnKey className="text-lg" />
 
-                  <li className="flex items-center gap-3 px-4 py-2 cursor-pointer group relative">
-                    <MdVpnKey className="text-lg" />
-                    <Link to="/dashboard/reset-password">
                       <span>Reset Password</span>
-                    </Link>
-                    <span className="absolute bottom-1 left-1/2 w-0 h-0.5 bg-current transition-all duration-700 group-hover:w-[80%] group-hover:left-[10%]"></span>
-                  </li>
+
+                      <span className="absolute bottom-1 left-1/2 w-0 h-0.5 bg-current transition-all duration-700 group-hover:w-[80%] group-hover:left-[10%]"></span>
+                    </li>
+                  </Link>
 
                   <li
                     onClick={() => logout()}

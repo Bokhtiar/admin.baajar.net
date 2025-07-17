@@ -172,9 +172,7 @@ export const PassworInput = (props) => {
           )}
         </div>
       </div>
-      {props?.error && (
-        <p className="text-xs text-red-500 pl-3.5">{props?.error}</p>
-      )}
+
     </div>
   );
 };
@@ -301,7 +299,7 @@ export const ImageUpload = (props) => {
   };
   return (
     <div className="flex flex-col space-y-2">
-      <span className="text-sm mb-1 text-black flex gap-1">
+      <span className="text-sm mb-2 text-black flex gap-1">
         {props?.label}{" "}
         <span className="text-white">{props?.rules?.required ? "*" : ""}</span>
       </span>

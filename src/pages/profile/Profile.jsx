@@ -57,7 +57,6 @@ const Profile = () => {
       const payload = new FormData();
 
       payload.append("name", formData.name);
-    
 
       if (formData.logo instanceof File) {
         payload.append("image", formData.logo);
@@ -171,28 +170,30 @@ const Profile = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
           <form
             onSubmit={handleSubmit(handleUpdate)}
-            className="bg-white p-6 rounded-xl w-full max-w-lg shadow-lg"
+            className="bg-white p-6  rounded-xl w-full max-w-lg shadow-lg"
           >
-            <h2 className="text-xl font-semibold mb-4">Edit Profile</h2>
-            <div className="grid grid-cols-2 gap-4">
-              <TextInput
-                name="name"
-                label=" Name"
-                placeholder="Enter Name"
-                control={control}
-                rules={{ required: " name is required" }}
-                error={errors.name?.message}
-              />
-
-
-              <ImageUpload
-                name="logo"
-                control={control}
-                label="Logo"
-                onUpload={(file) => setValue("logo", file)}
-                imgUrl={data?.image}
-                error={errors.logo?.message}
-              />
+            <h2 className="text-xl font-semibold ">Edit Profile</h2>
+            <div className="w-full max-w-4xl mx-auto ">
+              <div className=" grid grid-cols-1 items-center gap-4">
+                <TextInput
+                  name="name"
+                  label="Name"
+                  placeholder="Enter Name"
+                  control={control}
+                  rules={{ required: "Name is required" }}
+                  error={errors.name?.message}
+                />
+                <div className="mt-">
+                  <ImageUpload
+                    name="logo"
+                    control={control}
+                    label="Logo"
+                    onUpload={(file) => setValue("logo", file)}
+                    imgUrl={data?.image}
+                    error={errors.logo?.message}
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="flex justify-end gap-2 mt-6">
