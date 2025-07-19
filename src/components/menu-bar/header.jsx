@@ -86,7 +86,15 @@ const Header = ({ toggleSidebar }) => {
               className="flex gap-3 items-center border-r-2 pr-5 border-lightBorder cursor-pointer"
               onClick={() => setShowPopup(!showPopup)}
             >
-              <img src={userimg} alt="User" className="w-9 h-9 rounded-full" />
+              <img
+                src={
+                  profile?.image
+                    ? `${import.meta.env.VITE_API_SERVER}${profile?.image}`
+                    : userimg
+                }
+                alt="Admin"
+                className="w-9 h-9 rounded-full"
+              />
               <div className="flex items-center flex-col dark:text-darkTitle">
                 <span className="font-bold text-[14px] text-left block">
                   {profile?.name}

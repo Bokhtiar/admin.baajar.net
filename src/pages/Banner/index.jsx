@@ -9,14 +9,19 @@ import { FaTrashCan } from "react-icons/fa6";
 import Header from "../../components/heading/heading";
 import { networkErrorHandeller } from "../../utils/helpers";
 import CreateBannerModal from "./CreateModal";
+import BannerUpdateModal from "./update";
+
 
 export default function BannerTable() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [selectedId, setSelectedId] = useState("");
 
   const [updateModal, setUpdateModal] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  console.log("selectedId",selectedId)
 
   // Fetch categories from API
   const fetchBanner = useCallback(async () => {
@@ -91,7 +96,7 @@ export default function BannerTable() {
           <button
             title="Edit"
             onClick={() => {
-              //   setSelectedId(row?.id);
+                setSelectedId(row?.banner_id);
               setUpdateModal(true);
             }}
             className="cursor-pointer"
@@ -140,7 +145,7 @@ export default function BannerTable() {
   return (
     <div className="mt-3 bg ">
       <Header
-        title="All Unit"
+        title="All Banner"
         searchValue={search}
         onSearchChange={(value) => setSearch(value)}
         onAddClick={() => setShowModal(true)}
@@ -168,13 +173,13 @@ export default function BannerTable() {
         />
       )}
 
-      {/* {updateModal && (
-        <UnitUpdateModal
+      {updateModal && (
+        <BannerUpdateModal
           id={selectedId}
           onClose={() => setUpdateModal(false)}
-          fetchUnit={fetchUnit}
+          fetchBanner={fetchBanner}
         />
-      )} */}
+      )}
     </div>
   );
 }

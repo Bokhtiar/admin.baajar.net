@@ -119,7 +119,7 @@ export default function SubCategoryUpdate({
       console.log("response", response);
 
       if (response && response.status === 200) {
-        Toastify.Success("Category Updated successfully!");
+        Toastify.Success("Successfully updated the subcategory.");
         reset();
         onClose();
         fetchCategory();

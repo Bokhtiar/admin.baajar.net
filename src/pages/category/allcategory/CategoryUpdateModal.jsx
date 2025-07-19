@@ -89,7 +89,7 @@ export default function CategoryUpdateModal({
       console.log("response", response);
 
       if (response && response.status === 200) {
-        Toastify.Success("Category created successfully!");
+        Toastify.Success("Category Update successfully!");
         reset();
         onClose();
         fetchCategory();

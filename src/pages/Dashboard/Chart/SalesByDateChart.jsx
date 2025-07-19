@@ -33,7 +33,7 @@ const customStyles = {
 
 const PendingOrderTable = () => {
 
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  
 
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -55,7 +55,7 @@ const PendingOrderTable = () => {
   };
 
 
-  console.log("selectedOrder", selectedOrder);
+  
 
   const fetchOrder = useCallback(async () => {
     setLoading(true);
@@ -63,7 +63,7 @@ const PendingOrderTable = () => {
       const queryParams = new URLSearchParams();
       queryParams.append("page", currentPage);
       queryParams.append("per_page", perPage);
-      queryParams.append("order_status", "pending");
+      // queryParams.append("order_status", "pending");
       const response = await NetworkServices.Order.index(
         queryParams.toString()
       );
@@ -74,7 +74,7 @@ const PendingOrderTable = () => {
         setTotalRows(response?.data?.data?.total || 0);
       }
     } catch (error) {
-      // console.log(error);
+      console.log(error);
       networkErrorHandeller(error);
     }
     setLoading(false);
@@ -191,20 +191,6 @@ const PendingOrderTable = () => {
         )}
       </div>
 
-      {/* {showModal && (
-        <CreateRider
-          onClose={() => setShowModal(false)}
-          // fetchCategory={fetchCategory}
-          // onSubmit={handleAddCategory}
-        />
-      )}
-      {detailsModal && (
-        <DetailsModal
-          isOpen={detailsModal}
-          onClose={() => setDetailsModal(false)}
-          selectedDetails={selectedDetails}
-        />
-      )} */}
     </>
   );
 };

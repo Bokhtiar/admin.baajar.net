@@ -104,7 +104,7 @@ export default function CreateSubCategoryModal({ onClose, fetchCategory }) {
       console.log("response", response);
 
       if (response && response.status === 200) {
-        Toastify.Success("Category created successfully!");
+        Toastify.Success(" Successfully created the subcategory.");
         reset();
         onClose();
         fetchCategory();

@@ -46,7 +46,7 @@ export default function CreateBannerModal({ onClose, fetchBanner }) {
       console.log("response", response);
 
       if (response && response.status === 200) {
-        Toastify.Success("Unit created successfully!");
+        Toastify.Success("Banner created successfully!");
         fetchBanner();
         reset();
         onClose();

@@ -38,12 +38,14 @@ export const networkErrorHandeller = (error) => {
    
 
     if (
-        error ||
+        (error ||
         error.response ||
         error.response.data ||
-        error.response.data.errors
+        error.response.data.errors) 
     ) {
-    return Toastify.Error(error.response.data.message ||error.response.data.error[0]);
+    // return Toastify.Error(error.response.data.message ||error.response.data.error[0]);
+    return Toastify.Error(error.response.data.error[0]);
+    // alert("dddd")
     
     
     } else {
