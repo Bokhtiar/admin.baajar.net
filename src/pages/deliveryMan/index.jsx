@@ -161,13 +161,13 @@ export default function DeliveryMan() {
               }`}
             ></div>
           </button>
-          <button
+          {/* <button
             title="Show Details"
             onClick={() => setShowModal(true)}
             className="text-[#2D264B] text-xl cursor-pointer"
           >
             <IoDocumentTextOutline />
-          </button>
+          </button> */}
           <div className="mt-2">
             <Link to={`/dashboard/delivery-man/${row.id}`} title="Show Details">
               <button className="text-blue-600 text-xl cursor-pointer">

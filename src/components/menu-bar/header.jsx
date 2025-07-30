@@ -148,7 +148,7 @@ const Header = ({ toggleSidebar }) => {
             )}
           </div>
 
-          <CiSettings className="text-3xl rounded-full animate-[spin_2s_linear_infinite]  cursor-pointer" />
+          <CiSettings onClick={() => setShowPopup(!showPopup)} className="text-3xl rounded-full animate-[spin_2s_linear_infinite]  cursor-pointer" />
         </div>
       </div>
     </div>

@@ -150,27 +150,23 @@ const Sidebar = ({ setIsSidebarOpen }) => {
       icon: <RiShieldUserFill />,
       path: "/dashboard/admins",
     },
-    {
-      title: "Earnings",
-      icon: <BsFillBagPlusFill />,
-      path: "/dashboard/earnings",
-    },
+    // {
+    //   title: "Earnings",
+    //   icon: <BsFillBagPlusFill />,
+    //   path: "/dashboard/earnings",
+    // },
     {
       title: "Banner",
       icon: <PiFlagBannerFill />,
       path: "/dashboard/banner",
     },
-    {
-      title: "Settings",
-      icon: <IoSettingsOutline />,
-      path: "/dashboard/settings",
-    },
+
   ];
   return (
     <>
       <div
         // overflow-y-auto scrollbar-thin
-        className={`w-64  bg-lightCard dark:bg-darkCard dark:text-darkTitle   transition-all duration-300   mt-[0.5px] `}
+        className={`w-64  bg-lightCard dark:bg-darkCard dark:text-darkTitle   transition-all duration-300 mt-[0.5px] `}
       >
         {/* Logo */}
         <div className="flex items-center justify-between w-full p-[18px]  border-gray-300 lg:hidden">
@@ -187,7 +183,7 @@ const Sidebar = ({ setIsSidebarOpen }) => {
         </div>
 
         {/* Menu List */}
-        <nav className="mt-1 overflow-y-auto  pb-14">
+        <nav className="mt-1 overflow-y-auto md:overflow-hidden  h-[calc(100vh-60px)] md:h-screen pb-14 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
           {" "}
           {/* Prevents blue bar from going outside */}
           {menuData.map((item, index) => {

@@ -9,6 +9,8 @@ import { privateRequest } from "../../../config/axios.config";
 const Card = () => {
    const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
+
+    // console.log("dd",data)
     
   const fetchData = async () => {
     setLoading(true);
@@ -68,19 +70,19 @@ const Card = () => {
   },
   {
     title: "Sold Today",
-    value: 5100,
+    value: data?.today_sold || 0,
     bgColor: "bg-gradient-to-r from-[#F8BB21] to-[#FFA100]",
     icon: <FaMoneyBillWave size={80} />,
   },
   {
     title: "Total Sold",
-    value: 98891,
+    value: data?.total_sold || 0,
     bgColor: "bg-gradient-to-r from-[#F8BB21] to-[#FFA100]",
     icon: <FaMoneyBillWave size={80} />,
   },
   {
     title: "Total Revenue",
-    value: 105400,
+    value: data?.admin_revenue || 0,
     bgColor: "bg-gradient-to-r from-[#F8BB21] to-[#FFA100]",
     icon: <FaMoneyBillWave size={80} />,
   },

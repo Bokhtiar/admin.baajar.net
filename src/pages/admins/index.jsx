@@ -159,12 +159,12 @@ export default function Admins() {
               }`}
             ></div>
           </button>
-          <button
+          {/* <button
             title="Show Details"
             className="text-[#2D264B] text-xl cursor-pointer"
           >
             <IoDocumentTextOutline />
-          </button>
+          </button> */}
           <button
             title="Delete"
             onClick={() => destroy(row?.id)}
