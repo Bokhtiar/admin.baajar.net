@@ -8,6 +8,7 @@ import { networkErrorHandeller } from "../../utils/helpers";
 import Confirmation from "../../components/Confirmation/Confirmation";
 import { Toastify } from "../../components/toastify";
 import ListSkeleton from "../../components/loading/ListLoading";
+import userImg from "../../assets/logo/userimg.jpg";
 
 export default function User() {
   // const [showModal, setShowModal] = useState(false);
@@ -119,7 +120,8 @@ export default function User() {
       name: "Image",
       cell: (row) => (
         <img
-          src={`${import.meta.env.VITE_API_SERVER}${row?.image}`}
+          // src={`${import.meta.env.VITE_API_SERVER}${row?.image} `}
+          src={row?.image ? `${import.meta.env.VITE_API_SERVER}${row.image}` : userImg}
           alt={row?.name}
           className="w-14 h-14 rounded-full object-cover shadow-2xl p-2 transform scale-105 z-10"
         />

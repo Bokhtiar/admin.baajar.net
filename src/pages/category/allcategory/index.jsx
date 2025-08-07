@@ -138,23 +138,28 @@ export default function CategoryTable() {
     //   selector: (row) => row?.products,
     //   sortable: true,
     // },
+    // {
+    //   name: "Status",
+    //   cell: (row) => (
+    //     <button
+    //       // onClick={() => handleToggle(row.status)}
+    //       className={`w-10 h-6 rounded-full flex items-center px-1 transition ${
+    //         row?.status == 1 ? "bg-green-500" : "bg-gray-300"
+    //       }`}
+    //     >
+    //       <div
+    //         className={`w-4 h-4 bg-white rounded-full transform transition-transform ${
+    //           row?.status ? "translate-x-4" : ""
+    //         }`}
+    //       ></div>
+    //     </button>
+    //   ),
+    // },
     {
       name: "Status",
-      cell: (row) => (
-        <button
-          // onClick={() => handleToggle(row.status)}
-          className={`w-10 h-6 rounded-full flex items-center px-1 transition ${
-            row?.status == 1 ? "bg-green-500" : "bg-gray-300"
-          }`}
-        >
-          <div
-            className={`w-4 h-4 bg-white rounded-full transform transition-transform ${
-              row?.status ? "translate-x-4" : ""
-            }`}
-          ></div>
-        </button>
-      ),
+      cell: (row) => <span>{row?.status === 1 ? "Active" : "Inactive"}</span>,
     },
+
     {
       name: "Action",
       cell: (row) => (

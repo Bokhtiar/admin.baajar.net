@@ -119,7 +119,7 @@ export default function CreateCategoryModal({ onClose, fetchCategory }) {
               <select
                 {...register("status", { required: true })}
                 className="appearance-none w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none text-gray-500 pr-8 cursor-pointer "
-                defaultValue=""
+                defaultValue="1"
               >
                 <option value="" disabled>
                   Select Status
@@ -161,7 +161,7 @@ export default function CreateCategoryModal({ onClose, fetchCategory }) {
               </div>
               <input
                 type="file"
-                {...register("image", { required: "Image is required" })}
+                {...register("image" )}
                 className="hidden"
               />
             </label>

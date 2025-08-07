@@ -195,7 +195,7 @@ export default function CreateSubCategoryModal({ onClose, fetchCategory }) {
                 className={`appearance-none w-full px-4 py-2 border rounded-full focus:outline-none text-gray-500 pr-8 ${
                   errors.status ? "border-red-500" : "border-gray-300"
                 }`}
-                defaultValue=""
+                defaultValue="1"
               >
                 <option value="" disabled>
                   Select Status
@@ -234,7 +234,7 @@ export default function CreateSubCategoryModal({ onClose, fetchCategory }) {
               </div>
               <input
                 type="file"
-                {...register("image", { required: "Image is required" })}
+                {...register("image")}
                 className="hidden"
               />
             </label>
