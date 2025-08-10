@@ -74,7 +74,7 @@ const PendingOrderTable = () => {
         setTotalRows(response?.data?.data?.total || 0);
       }
     } catch (error) {
-      console.log(error);
+      console.log("jjjjj",error);
       networkErrorHandeller(error);
     }
     setLoading(false);
