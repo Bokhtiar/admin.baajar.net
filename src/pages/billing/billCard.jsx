@@ -8,10 +8,12 @@ import {
   FaBan,
 } from "react-icons/fa";
 import { MdOutlinePendingActions } from "react-icons/md";
-import { privateRequest } from "../../../config/axios.config";
-import { networkErrorHandeller } from "../../../utils/helpers";
+import { privateRequest } from "../../config/axios.config";
+import { networkErrorHandeller } from "../../utils/helpers";
 
-const UpdateCard = () => {
+
+
+const BillingCard = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({});
 
@@ -132,4 +134,4 @@ const UpdateCard = () => {
   );
 };
 
-export default UpdateCard;
+export default BillingCard;

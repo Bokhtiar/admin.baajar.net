@@ -7,8 +7,9 @@ import {
   RiMenuFold4Fill,
   RiProductHuntLine,
   RiShieldUserFill,
+  
 } from "react-icons/ri";
-import { FaList, FaUnity, FaUsers } from "react-icons/fa";
+import { FaList, FaMoneyBillWave, FaUnity, FaUsers } from "react-icons/fa";
 import { CgAttribution } from "react-icons/cg";
 
 import {
@@ -160,6 +161,11 @@ const Sidebar = ({ setIsSidebarOpen }) => {
       icon: <PiFlagBannerFill />,
       path: "/dashboard/banner",
     },
+    {
+      title: "Biling",
+      icon: <FaMoneyBillWave />,
+      path: "/dashboard/billing",
+    },
 
   ];
   return (
@@ -183,7 +189,7 @@ const Sidebar = ({ setIsSidebarOpen }) => {
         </div>
 
         {/* Menu List */}
-        <nav className="mt-1 overflow-y-auto md:overflow-hidden  h-[calc(100vh-60px)] md:h-screen pb-14 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
+        <nav className="mt-1 overflow-y-auto md:overflow-hidden  h-[calc(100vh-60px)] md:h-full pb-14 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
           {" "}
           {/* Prevents blue bar from going outside */}
           {menuData.map((item, index) => {

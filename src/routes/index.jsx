@@ -3,6 +3,7 @@ import { DashboardLayout } from "../layouts/dashboard.layout";
 import Admins from "../pages/admins";
 import AttributeTable from "../pages/attribute";
 import BannerTable from "../pages/Banner";
+import BillingList from "../pages/billing";
 import BrandTable from "../pages/Brand";
 import CategoryTable from "../pages/category/allcategory";
 import SubCategoryTable from "../pages/category/subcategory";
@@ -84,6 +85,8 @@ const appRoutes = [
       { path: "brand", element: <BrandTable /> },
       //  banner
       { path: "banner", element: <BannerTable /> },
+      //  billing
+      { path: "billing", element: <BillingList /> },
       //  profile
       { path: "profile", element: <Profile /> },
       //  reset pass
