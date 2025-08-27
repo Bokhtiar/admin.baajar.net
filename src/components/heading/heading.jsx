@@ -47,7 +47,7 @@ const Header = ({
           )}
         </div>
         <button
-          className="bg-[#13BF00] text-white px-11 py-[6px] rounded-full hover:bg-green-600 cursor-pointer"
+          className="bg-primary text-white px-11 py-[6px] rounded-full hover:bg-green-600 cursor-pointer"
           onClick={onAddClick}
         >
           {addButtonText}

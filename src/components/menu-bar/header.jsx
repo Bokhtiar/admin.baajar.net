@@ -55,12 +55,12 @@ const Header = ({ toggleSidebar }) => {
 
   return (
     <div
-      className={`bg-lightCard dark:bg-darkCard  py-4 px-2 shadow-sm  w-full `}
+      className={`bg-[#DC2626] dark:bg-darkCard  py-4 px-2 shadow-sm  w-full `}
     >
       <div className="flex justify-between gap-5 items-center relative ">
         <div>
           <Link to="/dashboard">
-            <h1 className="text-2xl text-red-600 font-bold pl-5 hidden lg:block">
+            <h1 className="text-2xl text-white font-bold pl-5 hidden lg:block">
               Bajjar
             </h1>
           </Link>
@@ -68,7 +68,7 @@ const Header = ({ toggleSidebar }) => {
 
         <RiMenuUnfold3Fill
           onClick={() => toggleSidebar()}
-          className="absolute left-5 top- text-2xl z-10 cursor-pointer text-lightTitle dark:text-darkTitle block lg:hidden"
+          className="absolute left-5 top- text-2xl z-10 cursor-pointer text-white dark:text-darkTitle block lg:hidden"
         />
 
         <div className="flex gap-3 items-center">
@@ -95,7 +95,7 @@ const Header = ({ toggleSidebar }) => {
                 alt="Admin"
                 className="w-9 h-9 rounded-full"
               />
-              <div className="flex items-center flex-col dark:text-darkTitle">
+              <div className="flex items-center flex-col text-white dark:text-darkTitle">
                 <span className="font-bold text-[14px] text-left block">
                   {profile?.name}
                 </span>
@@ -148,7 +148,7 @@ const Header = ({ toggleSidebar }) => {
             )}
           </div>
 
-          <CiSettings onClick={() => setShowPopup(!showPopup)} className="text-3xl rounded-full animate-[spin_2s_linear_infinite]  cursor-pointer" />
+          <CiSettings onClick={() => setShowPopup(!showPopup)} className="text-3xl rounded-full animate-[spin_2s_linear_infinite]  cursor-pointer text-white" />
         </div>
       </div>
     </div>

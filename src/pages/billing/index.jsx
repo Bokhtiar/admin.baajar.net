@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import BillingCard from "./billCard";
 import Header from "../../components/heading/heading";
+import { CiSearch } from "react-icons/ci";
 
 export default function BillingList() {
   const [search, setSearch] = useState("");
@@ -60,7 +61,7 @@ export default function BillingList() {
       name: "Status",
       selector: (row) => (
         <span
-          className={`px-2 py-1 rounded text-white ${
+          className={`px-2 py-1  text-white rounded-md ${
             row.status === "Paid" ? "bg-green-500" : "bg-yellow-500"
           }`}
         >
@@ -70,13 +71,26 @@ export default function BillingList() {
     },
     { name: "Date", selector: (row) => row.date },
   ];
-
   const customStyles = {
     headCells: {
       style: {
-        fontWeight: "500",
+        fontWeight: "400",
         fontSize: "14px",
-        color: "#4B5563",
+        color: "#8B8B8B",
+      },
+    },
+    rows: {
+      style: {
+        minHeight: "64px",
+        borderBottom: "1px solid #E5E7EB",
+        color: "#33363F",
+      },
+    },
+    cells: {
+      style: {
+        paddingTop: "8px",
+        paddingBottom: "8px",
+        color: "#33363F",
       },
     },
   };
@@ -88,14 +102,29 @@ export default function BillingList() {
   return (
     <>
       <BillingCard />
-      <div className="mt-3">
-        <Header
-          title="Billing & Payments"
-          searchValue={search}
-          onSearchChange={(value) => setSearch(value)}
-        />
+      <div className="mt-10">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-4 mt-5">
+          <h2 className="text-xl font-semibold text-primary">All Vendors</h2>
+          <div className="flex flex-col md:flex-row gap-2 mt-2 md:mt-0">
+            <div className="relative w-48">
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-10 pr-3 py-2 w-full border border-lightBorder rounded-full focus:outline-none text-sm"
+                // placeholder="Search"
+              />
+              {
+                <div className="absolute left-6 top-1/2 transform -translate-y-1/2 flex items-center text-gray-400 pointer-events-none">
+                  <CiSearch className="text-lg mr-1" />
+                  <span className="text-sm">search</span>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
 
-        <div className="bg-white rounded overflow-y-auto mb-10 p-3">
+        <div className="bg-white rounded  mb-10 ">
           <DataTable
             columns={columns}
             data={data}

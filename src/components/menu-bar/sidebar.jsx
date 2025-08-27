@@ -172,24 +172,24 @@ const Sidebar = ({ setIsSidebarOpen }) => {
     <>
       <div
         // overflow-y-auto scrollbar-thin
-        className={`w-64  bg-lightCard dark:bg-darkCard dark:text-darkTitle   transition-all duration-300 mt-[0.5px] `}
+        className={`w-64  bg-[#DC2626] dark:bg-darkCard dark:text-darkTitle   transition-all duration-300 mt-[0.5px] rounded-b-md `}
       >
         {/* Logo */}
         <div className="flex items-center justify-between w-full p-[18px]  border-gray-300 lg:hidden">
           {/* <img src={logo} alt="Logo" className="w-10 h-10 rounded-full" /> */}
 
-          <h1 className="text-2xl text-red-600 font-bold pl-5 ">Bajjar</h1>
+          <h1 className="text-2xl  font-bold pl-5 text-white ">Bajjar</h1>
 
           <button className="flex items-center justify-center w-10 h-10 rounded-md transition ">
             <RiMenuFold4Fill
               onClick={() => setIsSidebarOpen(false)}
-              className={`text-xl transform transition-transform duration-300 z-50 cursor-pointer `}
+              className={`text-xl transform transition-transform duration-300 z-50 cursor-pointer text-white `}
             />
           </button>
         </div>
 
         {/* Menu List */}
-        <nav className="mt-1 overflow-y-auto md:overflow-hidden  h-[calc(100vh-60px)] md:h-full pb-14 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
+        <nav className="-mt-2 pt-3 overflow-y-auto md:overflow-hidden  h-[calc(100vh-60px)] md:h-full pb- scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 ">
           {" "}
           {/* Prevents blue bar from going outside */}
           {menuData.map((item, index) => {
@@ -199,15 +199,15 @@ const Sidebar = ({ setIsSidebarOpen }) => {
             return (
               <div
                 key={index}
-                className="mb-2 relative overflow-y-auto gap-4 pl-3 pr-3"
+                className="mb-2 relative overflow-y-auto gap-4 pl-3 pr-3 "
               >
                 <Link
                   to={item.path}
                   className={`flex items-center w-full  text-left rounded-md 
-                p-[10px] pl-4 transition-all duration-200 relative border-[1px] border-[#F3F4F6] 
+                p-[10px] pl-4 transition-all duration-200 relative border-[1px] border-[#F3F4F6] text-white
                 ${
                   isActive || bgColor
-                    ? "bg-[#DC2626] text-white font-semibold "
+                    ? "bg-[#ffff] text-black!  font-semibold "
                     : " hover:text-black hover:bg-white "
                 }
               `}
@@ -237,8 +237,8 @@ const Sidebar = ({ setIsSidebarOpen }) => {
                           className={`flex items-center text-sm rounded-md p-1 pl-4 transition-all duration-200 relative 
                         ${
                           isSubActive
-                            ? "  text-primary  font-semibold"
-                            : " hover:text-primary"
+                            ? "  text-white font-semibold"
+                            : " hover:text-white"
                         }
                       `}
                         >
