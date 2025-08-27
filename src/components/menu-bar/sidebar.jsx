@@ -161,11 +161,11 @@ const Sidebar = ({ setIsSidebarOpen }) => {
       icon: <PiFlagBannerFill />,
       path: "/dashboard/banner",
     },
-    {
-      title: "Biling",
-      icon: <FaMoneyBillWave />,
-      path: "/dashboard/billing",
-    },
+    // {
+    //   title: "Biling",
+    //   icon: <FaMoneyBillWave />,
+    //   path: "/dashboard/billing",
+    // },
 
   ];
   return (

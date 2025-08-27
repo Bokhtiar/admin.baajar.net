@@ -86,7 +86,7 @@ const appRoutes = [
       //  banner
       { path: "banner", element: <BannerTable /> },
       //  billing
-      { path: "billing", element: <BillingList /> },
+      // { path: "billing", element: <BillingList /> },
       //  profile
       { path: "profile", element: <Profile /> },
       //  reset pass
