@@ -172,7 +172,7 @@ const Sidebar = ({ setIsSidebarOpen }) => {
     <>
       <div
         // overflow-y-auto scrollbar-thin
-        className={`w-64  bg-[#DC2626] dark:bg-darkCard dark:text-darkTitle   transition-all duration-300 mt-[0.5px] rounded-b-md `}
+        className={`w-64  bg-[#DC2626] dark:bg-darkCard dark:text-darkTitle   transition-all duration-300 mt-[0.5px] rounded-b-md h-full `}
       >
         {/* Logo */}
         <div className="flex items-center justify-between w-full p-[18px]  border-gray-300 lg:hidden">
@@ -189,7 +189,7 @@ const Sidebar = ({ setIsSidebarOpen }) => {
         </div>
 
         {/* Menu List */}
-        <nav className="-mt-2 pt-3 overflow-y-auto md:overflow-hidden  h-[calc(100vh-60px)] md:h-full pb- scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 ">
+        <nav className="-mt-2 pt-3 overflow-y-auto md:overflow-hidden  h-[calc(100vh-65px)]   scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 ">
           {" "}
           {/* Prevents blue bar from going outside */}
           {menuData.map((item, index) => {
@@ -234,10 +234,10 @@ const Sidebar = ({ setIsSidebarOpen }) => {
                         <Link
                           key={subIndex}
                           to={subItem.path}
-                          className={`flex items-center text-sm rounded-md p-1 pl-4 transition-all duration-200 relative 
+                          className={`flex items-center text-sm rounded-md p-1 pl-4 transition-all duration-200 relative text-white 
                         ${
                           isSubActive
-                            ? "  text-white font-semibold"
+                            ? "  text-black! font-semibold"
                             : " hover:text-white"
                         }
                       `}
