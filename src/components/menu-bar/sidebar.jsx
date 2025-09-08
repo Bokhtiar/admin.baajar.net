@@ -189,7 +189,7 @@ const Sidebar = ({ setIsSidebarOpen }) => {
         </div>
 
         {/* Menu List */}
-        <nav className="-mt-2 pt-3 overflow-y-auto md:overflow-hidden  h-[calc(100vh-65px)]   scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 ">
+        <nav className="-mt-2 pt-3 overflow-y-auto md:overflow-hidden  h-[calc(100vh-65px)] md:h-full   scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 ">
           {" "}
           {/* Prevents blue bar from going outside */}
           {menuData.map((item, index) => {
