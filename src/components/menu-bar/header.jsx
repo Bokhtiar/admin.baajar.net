@@ -52,10 +52,12 @@ const Header = ({ toggleSidebar }) => {
   useEffect(() => {
     fetchUser();
   }, [fetchUser]);
+ 
 
   return (
     <div
-      className={`bg-[#DC2626] dark:bg-darkCard  py-4 px-2 shadow-sm  w-full `}
+     // bg-[#DC2626]
+      className={` bg-red-700 dark:bg-darkCard  py-4 px-2 shadow-sm  w-full `}
     >
       <div className="flex justify-between gap-5 items-center relative ">
         <div>

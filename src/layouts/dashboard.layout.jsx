@@ -25,7 +25,7 @@ export const DashboardLayout = () => {
         </div>
 
 
-        <div className=" overflow-auto pt-0.5 px-3 w-full flex-1 ">
+        <div className=" overflow-auto pt-0.5 px-3 w-full flex-1  ">
           <Outlet />
         </div>
       </div>
