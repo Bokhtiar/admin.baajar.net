@@ -41,7 +41,7 @@ const AllOrderList = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setFilterDate(date); // update only after 1 second of inactivity
+      setFilterDate(date); 
     }, 1000);
 
     return () => clearTimeout(timer);

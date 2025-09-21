@@ -23,9 +23,9 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 mt-5 gap-4 ">
         {/* <BestSellersCard /> */}
-        <ActiveClient/>
+        {/* <ActiveClient/>
         <NewClient/>
-        <BestSellersCard/>
+        <BestSellersCard/> */}
       
         {/* <TrafficCard /> */}
       </div>

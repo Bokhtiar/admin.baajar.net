@@ -10,7 +10,7 @@ const Card = () => {
    const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
 
-    // console.log("dd",data)
+    console.log("dd",data)
     
   const fetchData = async () => {
     setLoading(true);
@@ -83,6 +83,24 @@ const Card = () => {
   {
     title: "Total Revenue",
     value: data?.admin_revenue || 0,
+    bgColor: "bg-gradient-to-r from-[#F8BB21] to-[#FFA100]",
+    icon: <FaMoneyBillWave size={80} />,
+  },
+  {
+    title: "Total User",
+    value: data?.user_count || 0,
+    bgColor: "bg-gradient-to-r from-[#F8BB21] to-[#FFA100]",
+    icon: <FaMoneyBillWave size={80} />,
+  },
+  {
+    title: "Total Vendor",
+    value: data?.vendor_count || 0,
+    bgColor: "bg-gradient-to-r from-[#F8BB21] to-[#FFA100]",
+    icon: <FaMoneyBillWave size={80} />,
+  },
+  {
+    title: "Total Rider",
+    value: data?.rider_count || 0,
     bgColor: "bg-gradient-to-r from-[#F8BB21] to-[#FFA100]",
     icon: <FaMoneyBillWave size={80} />,
   },
