@@ -7,9 +7,10 @@ import DetailsSkeleton from "../loading/detailsLoading";
 const Details = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
-  const [order, setOrder] = useState([]); 
+  const [order, setOrder] = useState([]);
+  const [statusLoading, setStatusLoading] = useState(false);
 
-  console.log("gg",order)
+  console.log("gg", order);
 
   const orderStates = [
     "pending",
@@ -38,14 +39,33 @@ const Details = () => {
     }
   }, [id]);
 
-   if(loading){
-    
-      return  <DetailsSkeleton></DetailsSkeleton>
-    
+  if (loading) {
+    return <DetailsSkeleton></DetailsSkeleton>;
   }
   if (!order) return <div className="text-center py-10">No order data</div>;
 
   const { user, rider, vendors } = order;
+
+  const handleStatusChange = async (newStatus) => {
+    try {
+      setStatusLoading(true);
+
+      const formData = new FormData();
+      formData.append("status", newStatus);
+      formData.append("_method", "PUT"); 
+
+      const response = await NetworkServices.Order.update(id, formData);
+
+      if (response?.status === 200) {
+        // Toastify.Success("Order status updated!");
+        fetchOrder(); // refresh order data
+      }
+    } catch (error) {
+      networkErrorHandeller(error);
+    } finally {
+      setStatusLoading(false);
+    }
+  };
 
   return (
     <div className="p-6 space-y-6  rounded-md">
@@ -57,7 +77,6 @@ const Details = () => {
           </h2>
           <div className="flex items-center gap-4">
             <img
-              
               src={`${import.meta.env.VITE_API_SERVER}${user?.photo}`}
               alt="user"
               className="w-16 h-16 rounded-full object-cover"
@@ -85,7 +104,6 @@ const Details = () => {
           </h2>
           <div className="flex items-center gap-4">
             <img
-           
               src={`${import.meta.env.VITE_API_SERVER}${rider?.profile_image}`}
               alt="user"
               className="w-16 h-16 rounded object-cover"
@@ -108,7 +126,6 @@ const Details = () => {
         </div>
       </div>
 
-
       {/* Order Status Buttons */}
       <div className="text-center mt-6">
         <h4 className="text-gray-600 mb-3 font-medium">Order State</h4>
@@ -116,7 +133,8 @@ const Details = () => {
           {orderStates.map((state) => (
             <button
               key={state}
-              //   onClick={() => handleStatusChange(state)}
+              onClick={() => handleStatusChange(state)}
+              disabled={statusLoading}
               className={`px-4 py-2 rounded-full ${
                 state === order?.order_status
                   ? "bg-[#FF6600] text-white"
@@ -146,7 +164,9 @@ const Details = () => {
               <table className="min-w-full divide-y divide-gray-200 text-sm">
                 <thead className="bg-gray-100 text-left">
                   <tr>
-                    <th className="p-3 font-semibold text-gray-600 w-20">Image</th>
+                    <th className="p-3 font-semibold text-gray-600 w-20">
+                      Image
+                    </th>
                     <th className="p-3 font-semibold text-gray-600 w-[400px]">
                       Product Name
                     </th>

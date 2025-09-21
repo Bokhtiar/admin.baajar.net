@@ -13,8 +13,8 @@ const Dashboard = () => {
   }, []);
   return (
     <div className="pb-10">
-      {/* <Card /> */}
-      <UpdateCard/>
+      <Card />
+      {/* <UpdateCard/> */}
 
       <div className="mt-5">
         <SalesByDateChart />
