@@ -29,7 +29,7 @@ const AllOrderList = () => {
   const [filterSearch, setFilterSearch] = useState("");
   const [filterDate, setFilterDate] = useState("");
 
-  console.log("data", data);
+  console.log("date", date);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -79,8 +79,8 @@ const AllOrderList = () => {
       queryParams.append("page", currentPage);
       queryParams.append("per_page", perPage);
       if (status) queryParams.append("order_status", status);
-      if (search) queryParams.append("search", filterSearch);
-      if (date) queryParams.append("created_at", filterDate);
+      if (filterSearch) queryParams.append("search", filterSearch);
+      if (filterDate) queryParams.append("created_at", filterDate);
 
       const response = await NetworkServices.Order.index(
         queryParams.toString()

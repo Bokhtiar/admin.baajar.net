@@ -1,8 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-
 import DataTable from "react-data-table-component";
-import { FaEdit, FaTrash } from "react-icons/fa";
-
 import { NetworkServices } from "../../../network";
 import { networkErrorHandeller } from "../../../utils/helpers";
 import ListSkeleton from "../../../components/loading/ListLoading";
@@ -97,8 +94,8 @@ const CanceledOrderList = () => {
       queryParams.append("page", currentPage);
       queryParams.append("per_page", perPage);
       queryParams.append("order_status", "cancelled");
-      if (search) queryParams.append("search", filterSearch);
-      if (date) queryParams.append("created_at", filterDate);
+      if (filterSearch) queryParams.append("search", filterSearch);
+      if (filterDate) queryParams.append("created_at", filterDate);
       const response = await NetworkServices.Order.index(
         queryParams.toString()
       );

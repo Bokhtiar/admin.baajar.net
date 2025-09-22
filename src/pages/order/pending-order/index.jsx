@@ -7,6 +7,7 @@ import { networkErrorHandeller } from "../../../utils/helpers";
 import ListSkeleton from "../../../components/loading/ListLoading";
 import CreateRider from "../../../components/createRider/createRider";
 import { Link } from "react-router-dom";
+import { CiSearch } from "react-icons/ci";
 
 const customStyles = {
   headCells: {
@@ -42,8 +43,28 @@ const PendingOrderList = () => {
   const [perPage, setPerPage] = useState(10);
   const [totalRows, setTotalRows] = useState(0);
   const [data, setData] = useState([]);
+  const [search, setSearch] = useState(""); // search filter
+  const [date, setDate] = useState(""); // created_at filter
+  const [filterSearch, setFilterSearch] = useState("");
+  const [filterDate, setFilterDate] = useState("");
 
   console.log("data", data);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFilterSearch(search);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFilterDate(date);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [date]);
 
   const handlePageChange = (page) => {
     if (!loading) {
@@ -74,6 +95,8 @@ const PendingOrderList = () => {
       queryParams.append("page", currentPage);
       queryParams.append("per_page", perPage);
       queryParams.append("order_status", "pending");
+      if (filterSearch) queryParams.append("search", filterSearch);
+      if (filterDate) queryParams.append("created_at", filterDate);
       const response = await NetworkServices.Order.index(
         queryParams.toString()
       );
@@ -88,7 +111,7 @@ const PendingOrderList = () => {
       networkErrorHandeller(error);
     }
     setLoading(false);
-  }, [currentPage, perPage]);
+  }, [currentPage, perPage, filterSearch, filterDate]);
 
   useEffect(() => {
     fetchOrder();
@@ -157,7 +180,6 @@ const PendingOrderList = () => {
       name: "Action",
       cell: (row) => (
         <div className="flex space-x-2">
-
           <Link to={`/dashboard/pending-order/${row.id}`} title="Show Details">
             <button className="text-blue-600 text-xl cursor-pointer">
               <FaEye />
@@ -172,13 +194,59 @@ const PendingOrderList = () => {
   }, []);
   return (
     <>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6 mt-5">
+        {/* <div className="relative inline-block ">
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                className="appearance-none w-full border border-lightBorder px-4 py-2 rounded-full bg-white focus:outline-none "
+              >
+                <option value="">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="processing">Processing</option>
+                <option value="shipped">Shipped</option>
+                <option value="delivered">Delivered</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                <FiChevronDown className="text-gray-500 w-4 h-4" />
+              </div>
+            </div> */}
+        <input
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          className="    border border-lightBorder 
+            px-3 py-2 
+            rounded-full 
+            outline-none 
+            focus:outline-none 
+            focus:ring-0
+            focus:border-lightBorder"
+        />
+        <div className="relative w-80">
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-10 pr-3 py-2 w-full border border-lightBorder rounded-full focus:outline-none text-sm"
+            // placeholder="Search"
+          />
+          {
+            <div className="absolute left-28 top-1/2 transform -translate-y-1/2 flex items-center text-gray-400 pointer-events-none">
+              <CiSearch className="text-lg mr-1" />
+              <span className="text-sm">search</span>
+            </div>
+          }
+        </div>
+      </div>
       <div className=" bg-white  rounded overflow-y-auto mb-10">
         {loading ? (
           <ListSkeleton />
         ) : (
           <DataTable
             columns={columns}
-            data={data}
+            data={data} /*  */
             customStyles={customStyles}
             pagination
             highlightOnHover
@@ -200,7 +268,6 @@ const PendingOrderList = () => {
           // onSubmit={handleAddCategory}
         />
       )}
-
     </>
   );
 };

@@ -97,8 +97,8 @@ const CompleteOrderList = () => {
       queryParams.append("page", currentPage);
       queryParams.append("per_page", perPage);
       queryParams.append("order_status", "delivered");
-      if (search) queryParams.append("search", filterSearch);
-      if (date) queryParams.append("created_at", filterDate);
+      if (filterSearch) queryParams.append("search", filterSearch);
+      if (filterDate) queryParams.append("created_at", filterDate);
       const response = await NetworkServices.Order.index(
         queryParams.toString()
       );
@@ -199,7 +199,7 @@ const CompleteOrderList = () => {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6 mt-5">
-        <div className="relative inline-block ">
+        {/* <div className="relative inline-block ">
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
@@ -215,7 +215,7 @@ const CompleteOrderList = () => {
           <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
             <FiChevronDown className="text-gray-500 w-4 h-4" />
           </div>
-        </div>
+        </div> */}
         <input
           type="date"
           value={date}
